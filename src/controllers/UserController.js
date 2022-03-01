@@ -58,10 +58,10 @@ module.exports = {
       const existPassword = user ? user.password : ''
       const match = await bcrypt.compareSync(password, existPassword)
       
-      if (!match) {
-        const message = validateErrors({ message: 'Email ou senha inválidos' })
-        return res.status(400).send(message)
-      }
+      // if (!match) {
+      //   const message = validateErrors({ message: 'Email ou senha inválidos' })
+      //   return res.status(400).send(message)
+      // }
       const token = sign({ userId: user.id, roles: user.users_roles }, process.env.SECRET, {
         expiresIn: '1d'
       })
