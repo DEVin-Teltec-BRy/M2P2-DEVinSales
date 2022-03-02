@@ -1,11 +1,11 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
 const dbConfig = require('../config/database');
-const Permission = require('../models/Permission');
-const Role = require('../models/Role');
 const nodeEnv = process.env.NODE_ENV
 
 const User = require('../models/User')
+const Permission = require('../models/Permission');
+const Role = require('../models/Role');
 
 const connection = new Sequelize(dbConfig[nodeEnv])
 /**
