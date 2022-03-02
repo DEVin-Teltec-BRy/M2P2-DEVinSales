@@ -14,6 +14,7 @@ O projeto desenvolvido utiliza as seguintes tecnologias:
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js/)
 - [Sequelize](https://sequelize.org/)
 - [Postgres](https://www.postgresql.org/)
+- [Swagger](https://swagger.io/)
 
 <a id="settings"></a>
 
