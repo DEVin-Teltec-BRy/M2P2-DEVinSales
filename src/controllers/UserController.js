@@ -7,6 +7,8 @@ const { validateErrors } = require("../utils/functions");
 
 module.exports = {
   async create(req, res) {
+    // #swagger.tags = ['Usuário']
+    // #swagger.description = 'Endpoint que criar um novo usuários.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
       const user = await User.create({
