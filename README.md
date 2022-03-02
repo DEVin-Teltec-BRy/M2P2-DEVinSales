@@ -46,12 +46,24 @@ $ SECRET=senha secreta
 ```bash
 # Criar o Database utilizando o Sequelize
 $ yarn sequelize db:create 
+# ou
+$ npx sequelize-cli db:create
 ```
 ```bash
 # Para popular as tabelas no postgres
 $ yarn sequelize db:migrate
+# ou
+$ npx sequelize-cli db:migrate
 ```
 ```bash
 # Executar o programa.
 $ yarn dev
+# ou
+$ npm run dev
+```
+```bash
+# Executar o programa.
+$ yarn swagger-autogen
+# ou
+$ npm run swagger-autogen
 ```
