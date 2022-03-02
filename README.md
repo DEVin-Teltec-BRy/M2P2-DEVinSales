@@ -31,30 +31,55 @@ $ git clone https://github.com/DEVin-Teltec-BRy/M2P2-DEVinSales.git
 ```bash
 # Entre na pasta projeto
 $ cd M2P2-DEVinSales
-
 ```
+
 ```bash
 # Já dentro da pasta do projeto.
 # Instale as bibliotecas utlizadas no projeto.
 $ yarn ou npm install
 ```
+
 ```bash
 # Criar um arquivo .env a partir do arquivo .env.sample
 $ DATABASE_URL=postgresql://user:password@host:port/database
 $ SECRET=senha secreta
 ```
+
 ```bash
 # Criar o Database utilizando o Sequelize
 $ yarn sequelize db:create 
 # ou
 $ npx sequelize-cli db:create
 ```
+
 ```bash
-# Para popular as tabelas no postgres
-$ yarn sequelize db:migrate
+# Para criar as tabelas no postgres
+$ yarn migrate:up
 # ou
-$ npx sequelize-cli db:migrate
+$ npm run migrate:up
 ```
+
+```bash
+# Para deletar as tabelas no postgres
+$ yarn migrate:down
+# ou
+$ npm run migrate:down
+```
+
+```bash
+# Para popular os dados nas tabelas do postgres com as seeders
+$ yarn seeders:up
+# ou
+$ npm run seeders:up
+```
+
+```bash
+# Para deletas os dados das tabelas do postgres
+$ yarn seeders:down
+# ou
+$ npm run seeders:down
+```
+
 ```bash
 # Executar o programa.
 $ yarn dev
