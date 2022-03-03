@@ -20,7 +20,12 @@
   },
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "swagger-autogen": "node ./src/utils/swagger.js",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:down": "npx sequelize-cli db:migrate:undo:all",
+    "seeders:up": "npx sequelize-cli db:seed:all",
+    "seeders:down": "npx sequelize-cli db:seed:undo:all"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
