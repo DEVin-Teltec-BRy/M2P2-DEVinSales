@@ -35,6 +35,8 @@ module.exports = {
   },
 
   async session(req, res) {
+    // #swagger.tags = ['Usuário']
+    // #swagger.description = 'Endpoint para login do usuário, quando email e senha são validos retorna um token.'
     try {
       const { email, password } = req.body;
 
@@ -45,6 +47,15 @@ module.exports = {
             [Op.eq]: email,
           },
         },
+        include: [
+          {
+            association: 'roles',
+            attributes: ['id', 'description'],
+            through: {
+              attributes: []
+            }
+          }
+        ]
       });
       const existPassword = user ? user.password : "";
       const match = await bcrypt.compareSync(password, existPassword);
@@ -56,7 +67,7 @@ module.exports = {
         return res.status(400).send(message);
       }
       const token = sign(
-        { userId: user.id, roles: user.users_roles },
+        { userId: user.id, roles: user.roles },
         process.env.SECRET,
         {
           expiresIn: "1d",
