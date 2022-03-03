@@ -8,7 +8,7 @@ const { validateErrors } = require("../utils/functions");
 module.exports = {
   async create(req, res) {
     // #swagger.tags = ['Usuário']
-    // #swagger.description = 'Endpoint que criar um novo usuários.'
+    // #swagger.description = 'Endpoint que criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
       const user = await User.create({
@@ -48,7 +48,7 @@ module.exports = {
       });
       const existPassword = user ? user.password : "";
       const match = await bcrypt.compareSync(password, existPassword);
-      
+
       if (!match) {
         const message = validateErrors({
           message: "Email ou senha inválidos",
@@ -64,6 +64,25 @@ module.exports = {
       );
 
       return res.status(201).send({ token: token });
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
+
+  async index(req, res) {
+    // #swagger.tags = ['Usuário']
+    // #swagger.description = 'Endpoint para buscar todos os usuários do banco de dados.'
+    try {
+      //const { name, birth_date_min, birth_date_max } = req.params;
+      const users = await User.findAll({
+        attributes: ["id", "name", "email", "birth_date"],
+      });
+
+      if (users.length === 0) {
+        return res.status(204).send();
+      }
+      return res.status(200).send({ users });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
