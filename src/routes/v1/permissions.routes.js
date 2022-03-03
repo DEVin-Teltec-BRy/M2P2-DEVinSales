@@ -5,3 +5,5 @@ const permissionRoutes = express.Router()
 permissionRoutes.post('/permissions', PermissionController.create);
 
 module.exports = permissionRoutes
+
+jsjsjs = require
