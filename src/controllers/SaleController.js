@@ -21,7 +21,7 @@ module.exports={
         } catch (error) {
             if(error.message==`insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`)return res.status(404).send("user_id inexistente")
             if(error.message==`insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`)return res.status(404).send("buyer_id inexistente")
-            res.status(404).send(error.message)
+            res.status(400).send(error.message)
         }
 
     }
