@@ -139,6 +139,45 @@
           }
         }
       }
+    },
+    "/api/v1/user/{user_id}/sales": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buyer_id": {
+                  "example": "any"
+                },
+                "dt_sale": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   }
 }

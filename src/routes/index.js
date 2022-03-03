@@ -2,6 +2,7 @@ const express = require('express')
 const routes = express.Router()
 const permissionRoutes = require('./v1/permissions.routes');
 const rolesRoutes = require('./v1/roles.routes');
+const salesRoutes = require('./v1/sales.routes');
 const usersRoutes = require('./v1/users.routes');
 
 routes.get('/', (req, res)=>{
@@ -11,7 +12,8 @@ routes.get('/', (req, res)=>{
 routes.use('/api/v1', [
     usersRoutes,
     rolesRoutes,
-    permissionRoutes
+    permissionRoutes,
+    salesRoutes
 ])
 
 module.exports = routes
