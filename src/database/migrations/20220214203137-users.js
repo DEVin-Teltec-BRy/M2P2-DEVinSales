@@ -21,7 +21,7 @@ module.exports = {
           unique: true,
         },
         birth_date: {
-          type: Sequelize.DATE,
+          type: Sequelize.DATEONLY,
           allowNull: false,
         },
         password: {

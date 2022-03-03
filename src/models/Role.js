@@ -1,35 +1,30 @@
-const connection = require('../database')
-const {DataTypes} = require('sequelize')
-const Permission = require('./Permission')
-const PermissionRole = require('./PermissionRole')
-
-const Role = connection.define('roles', {
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
+const {DataTypes, Model} = require('sequelize')
+class Role extends Model{
+  static init(sequelize){
+    super.init({
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: "A descrição deve ser única",
+      },
+      }
+    }, {
+      sequelize,
+      hooks:{
+        beforeCreate: (role)=>{
+          role.description = role.description.toUpperCase()
+        }
+      }
+    })
   }
-)
-
-Role.belongsToMany(Permission, {
-  through: {
-    model: PermissionRole
-  },
-  foreignKey: 'role_id',
-  constraint: true
-})
-
-Permission.belongsToMany(Role, {
-  through: {
-    model: PermissionRole
-  },
-  foreignKey: 'permission_id',
-  constraint: true
-})
-
-Role.hasMany(PermissionRole, {foreignKey: 'role_id'})
-Permission.hasMany(PermissionRole, {foreignKey: 'permission_id'})
-PermissionRole.belongsTo(Permission, {foreignKey: 'permission_id'})
-PermissionRole.belongsTo(Role, {foreignKey: 'role_id'})
+  static associate(models){
+    this.belongsToMany(models.Permission, {
+      foreignKey: 'role_id',
+      through: 'permissions_roles',
+      as: 'permissions'
+    })
+  }
+} 
 
 module.exports = Role
