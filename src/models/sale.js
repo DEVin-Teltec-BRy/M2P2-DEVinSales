@@ -6,6 +6,7 @@ const { Model, DataTypes} = require('sequelize');
  static init(sequelize) {
    super.init(
      {
+       
        seller_id:{
        type:DataTypes.INTEGER,
          allowNull:false,
@@ -17,6 +18,14 @@ const { Model, DataTypes} = require('sequelize');
     dt_sale:{
       type:DataTypes.DATE,
       allowNull:false
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE
     }
 
      },
