@@ -5,15 +5,31 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          get() {
+            const id = this.getDataValue("id");
+            return id;
+          },
+        },
         name: {
           type: DataTypes.STRING,
           allowNull: false,
+          get() {
+            const name = this.getDataValue("name");
+            return name;
+          },
         },
         email: {
           type: DataTypes.STRING,
           allowNull: false,
           unique: {
             msg: "E-mail deve ser único",
+          },
+          get() {
+            const email = this.getDataValue("email");
+            return email;
           },
         },
         birth_date: {
