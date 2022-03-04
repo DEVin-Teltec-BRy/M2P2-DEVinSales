@@ -7,6 +7,7 @@ const User = require("../models/User");
 const Permission = require("../models/Permission");
 const Role = require("../models/Role");
 const sale = require("../models/sale");
+const Product = require("../models/Product");
 const ProductsSales = require("../models/ProductsSales");
 
 const connection = new Sequelize(dbConfig[nodeEnv]);
@@ -18,7 +19,9 @@ User.init(connection);
 Role.init(connection);
 Permission.init(connection);
 sale.init(connection);
+Product.init(connection);
 ProductsSales.init(connection);
+
 /**
  * Associação dos models
  * Somente os models com associações devem ser chamados abaixo
@@ -29,4 +32,5 @@ Permission.associate(connection.models);
 sale.associate(connection.models);
 ProductsSales.associate(connection.models);
 
+//Product.associate(connection.models)
 module.exports = connection;
