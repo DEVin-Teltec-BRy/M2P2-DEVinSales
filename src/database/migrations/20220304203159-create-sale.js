@@ -13,6 +13,7 @@ module.exports = {
       },
       buyer_id: {
         type: Sequelize.INTEGER
+        
       },
       dt_sale: {
         type: Sequelize.DATE
