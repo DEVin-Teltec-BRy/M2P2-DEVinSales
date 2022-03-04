@@ -10,8 +10,6 @@ module.exports = {
           state_id: 8,
           created_at: new Date(),
           updated_at: new Date(),
-          created_at: new Date(),
-          updated_at: new Date(),
         },
         {
           name: "Água Doce do Norte",
