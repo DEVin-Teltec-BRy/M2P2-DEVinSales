@@ -23,13 +23,13 @@ class Address extends Model {
             
         }, {sequelize})
     }
-    static associate(models) {
-        this.belongsTo(
-            models.City, {
-            foreignKey: 'city_id', // Qual chave estrangeira dentro de Posts que representa o usuario
-            as: 'city' // nome do relacionamento
-        });
-    }
+    // static associate(models) {
+    //     this.belongsTo(
+    //         models.City, {
+    //         foreignKey: 'city_id', // Qual chave estrangeira dentro de Posts que representa o usuario
+    //         as: 'cities' // nome do relacionamento
+    //     });
+    // }
 }
 
 module.exports = Address;
