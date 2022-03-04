@@ -25,6 +25,5 @@ State.init(connection)
 User.associate(connection.models)
 Role.associate(connection.models)
 Permission.associate(connection.models)
-State.associate(connection.models)
 
 module.exports = connection
