@@ -7,6 +7,7 @@ const User = require('../models/User')
 const Permission = require('../models/Permission');
 const Role = require('../models/Role');
 const Sale = require('../models/Sale');
+const Deliveries = require('../models/Deliveries');
 
 const connection = new Sequelize(dbConfig[nodeEnv])
 /**
@@ -17,6 +18,7 @@ User.init(connection)
 Role.init(connection)
 Permission.init(connection)
 Sale.init(connection)
+Deliveries.init(connection)
 
 /**
  * Associação dos models
@@ -25,5 +27,6 @@ Sale.init(connection)
 User.associate(connection.models)
 Role.associate(connection.models)
 Permission.associate(connection.models)
+Deliveries.associate(connection.models)
 
 module.exports = connection

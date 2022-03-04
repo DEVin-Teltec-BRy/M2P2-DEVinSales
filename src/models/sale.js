@@ -18,7 +18,7 @@ const { Model, DataTypes} = require('sequelize');
     dt_sale:{
       type:DataTypes.DATE,
       allowNull:false
-    },
+    },/*
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE
@@ -27,7 +27,7 @@ const { Model, DataTypes} = require('sequelize');
       allowNull: false,
       type: DataTypes.DATE
     }
-
+*/
      },
     { sequelize,
      modelName:"Sale"
