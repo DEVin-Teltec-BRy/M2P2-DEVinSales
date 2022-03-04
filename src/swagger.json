@@ -83,7 +83,10 @@
     },
     "/api/v1/session": {
       "post": {
-        "description": "",
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
         "parameters": [
           {
             "name": "body",
