@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 docker-compose.yml
-docker-compose.yaml
 data/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
