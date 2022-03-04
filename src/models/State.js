@@ -3,25 +3,29 @@ const { DataTypes, Model } = require('sequelize')
 class State extends Model{
   static init(sequelize){
     super.init({
-        id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-        },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
+            unique: {
+                msg: "O nome deve ser único",
+            },
         },
         initials: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            unique: {
+                msg: "As iniciais devem ser únicas",
+            },
         },
     },{
         sequelize,
         modelName: 'State',
+    })
+  }
+  static associate(models){
+    this.hasMany(models.City, {
+        foreignKey: 'city_id',
+        as: 'cities'
     })
   }
 }
