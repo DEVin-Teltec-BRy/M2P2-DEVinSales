@@ -28,11 +28,5 @@ class State extends Model{
         modelName: 'State',
     })
   }
-  static associate(models){
-    this.hasMany(models.City, {
-        foreignKey: 'state_id',
-        as: 'cities'
-    })
-  }
 }
 module.exports = State
