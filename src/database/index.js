@@ -2,6 +2,7 @@ require('dotenv').config();
 const Sequelize = require('sequelize');
 const dbConfig = require('../config/database');
 const nodeEnv = process.env.NODE_ENV;
+const connection = new Sequelize(dbConfig[nodeEnv])
 
 const User = require('../models/User');
 const Permission = require('../models/Permission');
@@ -13,10 +14,11 @@ const Product = require('../models/Product');
 const { default: Adress } = require('../models/Adress');
 const Adresses = require('../models/Adress');
 
-const connection = new Sequelize(dbConfig[nodeEnv]);
+
 
 //   inicialização dos models
 //   todos os models devem ser iniciados passando a connection
+
 
 User.init(connection)
 Role.init(connection)
@@ -33,8 +35,10 @@ Adress.init(connection)
 User.associate(connection.models)
 Role.associate(connection.models)
 Permission.associate(connection.models)
+Sale.associate(connection.models)
 State.associate(connection.models)
 City.associate(connection.models)
 Adress.associate(connection.models)
+
 
 module.exports = connection
