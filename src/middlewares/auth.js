@@ -36,7 +36,6 @@ function onlyCanAccessWith(permissionsCanAccess) {
     const permissionsUser = roles.filter(role => {
         return role.permissions.length > 0
     })
-    console.log(permissionsUser[0].description)
     let existPermission = false
     roles.forEach((role) => {
       role.permissions.forEach((permission) => {
