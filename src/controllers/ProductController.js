@@ -23,11 +23,12 @@ module.exports = {
             query.suggested_price = {
                 [Op.between]: [priceMin, priceMax]
             };
+            console.log(query)
             const products = await Product.findAll({
                 attributes: ["id", "name", "suggested_price"],
                 where: query,
             });
-            console.log(products)
+
             if (products.length === 0) return res.status(204).send();
 
             return res.status(200).send({ products });
