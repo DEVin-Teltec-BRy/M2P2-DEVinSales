@@ -143,6 +143,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/v1/sales": {
       "get": {
         "tags": [
@@ -192,6 +193,43 @@
           },
           "404": {
             "description": "Not Found"
+=======
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para buscar produtos conforme critério query params",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+>>>>>>> d0d59483945d75d7a872d072394060573692c240
           }
         }
       }
