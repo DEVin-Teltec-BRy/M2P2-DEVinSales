@@ -10,10 +10,23 @@ module.exports = {
       },
       seller_id: {
         type: Sequelize.INTEGER,
-        allowNull:true
+        allowNull:true,
+        references: {
+          model: {
+            tableName: 'users', 
+          },
+          key: 'id'
+        },
       },
       buyer_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'users', 
+          },
+          key: 'id'
+        },
+        
       },
       dt_sale: {
         type: Sequelize.DATE
