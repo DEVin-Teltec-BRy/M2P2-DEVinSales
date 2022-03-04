@@ -12,10 +12,10 @@ module.exports = {
             if (name) {
                 query.name = { [Op.iLike]: `%${name}%` };
             }
-            const priceMin = Number(price_min) ? price_min : 0
-            const priceMax = Number(price_max) ? price_max : Number.MAX_SAFE_INTEGER
-            console.log(priceMin, priceMax)
-            if (price_max <= price_min) {
+            const priceMin = Number(price_min) ? Number(price_min) : 0
+            const priceMax = Number(price_max) ? Number(price_max) : Number.MAX_SAFE_INTEGER
+
+            if (priceMax <= priceMin) {
                 return res.status(400).json({
                     message: "Price max must be greater than price min"
                 })
@@ -23,7 +23,7 @@ module.exports = {
             query.suggested_price = {
                 [Op.between]: [priceMin, priceMax]
             };
-            console.log(query)
+
             const products = await Product.findAll({
                 attributes: ["id", "name", "suggested_price"],
                 where: query,
