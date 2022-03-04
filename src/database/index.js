@@ -2,23 +2,17 @@ require('dotenv').config();
 const Sequelize = require('sequelize');
 const dbConfig = require('../config/database');
 const nodeEnv = process.env.NODE_ENV;
+const connection = new Sequelize(dbConfig[nodeEnv])
 
 const User = require('../models/User');
 const Permission = require('../models/Permission');
 const Role = require('../models/Role');
-const Sale = require('../models/Sale')
-const connection = new Sequelize(dbConfig[nodeEnv])
-/**
- * inicialização dos models
- * todos os models devem ser iniciados passando a connection
- */
-
 const Sale = require('../models/Sale');
 const State = require('../models/State');
 const City = require('../models/City');
 const Product = require('../models/Product');
 
-const connection = new Sequelize(dbConfig[nodeEnv]);
+
 
 //   inicialização dos models
 //   todos os models devem ser iniciados passando a connection
