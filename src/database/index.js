@@ -6,6 +6,13 @@ const nodeEnv = process.env.NODE_ENV;
 const User = require('../models/User');
 const Permission = require('../models/Permission');
 const Role = require('../models/Role');
+const Sale = require('../models/Sale')
+const connection = new Sequelize(dbConfig[nodeEnv])
+/**
+ * inicialização dos models
+ * todos os models devem ser iniciados passando a connection
+ */
+
 const Sale = require('../models/Sale');
 const State = require('../models/State');
 const City = require('../models/City');
@@ -15,6 +22,7 @@ const connection = new Sequelize(dbConfig[nodeEnv]);
 
 //   inicialização dos models
 //   todos os models devem ser iniciados passando a connection
+
 
 User.init(connection)
 Role.init(connection)
@@ -30,8 +38,10 @@ Product.init(connection)
 User.associate(connection.models)
 Role.associate(connection.models)
 Permission.associate(connection.models)
+Sale.associate(connection.models)
 State.associate(connection.models)
 City.associate(connection.models)
+
 
 
 module.exports = connection
