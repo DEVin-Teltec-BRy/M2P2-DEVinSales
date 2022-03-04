@@ -10,13 +10,20 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
   "paths": {
     "/api/v1/users": {
       "post": {
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint que criar um novo usuários.",
+        "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
             "name": "body",
@@ -51,11 +58,35 @@
             "description": "Bad Request"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para buscar todos os usuários do banco de dados.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
       }
     },
     "/api/v1/session": {
       "post": {
-        "description": "",
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
         "parameters": [
           {
             "name": "body",
@@ -139,6 +170,50 @@
           }
         }
       }
+    },
+    "/api/v1/user/{user_id}/sales": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buyer_id": {
+                  "example": "any"
+                },
+                "dt_sale": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }

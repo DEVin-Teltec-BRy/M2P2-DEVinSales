@@ -2,10 +2,11 @@
 
 const { Model, DataTypes } = require('sequelize');
 
-class Sale extends Model {
-  static init(sequelize) {
-    super.init(
-      {
+
+  class Sale extends Model {
+ static init(sequelize) {
+   super.init(
+     {
 
         seller_id: {
           type: DataTypes.INTEGER,
@@ -30,7 +31,7 @@ class Sale extends Model {
     Sale.belongsToMany(models.User, {
       foreignKey: 'id',
       through: 'user',
-      constraints: true
+     
     })
   }
 }
