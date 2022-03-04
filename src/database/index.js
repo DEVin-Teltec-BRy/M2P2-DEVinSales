@@ -6,7 +6,7 @@ const nodeEnv = process.env.NODE_ENV
 const User = require('../models/User')
 const Permission = require('../models/Permission');
 const Role = require('../models/Role');
-
+const Product = require('../models/Product');
 const connection = new Sequelize(dbConfig[nodeEnv])
 /**
  * inicialização dos models
@@ -15,6 +15,7 @@ const connection = new Sequelize(dbConfig[nodeEnv])
 User.init(connection)
 Role.init(connection)
 Permission.init(connection)
+Product.init(connection)
 
 /**
  * Associação dos models
@@ -23,5 +24,6 @@ Permission.init(connection)
 User.associate(connection.models)
 Role.associate(connection.models)
 Permission.associate(connection.models)
+Product.init(connection.models)
 
 module.exports = connection
