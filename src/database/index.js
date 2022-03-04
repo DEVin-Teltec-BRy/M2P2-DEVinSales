@@ -10,6 +10,8 @@ const Sale = require('../models/Sale');
 const State = require('../models/State');
 const City = require('../models/City');
 const Product = require('../models/Product');
+const { default: Adress } = require('../models/Adress');
+const Adresses = require('../models/Adress');
 
 const connection = new Sequelize(dbConfig[nodeEnv]);
 
@@ -23,6 +25,7 @@ Sale.init(connection)
 State.init(connection)
 City.init(connection)
 Product.init(connection)
+Adress.init(connection)
 
 //   Associação dos models
 //   Somente os models com associações devem ser chamados abaixo
@@ -32,6 +35,6 @@ Role.associate(connection.models)
 Permission.associate(connection.models)
 State.associate(connection.models)
 City.associate(connection.models)
-
+Adress.associate(connection.models)
 
 module.exports = connection

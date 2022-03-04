@@ -3,7 +3,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable(
-      'adress',
+      'adresses',
       { 
         id: {
           type: Sequelize.INTEGER,
@@ -12,34 +12,34 @@ module.exports = {
           primaryKey: true,
         },
         street: {
-          type: Datatypes.STRING,
+          type: Sequelize.STRING,
           allowNull: false
-      },
-      number: {
-          type: DataTypes.INTEGER,
+        },
+        number: {
+          type: Sequelize.INTEGER,
           allowNull: false
-      },
-      complement: {
-          type: DataTypes.STRING,
+        },
+        complement: {
+          type: Sequelize.STRING,
           allowNull: false
-      },
-      cep: {
-          type: DataTypes.STRING,
+        },
+        cep: {
+          type: Sequelize.STRING,
           allowNull: false
-      },
-      created_at: {
+        },
+        created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-      },
-      updated_at: {
+        },
+        updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-      },
+        },
       }
     );
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('adress')
+    await queryInterface.dropTable('adresses')
   }
 };

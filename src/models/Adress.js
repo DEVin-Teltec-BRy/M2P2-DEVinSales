@@ -5,7 +5,7 @@ class Adress extends Model {
         super.init(
         {
             street: {
-                type: Datatypes.STRING,
+                type: DataTypes.STRING,
                 allowNull: false
             },
             number: {
@@ -26,10 +26,16 @@ class Adress extends Model {
     static associate(models) {
         this.belongsTo(
             models.City, {
-            foreignKey: 'city_id', // Qual chave estrangeira dentro de Posts que representa o usuario
-            as: 'city' // nome do relacionamento
+            foreignKey: 'city_id', 
+            as: 'cities' 
         });
-    }
+        this.belongsTo(
+            models.Delivery, {
+            foreignKey: 'delivery_id', 
+            as: 'deliveries' 
+        
+        })
+   }
 }
 
-export default Adress;
+module.exports = Adress;
