@@ -1,30 +1,41 @@
 'use strict';
-const User = require('./User')
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Sale extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      Sale.belongsToMany(models.User,{
-        foreignKey:'id',
-        through:'user'
-      
-      })
-    }
+
+const { Model, DataTypes } = require('sequelize');
+
+class Sale extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+
+        seller_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        buyer_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        dt_sale: {
+          type: DataTypes.DATE,
+          allowNull: false
+        },
+
+
+      },
+      {
+        sequelize,
+        modelName: "Sale"
+      }
+    )
   }
-  Sale.init({
-    seller_id: DataTypes.INTEGER,
-    buyer_id: DataTypes.INTEGER,
-    dt_sale: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'Sale',
-  });
-  return Sale;
-};
+  static associate(models) {
+    Sale.belongsToMany(models.User, {
+      foreignKey: 'id',
+      through: 'user',
+      constraints: true
+    })
+  }
+}
+
+
+module.exports = Sale
