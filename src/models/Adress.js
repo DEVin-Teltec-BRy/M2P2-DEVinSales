@@ -14,27 +14,20 @@ class Adress extends Model {
             },
             complement: {
                 type: DataTypes.STRING,
-                allowNull: true
+                allowNull: false
             },
             cep: {
                 type: DataTypes.STRING,
                 allowNull: false
             }
             
-        }, {sequelize, 
-            tableName:'adress'
-        })
+        }, {sequelize})
     }
     static associate(models) {
         this.belongsTo(
             models.City, {
             foreignKey: 'city_id', // Qual chave estrangeira dentro de Posts que representa o usuario
             as: 'city' // nome do relacionamento
-        });
-        this.belongsTo(
-            models.Delivey, {
-            foreignKey: '',
-            as: 'delivery'
         });
     }
 }
