@@ -19,8 +19,6 @@ class Sale extends Model {
           type: DataTypes.DATE,
           allowNull: false
         },
-
-
       },
       {
         sequelize,
