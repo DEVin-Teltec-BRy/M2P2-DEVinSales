@@ -15,10 +15,11 @@ class Product extends Model {
     }, {sequelize})
   }
   static associate(models) {
-        this.belongsToMany(models.ProductSales, {
-            foreignKey: "product_id",
-            through: "product-sales"
-        });
+      Product.hasMany(models.ProductsSales,{
+        foreignKey:'id',
+        through:'products_sales',
+        constraints:true
+      })
     }
 }
 
