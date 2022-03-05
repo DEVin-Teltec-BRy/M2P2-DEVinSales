@@ -58,8 +58,8 @@ module.exports = {
       // #swagger.description = 'nao sei o que ele faz.'
 
       const { seller_id } = req.params;
-      const { product_id, unit_price, amount } = req.body;
-      
+      const { product_id } = req.body;
+      let { unit_price, amount } = req.body;
       if (
           !product_id || 
           product_id.replace(/\s/g, "") == "" || 
@@ -67,7 +67,11 @@ module.exports = {
         {
           throw new Error("Product_id invalido")
         }
-  
+        
+      if(!amount || amount.replace(/\s/g, "") == ""){
+        amount = 1
+      }
+        
         return res.status(200).send({});
     } catch (error) {
       return res.status(400).send({message: error.message});
