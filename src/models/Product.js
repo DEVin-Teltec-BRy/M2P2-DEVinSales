@@ -11,7 +11,7 @@ class Product extends Model {
           validate: {
             len: {
               args: [3, 50],
-              msg: "O nome do produto deve conter entre 3 e 30 caractéres.",
+              msg: "O nome do produto deve conter entre 3 e 50 caractéres.",
             },
           },
         },
