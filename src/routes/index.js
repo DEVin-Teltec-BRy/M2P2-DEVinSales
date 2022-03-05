@@ -1,5 +1,4 @@
 const express = require('express');
-const addressRoutes  = require('./v1/adress.routes');
 const routes = express.Router()
 const permissionRoutes = require('./v1/permissions.routes');
 const rolesRoutes = require('./v1/roles.routes');
@@ -13,7 +12,6 @@ routes.use('/api/v1', [
     usersRoutes,
     rolesRoutes,
     permissionRoutes,
-    addressRoutes,
     productsRoutes
 ])
 
