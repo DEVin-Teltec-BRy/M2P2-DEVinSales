@@ -1,4 +1,6 @@
 const Sale = require('../models/Sale')
+const User = require("../models/User");
+
 const { validateErrors } = require('../utils/functions')
 
 module.exports={
@@ -23,6 +25,29 @@ module.exports={
             if(error.message==`insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`)return res.status(404).send("buyer_id inexistente")
             res.status(404).send(error.message)
         }
+
+    },
+
+    async showSaler(req,res){
+
+         // #swagger.tags = ['Busca as Vendas do Usuarios']
+        // #swagger.description = 'Endpoint pra busacar as vendas do usuario.'
+
+
+        // const {user_id} = req.params
+        // const { buyer_id, dt_sale,} = req.body
+           
+       const FindUser = await User.findAll()
+      console.log(FindUser)
+       return res.status(201).json(FindUser)
+
+
+        // const selerUser = await Sale.findAll({
+        //     where: {
+        //         id: salesRoutes.map((sale) => sale.seller_id),
+        //     }
+        // })
+        // return res.status(201).send({ message: "AChou" })
 
     }
 
