@@ -18,6 +18,7 @@ User.init(connection)
 Role.init(connection)
 Permission.init(connection)
 Product.init(connection)
+Sale.init(connection)
 State.init(connection)
 
 /**
