@@ -8,7 +8,7 @@ class Sale extends Model {
       {
         seller_id: {
           type: DataTypes.INTEGER,
-          allowNull: true,
+          allowNull: false,
         },
         buyer_id: {
           type: DataTypes.INTEGER,
@@ -19,16 +19,14 @@ class Sale extends Model {
           allowNull: false,
         },
       },
-      {
-        sequelize,
-        modelName: 'Sale',
-      }
+      { sequelize, modelName: 'Sale' }
     );
   }
   static associate(models) {
-    Sale.belongsToMany(models.User, {
+    Sale.belongsTo(models.User, {
       foreignKey: 'id',
       through: 'user',
+      constraints: true,
     });
   }
 }

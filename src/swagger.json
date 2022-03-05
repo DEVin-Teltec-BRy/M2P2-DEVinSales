@@ -7,9 +7,7 @@
   },
   "host": "localhost:3333",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "securityDefinitions": {
     "bearerAuth": {
       "type": "apiKey",
@@ -20,9 +18,7 @@
   "paths": {
     "/api/v1/users": {
       "post": {
-        "tags": [
-          "Usuário"
-        ],
+        "tags": ["Usuário"],
         "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
@@ -60,9 +56,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Usuário"
-        ],
+        "tags": ["Usuário"],
         "description": "Endpoint para buscar todos os usuários do banco de dados.",
         "parameters": [
           {
@@ -99,9 +93,7 @@
     },
     "/api/v1/session": {
       "post": {
-        "tags": [
-          "Usuário"
-        ],
+        "tags": ["Usuário"],
         "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
         "parameters": [
           {
@@ -187,11 +179,58 @@
         }
       }
     },
+    "/api/v1/sales": {
+      "get": {
+        "tags": ["Busca as Vendas do Usuarios"],
+        "description": "Endpoint pra busacar as vendas do usuario.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/user/{user_id}/sales": {
+      "post": {
+        "tags": ["Vendas"],
+        "description": "Endpoint criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buyer_id": {
+                  "example": "any"
+                },
+                "dt_sale": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products": {
       "get": {
-        "tags": [
-          "Produto"
-        ],
+        "tags": ["Produto"],
         "description": "Endpoint para buscar produtos conforme critério query params",
         "parameters": [
           {
@@ -255,9 +294,7 @@
     },
     "/api/v1/sales": {
       "get": {
-        "tags": [
-          "Busca as Vendas do Usuarios"
-        ],
+        "tags": ["Busca as Vendas do Usuarios"],
         "description": "Endpoint pra busacar as vendas do usuario.",
         "parameters": [],
         "responses": {
@@ -269,9 +306,7 @@
     },
     "/api/v1/user/{user_id}/sales": {
       "post": {
-        "tags": [
-          "Vendas"
-        ],
+        "tags": ["Vendas"],
         "description": "Endpoint criar uma venda.",
         "parameters": [
           {
