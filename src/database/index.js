@@ -11,6 +11,7 @@ const Sale = require('../models/Sale');
 const State = require('../models/State');
 const City = require('../models/City');
 const Product = require('../models/Product');
+const Address = require('../models/Address');
 
 
 
@@ -25,6 +26,7 @@ Sale.init(connection)
 State.init(connection)
 City.init(connection)
 Product.init(connection)
+Address.init(connection)
 
 //   Associação dos models
 //   Somente os models com associações devem ser chamados abaixo
@@ -34,7 +36,7 @@ Role.associate(connection.models)
 Permission.associate(connection.models)
 Sale.associate(connection.models)
 City.associate(connection.models)
-
+Address.associate(connection.models)
 
 
 module.exports = connection

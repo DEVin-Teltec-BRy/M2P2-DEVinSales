@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const routes = express.Router()
 const permissionRoutes = require('./v1/permissions.routes');
 const rolesRoutes = require('./v1/roles.routes');
