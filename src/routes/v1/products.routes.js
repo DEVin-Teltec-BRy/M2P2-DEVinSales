@@ -6,9 +6,6 @@ const { READ, DELETE, UPDATE } = require("../../utils/constants/permissions");
 
 productsRoutes.get("/products", onlyCanAccessWith([READ]), ProductController.index);
 productsRoutes.delete("/products/:id", onlyCanAccessWith([DELETE]), ProductController.delete);
-
-
-productsRoutes.get("/products", onlyCanAccessWith([READ]), ProductController.index);
 productsRoutes.put("/product/:product_id", onlyCanAccessWith([UPDATE]), ProductController.update);
 
 module.exports = productsRoutes;
