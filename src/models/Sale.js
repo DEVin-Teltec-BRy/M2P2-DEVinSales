@@ -32,11 +32,7 @@ class Sale extends Model {
     });
   }
   static associate(models) {
-    Sale.hasMany(models.ProductsSales, {
-      foreignKey: "id",
-      through: "products_sales",
-      constraints: true,
-    });
+    this.hasMany(models.ProductsSales);
   }
 }
 
