@@ -38,18 +38,16 @@ module.exports = {
         },
         {
           role_id: ROLE.OWNER_ID,
-          permission_id: PERMISSIONS.UPDATE_ID,
+          permission_id: PERMISSIONS.DELETE_ID,
           created_at: new Date(),
           updated_at: new Date(),
-        }
+        },
       ],
       {}
     );
   },
 
   async down(queryInterface, Sequelize) {
- 
-      await queryInterface.bulkDelete('permissions_roles', null, {});
-    
+    await queryInterface.bulkDelete("permissions_roles", null, {});
   },
 };
