@@ -10,13 +10,20 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
   "paths": {
     "/api/v1/users": {
       "post": {
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint que criar um novo usuários.",
+        "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
             "name": "body",
@@ -49,6 +56,27 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para buscar todos os usuários do banco de dados.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -182,5 +210,10 @@
         }
       }
     }
-  }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }
