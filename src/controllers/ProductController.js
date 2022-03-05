@@ -37,6 +37,36 @@ module.exports = {
             const message = validateErrors(error);
             return res.status(400).send(message)
         }
+    },
+
+    async update(req, res){
+        // #swagger.tags = ['Produto']
+        // #swagger.description = 'Endpoint para atualizar um produto, neste Enpoint o usuario logado deve ter permissão de UPDATE.'
+        try {
+            const { product_id } = req.params
+            const {name, suggested_price} = req.body
+
+            if(!name) {
+                return res.status(400).send({message: 'O campo name, não foi enviado.'});
+            }
+            if(!suggested_price){
+                return res.status(400).send({message: 'O campo suggested_price, não foi enviado.'});
+            }
+            if(Number(suggested_price) <= 0) {
+                return res.status(400).send({message: 'O campo suggested_price, deve ser maior que 0.'});
+            }
+            const product = await Product.findByPk(product_id)
+            if(!product) {
+                return res.status(404).send({message: 'Product not found.'});
+            }
+            product.name = name || product.name
+            product.suggested_price = suggested_price || product.suggested_price
+            await product.save()
+            return res.status(204).send();
+        } catch (error) {
+            const message = validateErrors(error);
+            return res.status(400).send(message)
+        }
     }
 
 }
