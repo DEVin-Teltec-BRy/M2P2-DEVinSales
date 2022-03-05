@@ -143,7 +143,6 @@
         }
       }
     },
-<<<<<<< HEAD
     "/api/v1/sales": {
       "get": {
         "tags": [
@@ -193,7 +192,45 @@
           },
           "404": {
             "description": "Not Found"
-=======
+          }
+        }
+      }
+    },
+    "/api/v1/user/{seller_id}/item": {
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "description": "nao sei o que ele faz.",
+        "parameters": [
+          {
+            "name": "seller_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "example": "any"
+                },
+                "unit_price": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/api/v1/products": {
       "get": {
         "tags": [
@@ -229,7 +266,6 @@
           },
           "401": {
             "description": "Unauthorized"
->>>>>>> d0d59483945d75d7a872d072394060573692c240
           }
         }
       }
