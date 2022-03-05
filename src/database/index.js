@@ -36,7 +36,6 @@ User.associate(connection.models)
 Role.associate(connection.models)
 Permission.associate(connection.models)
 Sale.associate(connection.models)
-State.associate(connection.models)
 City.associate(connection.models)
 Adress.associate(connection.models)
 
