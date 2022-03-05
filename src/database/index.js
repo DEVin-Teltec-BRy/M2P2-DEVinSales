@@ -7,6 +7,8 @@ const User = require('../models/User')
 const Permission = require('../models/Permission');
 const Role = require('../models/Role');
 const Product = require('../models/Product');
+const State = require('../models/State');
+
 const connection = new Sequelize(dbConfig[nodeEnv])
 /**
  * inicialização dos models
@@ -16,6 +18,8 @@ User.init(connection)
 Role.init(connection)
 Permission.init(connection)
 Product.init(connection)
+State.init(connection)
+
 /**
  * Associação dos models
  * Somente os models com associações devem ser chamados abaixo
