@@ -1,8 +1,8 @@
-const { verify } = require('jsonwebtoken')
-const Role = require('../models/Role')
+const { verify } = require("jsonwebtoken");
+const Role = require("../models/Role");
 
-async function auth(req){
-    const { authorization } = req.headers;
+async function auth(req) {
+  const { authorization } = req.headers;
   try {
     if (!authorization) {
       throw Error;
@@ -18,30 +18,34 @@ function onlyCanAccessWith(permissionsCanAccess) {
   return async (req, res, next) => {
     const user = await auth(req, res);
     if (user.message) {
-      return res.status(401).send({ message: user.message });
+      return res.status(403).send({ message: user.message });
     }
     const roles = await Role.findAll({
       where: {
         id: user.roles.map((role) => role.id),
       },
-      include: [{ 
+      include: [
+        {
           association: "permissions",
           required: false,
-          attributes: ['description'],
+          attributes: ["description"],
           through: {
-              attributes: []
-          }
-        }],
+            attributes: [],
+          },
+        },
+      ],
     });
-    const permissionsUser = roles.filter(role => {
-        return role.permissions.length > 0
-    })
-    let existPermission = false
+    const permissionsUser = roles.filter((role) => {
+      return role.permissions.length > 0;
+    });
+    let existPermission = false;
     roles.forEach((role) => {
       role.permissions.forEach((permission) => {
-          if(!existPermission) {
-              existPermission =  permissionsCanAccess.includes(permission.description)
-          }
+        if (!existPermission) {
+          existPermission = permissionsCanAccess.includes(
+            permission.description
+          );
+        }
       });
     });
     if (!existPermission) {
@@ -54,5 +58,5 @@ function onlyCanAccessWith(permissionsCanAccess) {
 }
 
 module.exports = {
-    onlyCanAccessWith,
+  onlyCanAccessWith,
 };
