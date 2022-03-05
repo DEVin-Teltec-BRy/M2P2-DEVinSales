@@ -3,13 +3,25 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable(
-      'adresses',
+      'addresses',
       { 
         id: {
           type: Sequelize.INTEGER,
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
+        },
+        city_id: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: {
+              tableName: 'cities', 
+              },
+             key: 'id',
+             onUpdate: 'CASCADE',
+             onDelete: 'CASCADE'
+        },
         },
         street: {
           type: Sequelize.STRING,
@@ -40,6 +52,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('adresses')
+    await queryInterface.dropTable('addresses')
   }
 };
