@@ -5,7 +5,7 @@
 
 <a id="tech"></a>
 
-Este repositório foi criado para demonstrar como funciona o conceito de Role Based Access Control para os alunos do curso DEVinHouse.
+Este projeto serve para testar os conhecimentos em NodeJS com Express e utilizando Sequelize para trabalhar com banco de dados.
 ## Tecnologias
 
 O projeto desenvolvido utiliza as seguintes tecnologias:

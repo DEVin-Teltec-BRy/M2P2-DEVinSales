@@ -38,21 +38,16 @@ module.exports = {
         },
         {
           role_id: ROLE.OWNER_ID,
-          permission_id: PERMISSIONS.UPDATE_ID,
+          permission_id: PERMISSIONS.DELETE_ID,
           created_at: new Date(),
           updated_at: new Date(),
-        }
+        },
       ],
       {}
     );
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete("permissions_roles", null, {});
   },
 };
