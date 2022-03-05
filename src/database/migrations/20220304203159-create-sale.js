@@ -25,8 +25,7 @@ module.exports = {
             tableName: 'users', 
           },
           key: 'id'
-        },
-        
+        }, 
       },
       dt_sale: {
         type: Sequelize.DATE
