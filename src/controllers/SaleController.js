@@ -2,7 +2,7 @@ const Sale = require("../models/Sale");
 const User = require("../models/User");
 const salesRoutes = require("../routes/v1/sales.routes");
 const { validateErrors } = require("../utils/functions");
-
+const { Op } = require("sequelize");
 module.exports = {
   async create(req, res) {
     // #swagger.tags = ['Vendas']
@@ -59,6 +59,18 @@ module.exports = {
 
       const { seller_id } = req.params;
       const { product_id, unit_price, amount } = req.body;
-    } catch (error) {}
+      
+      if (
+          !product_id || 
+          product_id.replace(/\s/g, "") == "" || 
+          product_id === "any") 
+        {
+          throw new Error("Product_id invalido")
+        }
+  
+        return res.status(200).send({});
+    } catch (error) {
+      return res.status(400).send({message: error.message});
+    }
   },
 };
