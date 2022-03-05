@@ -7,7 +7,6 @@ const { Model, DataTypes } = require('sequelize');
  static init(sequelize) {
    super.init(
      {
-
         seller_id: {
           type: DataTypes.INTEGER,
           allowNull: true,
