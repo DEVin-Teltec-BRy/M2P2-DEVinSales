@@ -2,9 +2,15 @@ const Sale = require("../models/Sale");
 const { Op } = require("sequelize");
 
 module.exports = {
-  async updateOne(req, res) {
-    // #swagger.tags = ['Sales']
-    // #swagger.description = 'Endpoint que criar um novo usuário.'
+    async create(req,res){
+        // #swagger.tags = ['Produtos_Vendas']
+       // #swagger.description = 'Endpoint criar uma venda.'
+       
+
+   },
+    async updateOne(req, res) {
+    // #swagger.tags = ['Produtos_Vendas']
+    // #swagger.description = 'Endpoint que atualiza a quantidade de produtos de uma venda.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
       
