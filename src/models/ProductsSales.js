@@ -10,7 +10,7 @@ class ProductSales extends Model {
             amount: {
                 type: DataTypes.INTEGER,
                 allowNull: false
-            }
+            },{sequelize}
         })
     }
 }
