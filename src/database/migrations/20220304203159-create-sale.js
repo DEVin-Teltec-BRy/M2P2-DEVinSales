@@ -19,6 +19,7 @@ module.exports = {
       },
       buyer_id: {
         type: Sequelize.INTEGER,
+        allowNull:true,
         references: {
           model: {
             tableName: 'users', 

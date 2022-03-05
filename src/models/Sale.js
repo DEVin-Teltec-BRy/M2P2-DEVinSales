@@ -2,12 +2,10 @@
 
 const { Model, DataTypes } = require('sequelize');
 
-
-  class Sale extends Model {
- static init(sequelize) {
-   super.init(
-     {
-
+class Sale extends Model {
+  static init(sequelize) {
+    super.init(
+      {
         seller_id: {
           type: DataTypes.INTEGER,
           allowNull: true,
@@ -18,25 +16,21 @@ const { Model, DataTypes } = require('sequelize');
         },
         dt_sale: {
           type: DataTypes.DATE,
-          allowNull: false
+          allowNull: false,
         },
-
-
       },
       {
         sequelize,
-        modelName: "Sale"
+        modelName: 'Sale',
       }
-    )
+    );
   }
   static associate(models) {
     Sale.belongsToMany(models.User, {
       foreignKey: 'id',
       through: 'user',
-     
-    })
+    });
   }
 }
 
-
-module.exports = Sale
+module.exports = Sale;
