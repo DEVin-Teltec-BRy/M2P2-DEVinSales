@@ -8,7 +8,7 @@ const { Model, DataTypes} = require('sequelize');
      {
        seller_id:{
        type:DataTypes.INTEGER,
-         allowNull:false,
+         allowNull:true,
      },
      buyer_id:{
       type:DataTypes.INTEGER,
@@ -26,7 +26,7 @@ const { Model, DataTypes} = require('sequelize');
    )
  }
     static associate(models) {
-      Sale.hasMany(models.User,{
+      Sale.belongsToMany(models.User,{
         foreignKey:'id',
         through:'user',
         constraints:true
