@@ -2,7 +2,7 @@ const ProductController = require("../../controllers/ProductController");
 const express = require("express");
 const productsRoutes = express.Router();
 const { onlyCanAccessWith } = require("../../middlewares/auth");
-const { READ, WRITE } = require("../../utils/constants/permissions");
+const { READ, WRITE, DELETE } = require("../../utils/constants/permissions");
 
 productsRoutes.get(
   "/products",
@@ -14,5 +14,7 @@ productsRoutes.post(
   onlyCanAccessWith([WRITE]),
   ProductController.store
 );
+
+productsRoutes.delete("/products/:id", onlyCanAccessWith([DELETE]), ProductController.delete);
 
 module.exports = productsRoutes;

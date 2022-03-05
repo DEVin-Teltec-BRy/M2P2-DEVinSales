@@ -41,7 +41,29 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findByPk(id);
+      if (!product) {
+        return res.status(404).send();
+      }
+      // Como a tabela product_sales ainda não foi criada, a regra de negócio:
+      // "Caso exista algum products_sales com o product_id enviado, deve-se retornar o código de erro 400 (Bad Request)"
+      // foi ignorada no momento, e adicionada a outro card no trello
 
+      await Product.destroy({
+        where: {
+          id: id,
+        },
+      });
+      return res.status(204).send();
+    } catch (error) {
+      return res.status(400).send({
+        message: "Error deleting product",
+      });
+    }
+  },
   async store(req, res) {
     // #swagger.tags = ['Produto']
     // #swagger.description = 'Endpoint para criar um novo produto.'
