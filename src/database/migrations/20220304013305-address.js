@@ -11,18 +11,18 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true,
         },
-        // city_id: {
-        //   type: Sequelize.INTEGER,
-        //   allowNull: false,
-        //   references: {
-        //     model: {
-        //       tableName: 'cities', 
-        //       },
-        //      key: 'id',
-        //      onUpdate: 'CASCADE',
-        //      onDelete: 'CASCADE'
-        // },
-        // },
+        city_id: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: {
+              tableName: 'cities', 
+              },
+             key: 'id',
+             onUpdate: 'CASCADE',
+             onDelete: 'CASCADE'
+        },
+        },
         street: {
           type: Sequelize.STRING,
           allowNull: false
