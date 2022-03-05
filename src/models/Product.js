@@ -18,6 +18,9 @@ class Product extends Model {
         suggested_price: {
           type: DataTypes.DECIMAL(7, 2),
           allowNull: false,
+          validate: {
+            isNumeric: { msg: "O preço sugerido deve ser um número." },
+          },
         },
       },
       { sequelize }
