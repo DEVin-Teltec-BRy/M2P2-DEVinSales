@@ -18,7 +18,13 @@ class Address extends Model {
             },
             cep: {
                 type: DataTypes.STRING,
-                allowNull: false
+                allowNull: false,
+                validate: {
+                 len: {
+                     msg: 'O cep deve ter 8 dígitos', 
+                     args: [8]
+                 }
+                }
             }
             
         }, {sequelize})
