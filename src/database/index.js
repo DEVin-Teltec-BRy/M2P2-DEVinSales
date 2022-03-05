@@ -2,15 +2,16 @@ require('dotenv').config();
 const Sequelize = require('sequelize');
 const dbConfig = require('../config/database');
 const nodeEnv = process.env.NODE_ENV;
+const connection = new Sequelize(dbConfig[nodeEnv])
 
 const User = require('../models/User');
 const Permission = require('../models/Permission');
 const Role = require('../models/Role');
 const Sale = require('../models/Sale')
-const connection = new Sequelize(dbConfig[nodeEnv])
+const Product = require('../models/Product');
 const State = require('../models/State');
 const City = require('../models/City');
-const Product = require('../models/Product');
+
 
 
 
@@ -35,7 +36,6 @@ Permission.associate(connection.models)
 Sale.associate(connection.models)
 State.associate(connection.models)
 City.associate(connection.models)
-
-
+Product.associate(connection.models)
 
 module.exports = connection
