@@ -1,14 +1,14 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('sales', {
+    await queryInterface.createTable('Sales', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      buyer_id: {
+      seller_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -16,17 +16,17 @@ module.exports = {
           },
           key: 'id'
         },
-      
       },
-      seller_id: {
+      buyer_id: {
         type: Sequelize.INTEGER,
         allowNull:true,
         references: {
           model: {
-            tableName: 'users',
+            tableName: 'users', 
           },
           key: 'id'
         },
+        
       },
       dt_sale: {
         type: Sequelize.DATE
@@ -42,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('sales');
+    await queryInterface.dropTable('Sales');
   }
 };
