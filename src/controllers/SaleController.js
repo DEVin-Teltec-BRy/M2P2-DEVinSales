@@ -73,15 +73,11 @@ module.exports = {
           product_id.replace(/\s/g, "") == "" || 
           product_id === "any") 
         {
-          errorStatus = 400;
-          errorMessage = "Product_id invalido"
-          throw new Error()
-      }
+          return res.status(400).send({message: "Product_id invalido"});
+      } 
       //verificando se o amount ou o unit price estao com valores menores que 0
       if (unit_price <= 0 || amount <= 0) {
-        errorStatus = 400;
-        errorMessage = "unit_price ou amount com valores invalidos"
-        throw new Error()
+        return res.status(400).send({message: "unit_price ou amount com valores invalidos"});
       }
       //verificando se o product id existe para
       const validProductId = await Product.findByPk(product_id);
@@ -89,16 +85,16 @@ module.exports = {
         return res.status(404).send({message: "product_id inexistente"});
       }
       
+      //verificando se o seller_id existe na tabela user_id
+      const validSellerId = await User.findByPk(seller_id)
+      if(!validSellerId){
+        return res.status(404).send({message: "seller_id inexistente"});
+      }
       
 
-      return res.status(200).send({});
+      return res.status(200).send("nada quebrou");
     } catch (error) {
-      try {
-        return res.status(errorStatus).send({message: errorMessage});
-      } catch (err) {
-        return res.status(400).send(error.message);
-      }
-     
+      return res.status(400).send(error.message);
     }
   },
 };
