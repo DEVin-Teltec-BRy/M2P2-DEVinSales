@@ -18,20 +18,4 @@ routes.use('/api/v1', [
   //stateRoutes
 ]);
 
-const salesRoutes = require('./v1/sales.routes');
-const productsRoutes = require('./v1/products.routes');
-
-routes.get('/', (req, res) => {
-    // #swagger.ignore = true
-    res.redirect('/api/v1/docs')
-})
-routes.use('/api/v1', [
-    usersRoutes,
-    rolesRoutes,
-    permissionRoutes,
-    salesRoutes,
-    productsRoutes
-])
-
-
 module.exports = routes;
