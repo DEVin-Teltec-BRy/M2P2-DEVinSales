@@ -60,14 +60,13 @@ module.exports = {
       const { seller_id } = req.params;
       const { product_id } = req.body;
       let { unit_price, amount } = req.body;
-      //teste
-      
 
-      // se o amount vir vazio bota  o valor de 1
+      // se o amount vir vazio bota o valor de 1
       if(!amount || amount.replace(/\s/g, "") == ""){
         amount = 1
       }
-      //verificando se o product id foi mandando
+
+      //verificando se o product_id foi enviado
       if (
           !product_id || 
           product_id.replace(/\s/g, "") == "" || 
@@ -75,10 +74,12 @@ module.exports = {
         {
           return res.status(400).send({message: "Product_id invalido"});
       } 
+
       //verificando se o amount ou o unit price estao com valores menores que 0
       if (unit_price <= 0 || amount <= 0) {
         return res.status(400).send({message: "unit_price ou amount com valores invalidos"});
       }
+
       //verificando se o product id existe para
       const validProductId = await Product.findByPk(product_id);
       if(!validProductId){
@@ -89,6 +90,15 @@ module.exports = {
       const validSellerId = await User.findByPk(seller_id)
       if(!validSellerId){
         return res.status(404).send({message: "seller_id inexistente"});
+      }
+      
+      //verificando se o unit_price foi enviado
+      if (
+          !unit_price || 
+          unit_price.replace(/\s/g, "") == "" || 
+          unit_price === "any") 
+        {
+          unit_price = validProductId.suggested_price
       }
       
 
