@@ -62,5 +62,14 @@ class User extends Model {
       as: "roles",
     });
   }
+
+  static associate(models) {
+    this.hasMany(models.Sale, {
+      foreignKey: "sales_id",
+      as: "sales",
+    });
+  }
+
+
 }
 module.exports = User;

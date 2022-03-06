@@ -39,7 +39,7 @@ module.exports={
         
          const Finduser = await User.findByPk(id);
         
-         console.log(Finduser)  
+         
        
       
        return res.status(201).json(Finduser)

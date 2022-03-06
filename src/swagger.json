@@ -190,15 +190,15 @@
         }
       }
     },
-    "/api/v1/sales/{user_id}": {
+    "/api/v1/sales/{id}": {
       "get": {
         "tags": [
           " Vendas "
         ],
-        "description": "Endpoint pra busacar as vendas do usuario.",
+        "description": "Endpoint pra buscar as vendas do usuario.",
         "parameters": [
           {
-            "name": "user_id",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
