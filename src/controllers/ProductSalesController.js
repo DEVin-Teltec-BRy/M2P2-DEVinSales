@@ -29,7 +29,7 @@ module.exports = {
       })
       console.log(productSaleResult)
         if(!saleResult || !productResult){
-        return res.status(404).send({ message: "Produto ou venda não existem" });
+        return res.status(404).send({ message: "id de Produto ou de Venda não existem" });
 
       }else{
         return res.status(201).send({ message: "Venda atualizada com sucesso." });
