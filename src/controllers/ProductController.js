@@ -97,4 +97,54 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+  async update(req, res) {
+    // #swagger.tags = ['Produto']
+    // #swagger.description = 'Endpoint para criar um novo produto.'
+
+    try {
+      const { id } = req.params;
+      const { name, suggested_price } = req.body;
+
+      if (!name && !suggested_price) {
+        return res
+          .status(400)
+          .send({ message: "Não foram enviados dados para atualização." });
+      }
+
+      if (name) {
+        const name_Db = await Product.findOne({ where: { name: name } });
+
+        if (name_Db) {
+          return res
+            .status(400)
+            .send({ message: `Já existe outro produto com o nome ${name}` });
+        }
+      }
+
+      if (suggested_price <= 0) {
+        return res
+          .status(400)
+          .send({ message: "O preço sugerido deve ser maior que zero." });
+      }
+      const productExist = await Product.findByPk(id);
+
+      if (!productExist) {
+        return res
+          .status(404)
+          .send({ message: `Não existe produto com o id ${id}` });
+      }
+
+      name ? (productExist.name = name) : productExist.name;
+      suggested_price
+        ? (productExist.suggested_price = suggested_price)
+        : productExist.suggested_price;
+
+      productExist.save();
+
+      return res.status(204).send();
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
 };
