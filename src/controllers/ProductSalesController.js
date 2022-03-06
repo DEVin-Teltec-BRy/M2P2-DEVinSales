@@ -20,6 +20,7 @@ module.exports = {
       const saleResult = await Sale.findByPk(sale_id)
       const productResult = await Product.findByPk(product_id)
       const productSaleResult = await ProductsSales.findAll({
+        attributes: ['id', 'unit_price', 'amount', 'sales_id', 'product_id' ],
         where: {
           sales_id :{
             [Op.eq]:sale_id
@@ -27,7 +28,7 @@ module.exports = {
         }
       })
       console.log(productSaleResult)
-      if(!saleResult || !productResult){
+        if(!saleResult || !productResult){
         return res.status(404).send({ message: "Produto ou venda não existem" });
 
       }else{
