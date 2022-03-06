@@ -18,6 +18,13 @@
     }
   },
   "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
     "/api/v1/users": {
       "post": {
         "tags": [
@@ -64,7 +71,23 @@
           "Usuário"
         ],
         "description": "Endpoint para buscar todos os usuários do banco de dados.",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "birth_date_min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "birth_date_max",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -77,6 +100,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
