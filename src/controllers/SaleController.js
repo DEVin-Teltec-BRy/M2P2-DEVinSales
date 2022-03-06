@@ -102,7 +102,7 @@ module.exports = {
       }
       
 
-      return res.status(200).send("nada quebrou");
+      return res.status(201).send("nada quebrou");
     } catch (error) {
       return res.status(400).send(error.message);
     }

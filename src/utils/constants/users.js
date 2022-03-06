@@ -47,4 +47,11 @@ module.exports = {
     "22/08/2000",
     "VictorD12."
   ),
+  User5: createUser(
+    5,
+    "admin",
+    "admin@admin.com",
+    "01/01/2022",
+    "admin"
+  )
 };

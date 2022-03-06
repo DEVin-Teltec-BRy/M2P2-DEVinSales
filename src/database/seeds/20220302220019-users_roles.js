@@ -29,8 +29,13 @@ module.exports = {
         role_id: ROLES.OWNER_ID,
         created_at: new Date(),
         updated_at: new Date()
+      },
+      {
+        user_id: USERS.User5.id,
+        role_id: ROLES.OWNER_ID,
+        created_at: new Date(),
+        updated_at: new Date()
       }
-    
     ], {});
   },
 
