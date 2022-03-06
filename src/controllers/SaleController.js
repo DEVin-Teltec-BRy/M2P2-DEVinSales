@@ -30,16 +30,19 @@ module.exports={
 
     async showSaler(req,res){
 
-         // #swagger.tags = ['Busca as Vendas do Usuarios']
-        // #swagger.description = 'Endpoint pra busacar as vendas do usuario.'
+         // #swagger.tags = [' Vendas ']
+        // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
 
 
-        // const {user_id} = req.params
-        // const { buyer_id, dt_sale,} = req.body
-           
-       const FindUser = await User.findAll()
-      console.log(FindUser)
-       return res.status(201).json(FindUser)
+         const {id} = req.params;
+         
+        
+         const Finduser = await User.findByPk(id);
+        
+         console.log(Finduser)  
+       
+      
+       return res.status(201).json(Finduser)
 
 
         // const selerUser = await Sale.findAll({
