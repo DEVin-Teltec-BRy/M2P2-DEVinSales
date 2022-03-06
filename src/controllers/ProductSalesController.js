@@ -1,6 +1,8 @@
 const Sale = require("../models/Sale");
 const Product = require('../models/Product') 
+const ProductsSales = require('../models/ProductsSales')
 const { Op } = require("sequelize");
+const { validateErrors } = require("../utils/functions");
 
 
 module.exports = {
@@ -17,6 +19,14 @@ module.exports = {
       const { sale_id, product_id, amount } = req.params;
       const saleResult = await Sale.findByPk(sale_id)
       const productResult = await Product.findByPk(product_id)
+      const productSaleResult = await ProductsSales.findAll({
+        where: {
+          sales_id :{
+            [Op.eq]:sale_id
+          }
+        }
+      })
+      console.log(productSaleResult)
       if(!saleResult || !productResult){
         return res.status(404).send({ message: "Produto ou venda não existem" });
 
