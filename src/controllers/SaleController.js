@@ -36,13 +36,14 @@ module.exports={
 
          const {id} = req.params;
          
-        
-         const Finduser = await User.findByPk(id);
-        
+        try {
+            const Finduser = await User.findByPk(id);
+            return res.status(200).send({message: Finduser})
+        } catch (error) {
+            console.log(error)
+            return res.status(400).send({message: "Este usuario não existe!"})
+        }
          
-       
-      
-       return res.status(201).json(Finduser)
 
 
         // const selerUser = await Sale.findAll({
