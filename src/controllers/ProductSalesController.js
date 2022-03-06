@@ -1,5 +1,7 @@
 const Sale = require("../models/Sale");
+const Product = require('../models/Product') 
 const { Op } = require("sequelize");
+
 
 module.exports = {
     async create(req,res){
@@ -12,9 +14,18 @@ module.exports = {
     // #swagger.tags = ['Produtos_Vendas']
     // #swagger.description = 'Endpoint que atualiza a quantidade de produtos de uma venda.'
     try {
-      const { name, password, email, birth_date, roles } = req.body;
+      const { sale_id, product_id, amount } = req.params;
+      const saleResult = await Sale.findByPk(sale_id)
+      const productResult = await Product.findByPk(product_id)
+      if(!saleResult || !productResult){
+        return res.status(404).send({ message: "Produto ou venda não existem" });
+
+      }else{
+        return res.status(201).send({ message: "Venda atualizada com sucesso." });
+
+      }
       
-      return res.status(201).send({ message: "Venda atualizada com sucesso." });
+
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
