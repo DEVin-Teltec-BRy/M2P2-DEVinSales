@@ -1,5 +1,6 @@
 const Sale = require("../models/Sale");
 const User = require("../models/User");
+const Product = require("../models/Product");
 const salesRoutes = require("../routes/v1/sales.routes");
 const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
@@ -56,25 +57,48 @@ module.exports = {
     try {
       // #swagger.tags = ['Sales']
       // #swagger.description = 'nao sei o que ele faz.'
-
       const { seller_id } = req.params;
       const { product_id } = req.body;
       let { unit_price, amount } = req.body;
+      //teste
+      
+
+      // se o amount vir vazio bota  o valor de 1
+      if(!amount || amount.replace(/\s/g, "") == ""){
+        amount = 1
+      }
+      //verificando se o product id foi mandando
       if (
           !product_id || 
           product_id.replace(/\s/g, "") == "" || 
           product_id === "any") 
         {
-          throw new Error("Product_id invalido")
-        }
-        
-      if(!amount || amount.replace(/\s/g, "") == ""){
-        amount = 1
+          errorStatus = 400;
+          errorMessage = "Product_id invalido"
+          throw new Error()
       }
-        
-        return res.status(200).send({});
+      //verificando se o amount ou o unit price estao com valores menores que 0
+      if (unit_price <= 0 || amount <= 0) {
+        errorStatus = 400;
+        errorMessage = "unit_price ou amount com valores invalidos"
+        throw new Error()
+      }
+      //verificando se o product id existe para
+      const validProductId = await Product.findByPk(product_id);
+      if(!validProductId){
+        return res.status(404).send({message: "product_id inexistente"});
+      }
+      
+      
+
+      return res.status(200).send({});
     } catch (error) {
-      return res.status(400).send({message: error.message});
+      try {
+        return res.status(errorStatus).send({message: errorMessage});
+      } catch (err) {
+        return res.status(400).send(error.message);
+      }
+     
     }
   },
 };
