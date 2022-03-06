@@ -65,7 +65,7 @@ module.exports = {
 
     },
   async showSaler(req, res) {
-    // #swagger.tags = ['Busca as Vendas do Usuarios']
+    // #swagger.tags = ['Vendas']
     // #swagger.description = 'Endpoint pra busacar as vendas do usuario.'
 
     // const {user_id} = req.params
