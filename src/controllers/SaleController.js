@@ -52,7 +52,7 @@ module.exports={
     },
 
     async showSalesByBuyer(req, res){
-        // #swagger.tags = ['Busca as Vendas do Usuarios pelo buyer_id']
+        // #swagger.tags = ['Vendas']
         // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
 
        const {user_id} = req.params;
