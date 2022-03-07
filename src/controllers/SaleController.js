@@ -57,6 +57,7 @@ module.exports={
 
        const {user_id} = req.params;
 
+      
        try{
        const salesData = await User.findAll({
             include: [
@@ -68,6 +69,10 @@ module.exports={
                 }
             ]
         });     
+
+        if(salesData.length == 0){
+            return res.status(204).json({message: "no content"});
+        }
 
         return res.status(200).json(salesData);
 
