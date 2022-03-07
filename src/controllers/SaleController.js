@@ -59,12 +59,7 @@ module.exports={
          
 
 
-        // const selerUser = await Sale.findAll({
-        //     where: {
-        //         id: salesRoutes.map((sale) => sale.seller_id),
-        //     }
-        // })
-        // return res.status(201).send({ message: "AChou" })
+        
 
     }
 
