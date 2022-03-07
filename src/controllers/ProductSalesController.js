@@ -45,7 +45,7 @@ module.exports = {
             {where: {id: id}}
           )
 
-        return res.status(201).send({ message: "Venda atualizada com sucesso." });
+        return res.status(204).send();
         }
       }
       
