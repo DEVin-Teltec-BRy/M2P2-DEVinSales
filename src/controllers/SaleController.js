@@ -1,7 +1,9 @@
 const Sale = require("../models/Sale");
 const User = require("../models/User");
 const Product = require("../models/Product");
+const ProductsSales = require("../models/ProductsSales");
 const salesRoutes = require("../routes/v1/sales.routes");
+const { verify } = require("jsonwebtoken");
 const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
 module.exports = {
@@ -59,8 +61,11 @@ module.exports = {
       // #swagger.description = 'nao sei o que ele faz.'
       const { seller_id } = req.params;
       const { product_id } = req.body;
+      const { authorization } = req.headers;
       let { unit_price, amount } = req.body;
-
+      const dt_sale = new Date()
+      const buyer = await verify(authorization, process.env.SECRET);
+      const buyer_id = buyer.userId
       // se o amount vir vazio bota o valor de 1
       if(!amount || amount.replace(/\s/g, "") == ""){
         amount = 1
@@ -100,9 +105,24 @@ module.exports = {
         {
           unit_price = validProductId.suggested_price
       }
+      //Criando oregistro sale 
+      const sale = await Sale.create({
+        seller_id,
+        buyer_id,
+        dt_sale
+      })
+      const sales_id = sale.dataValues.id
       
-
-      return res.status(201).send("nada quebrou");
+      //criando o registro product_sale
+      const product_sale = await ProductsSales.create({
+        sales_id,
+        product_id,
+        unit_price,
+        amount
+      })
+      const product_sale_id = product_sale.dataValues.id
+     
+      return res.status(201).send(`product_sale id: ${product_sale_id}`);
     } catch (error) {
       return res.status(400).send(error.message);
     }

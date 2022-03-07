@@ -4,6 +4,14 @@ class ProductsSales extends Model {
   static init(sequelize) {
     super.init(
       {
+        sales_id: {
+          type: DataTypes.INTEGER,
+          allowNull:false,
+        },
+        product_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
         unit_price: {
           type: DataTypes.DECIMAL,
           allowNull: false,
