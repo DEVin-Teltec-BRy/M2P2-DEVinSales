@@ -112,7 +112,14 @@ module.exports = {
       }
 
       if (name) {
-        const name_Db = await Product.findOne({ where: { name: name } });
+        const name_Db = await Product.findOne({
+          where: {
+            name: name,
+            id: {
+              [Op.not]: id,
+            },
+          },
+        });
 
         if (name_Db) {
           return res
@@ -139,7 +146,7 @@ module.exports = {
         ? (productExist.suggested_price = suggested_price)
         : productExist.suggested_price;
 
-      productExist.save();
+      await productExist.save();
 
       return res.status(204).send();
     } catch (error) {
