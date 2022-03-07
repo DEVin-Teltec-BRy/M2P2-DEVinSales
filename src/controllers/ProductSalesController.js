@@ -6,12 +6,7 @@ const { validateErrors } = require("../utils/functions");
 
 
 module.exports = {
-    async create(req,res){
-        // #swagger.tags = ['Produtos_Vendas']
-       // #swagger.description = 'Endpoint criar uma venda.'
-       
 
-   },
     async updateOne(req, res) {
     // #swagger.tags = ['Produtos_Vendas']
     // #swagger.description = 'Endpoint que atualiza a quantidade de produtos de uma venda.'
