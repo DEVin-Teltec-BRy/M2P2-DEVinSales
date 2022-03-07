@@ -37,7 +37,17 @@ module.exports={
          const {id} = req.params;
          
         try {
-            const Finduser = await User.findByPk(id);
+            const Finduser = await User.findAll({
+                include: [
+                    {
+                        association: 'sales_user',
+                        where: {
+                            seller_id: id
+                        }
+                    }
+                ]
+            });
+            
             return res.status(200).send({message: Finduser})
         } catch (error) {
             console.log(error)
