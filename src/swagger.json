@@ -259,32 +259,73 @@
         }
       }
     },
-    "/api/v1/sales": {
+    "/api/v1/sales/{id}": {
       "get": {
         "tags": [
-          "Vendas"
+          " Vendas "
         ],
-        "description": "Endpoint pra busacar as vendas do usuario.",
-        "parameters": [],
+        "description": "Endpoint pra buscar as vendas do usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
     },
     "/api/v1/user/{user_id}/sales": {
       "post": {
-        "description": "",
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint para criar uma venda.",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buyer_id": {
+                  "example": "any"
+                },
+                "dt_sale": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
-        "responses": {}
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/api/v1/user/{seller_id}/item": {

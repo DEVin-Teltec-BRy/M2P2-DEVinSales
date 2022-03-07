@@ -70,6 +70,11 @@ class User extends Model {
         }
     );
 
+    this.hasMany(models.Sale, {
+      foreignKey: "seller_id",
+      as: 'sales_user'
+
+    });
   }
 }
 module.exports = User;

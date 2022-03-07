@@ -87,6 +87,9 @@ module.exports = {
         // #swagger.tags = ['Vendas']
         // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
 
+
+        // const {user_id} = req.params
+        // const { buyer_id, dt_sale,} = req.body
         const { user_id } = req.params;
 
         try {
@@ -113,15 +116,36 @@ module.exports = {
     },
 
     async showSaler(req, res) {
-        // #swagger.tags = ['Vendas']
-        // #swagger.description = 'Endpoint pra busacar as vendas do usuario.'
+        
+         // #swagger.tags = [' Vendas ']
+        // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
 
-        // const {user_id} = req.params
-        // const { buyer_id, dt_sale,} = req.body
 
-        const FindUser = await User.findAll();
-        console.log(FindUser);
-        return res.status(201).json(FindUser);
+         const {id} = req.params;
+         
+        try {
+            const Finduser = await User.findAll({
+                include: [
+                    {
+                        association: 'sales_user',
+                        where: {
+                            seller_id: id
+                        }
+                    }
+                ]
+            });
+            if(Finduser.length === 0){
+                return res.status(400).send({message: "Este usuario não possui vendas!"});
+            }
+            
+            return res.status(200).send({message: Finduser})
+        } catch (error) {
+            console.log(error)
+            return res.status(400).send({message: "Este usuario não existe!"})
+        }
+         
+
+        
 
         // const selerUser = await Sale.findAll({
         //     where: {

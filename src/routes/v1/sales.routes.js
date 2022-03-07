@@ -6,7 +6,10 @@ const salesRoutes = express.Router();
 
 
 
-salesRoutes.get("/sales", SaleController.showSaler);
+
+
+salesRoutes.get('/sales/:id',onlyCanAccessWith([READ]) ,SaleController.showSaler);
+
 
 salesRoutes.post("/user/:user_id/sales", SaleController.createSale);
 //Squad:TryCatch Tema:2 Endpoint:5
