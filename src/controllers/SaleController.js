@@ -55,9 +55,9 @@ module.exports={
         // #swagger.tags = ['Busca as Vendas do Usuarios pelo buyer_id']
         // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
 
-        const {user_id} = req.params;
+       const {user_id} = req.params;
 
-        try{
+       try{
        const salesData = await User.findAll({
             include: [
                 {
@@ -67,11 +67,10 @@ module.exports={
                     }
                 }
             ]
-        });
-
-      //  const salesData = await Sale.findAll();
+        });     
 
         return res.status(200).json(salesData);
+
         }catch(error){
             return res.status(201).json({message: "erro ao listar dados de vendas"});
         }
