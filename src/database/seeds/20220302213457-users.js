@@ -7,7 +7,6 @@ module.exports = {
       USERS.User2,
       USERS.User3,
       USERS.User4,
-      USERS.User5,
     ], {});
   },
 
