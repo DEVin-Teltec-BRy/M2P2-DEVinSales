@@ -152,7 +152,7 @@ module.exports = {
       ) {
         unit_price = validProductId.suggested_price;
       }
-      //Criando oregistro sale
+      //Criando o registro sale
       const sale = await Sale.create({
         seller_id,
         buyer_id,
