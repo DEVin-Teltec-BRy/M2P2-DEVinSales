@@ -20,9 +20,9 @@ module.exports = {
       const saleResult = await Sale.findByPk(sale_id)
       const productResult = await Product.findByPk(product_id)
       const productSaleResult = await ProductsSales.findAll({
-        attributes: ['id', 'unit_price', 'amount', 'sales_id', 'product_id' ],
+        //attributes: ['id', 'unit_price', 'amount', 'sale_id', 'product_id' ],
         where: {
-          sales_id :{
+          sale_id :{
             [Op.eq]:sale_id
           }
         }
@@ -38,12 +38,13 @@ module.exports = {
           if(amount<=0||isNaN(amount)){ //confere se Produto repassado no Params é o mesmo cadastrado na Venda 
             return res.status(400).send({message:"Quantidade deve ser um número superior à zero"});
           }
-          //const id = Number(productSaleResult[0].dataValues.id)
-          //const saleInfo = await ProductsSales.findByPk(id)
-          console.log(productSaleResult[0].dataValues.amount)
-          productSaleResult[0].dataValues.amount = Number(amount)
-          console.log(productSaleResult[0].dataValues.amount)
-          const updatedAmount = await productSaleResult.save()
+          const id = Number(productSaleResult[0].dataValues.id)
+
+          const result = await ProductsSales.update(
+            {amount: Number(amount)},
+            {where: {id: id}}
+          )
+
         return res.status(201).send({ message: "Venda atualizada com sucesso." });
         }
       }
