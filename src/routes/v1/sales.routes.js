@@ -8,5 +8,5 @@ salesRoutes.get("/sales", SaleController.showSaler);
 
 salesRoutes.post("/user/:user_id/sales", SaleController.create);
 //Squad:TryCatch Tema:2 Endpoint:5
-salesRoutes.post("/user/:seller_id/item",onlyCanAccessWith([WRITE]), SaleController.item);
+salesRoutes.post("/user/:seller_id/item",onlyCanAccessWith([WRITE]), SaleController.saleMade);
 module.exports = salesRoutes;
