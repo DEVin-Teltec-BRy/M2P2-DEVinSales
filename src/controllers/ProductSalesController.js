@@ -20,9 +20,9 @@ module.exports = {
       const saleResult = await Sale.findByPk(sale_id)
       const productResult = await Product.findByPk(product_id)
       const productSaleResult = await ProductsSales.findAll({
-        //attributes: ['id', 'unit_price', 'amount', 'sale_id', 'product_id' ],
+        attributes: ['id', 'unit_price', 'amount', 'sales_id', 'product_id' ],
         where: {
-          sale_id :{
+          sales_id :{
             [Op.eq]:sale_id
           }
         }
