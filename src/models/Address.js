@@ -36,12 +36,12 @@ class Address extends Model {
             as: 'cities' 
         });
         ;
-        this.belongsTo(
-            models.Delivery, {
-            foreignKey: 'delivery_id', 
-            as: 'deliveries' 
+        // this.belongsTo(
+        //     models.Delivery, {
+        //     foreignKey: 'delivery_id', 
+        //     as: 'deliveries' 
         
-        })
+        // })
     }
 }
 
