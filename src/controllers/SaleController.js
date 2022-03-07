@@ -49,6 +49,10 @@ module.exports={
         // })
         // return res.status(201).send({ message: "AChou" })
 
+    },
+
+    async showSalesByBuyer(req, res){
+
     }
 
 }
