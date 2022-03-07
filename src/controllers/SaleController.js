@@ -102,8 +102,8 @@ module.exports = {
   },
   async saleMade(req, res) {
     try {
-      // #swagger.tags = ['Sales']
-      // #swagger.description = 'nao sei o que ele faz.'
+      // #swagger.tags = ['Vendas']
+      // #swagger.description = 'Endpoint para registrar vendas.'
       const { seller_id } = req.params;
       const { product_id } = req.body;
       const { authorization } = req.headers;
@@ -169,6 +169,7 @@ module.exports = {
       });
       const product_sale_id = product_sale.dataValues.id;
 
+      
       return res.status(201).send(`product_sale id: ${product_sale_id}`);
     } catch (error) {
       return res.status(400).send(error.message);
