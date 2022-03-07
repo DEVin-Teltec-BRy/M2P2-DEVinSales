@@ -47,6 +47,9 @@ module.exports={
                     }
                 ]
             });
+            if(Finduser.length === 0){
+                return res.status(400).send({message: "Este usuario não possui vendas!"});
+            }
             
             return res.status(200).send({message: Finduser})
         } catch (error) {
