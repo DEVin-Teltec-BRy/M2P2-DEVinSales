@@ -7,6 +7,7 @@ const productsRoutes = require('./v1/products.routes');
 const salesRoutes = require('./v1/sales.routes');
 //const stateRoutes = require('./v1/states.routes');
 
+const productsalesRoutes = require ('./v1/productsales.routes')
 
 routes.get('/', (req, res) => {
   // #swagger.ignore = true
@@ -16,10 +17,9 @@ routes.use('/api/v1', [
     usersRoutes,
     rolesRoutes,
     permissionRoutes,
-    productsRoutes,
-    salesRoutes
-  //stateRoutes
-]);
-
+    salesRoutes,
+    productsRoutes, 
+    productsalesRoutes
+])
 
 module.exports = routes;

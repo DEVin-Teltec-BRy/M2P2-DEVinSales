@@ -38,4 +38,7 @@ City.associate(connection.models);
 Address.associate(connection.models);
 
 //Product.associate(connection.models)
+Product.associate(connection.models);
+ProductsSales.associate(connection.models);
+
 module.exports = connection;
