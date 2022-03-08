@@ -12,7 +12,6 @@ const State = require("../models/State");
 const ProductsSales = require("../models/ProductsSales");
 const City = require("../models/City");
 
-
 const connection = new Sequelize(dbConfig[nodeEnv]);
 /**
  * inicialização dos models
