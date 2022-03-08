@@ -18,12 +18,12 @@ class City extends Model {
   static associate(models) {
     this.belongsTo(models.State, {
       foreignKey: "state_id",
-      as: "states",
+      as: "state",
     });
 
     this.hasMany(models.Address, {
       foreignKey: "city_id",
-      as: "cities",
+      as: "address",
     });
   }
 }
