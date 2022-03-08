@@ -1,9 +1,12 @@
 const StateController = require("../../controllers/StateController");
-const { accessWith } = require("./../../middlewares/auth");
+const { onlyCanAccessWith } = require("./../../middlewares/auth");
 const { READ } = require("./../../utils/constants/permissions");
 const express = require("express");
 const stateRoutes = express.Router();
 
-stateRoutes.get("/state/:state_id/city", StateController.getCitiesByStateID);
+stateRoutes.get(
+  "/state/:state_id/city",
+  /*onlyCanAccessWith(READ),*/ StateController.getCitiesByStateID
+);
 
 module.exports = stateRoutes;

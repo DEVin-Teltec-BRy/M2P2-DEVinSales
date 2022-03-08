@@ -34,18 +34,19 @@ module.exports = {
       const cities = await City.findAll({
         where: query,
         include: {
-          association: { model: "states" },
-          attributes: ["name"],
+          association: {
+            model: "states",
+          },
         },
       });
 
       if (cities.length < 1) {
         return res
-          .status(404)
+          .status(204)
           .json({ message: "Nenhum resultado encontrado." });
       }
 
-      return res.status(200).json({ message: cities });
+      return res.status(200).json({ cities });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
