@@ -6,13 +6,12 @@ const usersRoutes = require('./v1/users.routes');
 const productsRoutes = require('./v1/products.routes');
 const salesRoutes = require('./v1/sales.routes');
 //const stateRoutes = require('./v1/states.routes');
-
 const productsalesRoutes = require ('./v1/productsales.routes')
-
+const addressRoutes = require('./v1/addresses.routes')
 routes.get('/', (req, res) => {
-  // #swagger.ignore = true
-  res.redirect('/api/v1/docs');
-});
+    // #swagger.ignore = true
+    res.redirect('/api/v1/docs')
+})
 routes.use('/api/v1', [
     usersRoutes,
     rolesRoutes,
