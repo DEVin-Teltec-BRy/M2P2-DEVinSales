@@ -49,6 +49,33 @@ module.exports={
         // })
         // return res.status(201).send({ message: "AChou" })
 
-    }
+    },
+
+    async showSaleById(req, res) {
+
+
+        const sales_id = parseInt(req.params.id);
+  const response = await db.query('SELECT * FROM products WHERE sales_id = $1', [sales_id]);
+  res.status(200).send(response.rows);
+}
+
+    //     try {
+    //         const {sales_id} =  req.params
+            
+    //         if (!sales_id) throw new Error ("Id not provided")
+
+    //         const sales = await Sale.findAll();
+    //         const sale = sales.find((sale) => sale.id === Number(id));
+
+    //         if (!sales_id) throw new Error (`No Sale found for ${sale_id}`);
+
+    //         return console.log(sale);
+
+    //         res.status(200).json({ message: "sucesso", sale })
+    //     }
+    //     catch (err) {
+    //         res.status(404).json({ message: err.message})
+    //     }
+    // }
 
 }
