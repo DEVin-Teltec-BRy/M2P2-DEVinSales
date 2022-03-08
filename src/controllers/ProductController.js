@@ -15,13 +15,11 @@ module.exports = {
         query.name = { [Op.iLike]: `%${name}%` };
       }
       const priceMin = Number(price_min) ? Number(price_min) : 0;
-      const priceMax = Number(price_max)
-        ? Number(price_max)
-        : Number.MAX_SAFE_INTEGER;
+      const priceMax = Number(price_max) ? Number(price_max) : Number.MAX_SAFE_INTEGER;
 
       if (priceMax <= priceMin) {
         return res.status(400).json({
-          message: "Price max must be greater than price min",
+          message: "Preço máximo deve ser maior que o preço minimo",
         });
       }
       query.suggested_price = {
@@ -43,10 +41,10 @@ module.exports = {
   },
   async delete(req, res) {
     // #swagger.tags = ['Produto']
-        // #swagger.description = 'Endpoint para deletar um produto, neste Endpoint o usuário logado deve ter permissão de DELETE, e não pode ser um produto vendido.'
+    // #swagger.description = 'Endpoint para deletar um produto, neste Endpoint o usuário logado deve ter permissão de DELETE, e não pode ser um produto vendido.'
     try {
       const { id } = req.params;
-      const product = await Product.findByPk(id,{
+      const product = await Product.findByPk(id, {
         include: [
           {
             required: false,
@@ -55,10 +53,10 @@ module.exports = {
         ]
       });
       if (!product) {
-        return res.status(404).send({message: 'Produto não encontrado.'});
+        return res.status(404).send({ message: 'Produto não encontrado.' });
       }
-      if(product.sales.length > 0) {
-        return res.status(400).send({message: 'Produto não pode ser deletado, produto já vendido.'});
+      if (product.sales.length > 0) {
+        return res.status(400).send({ message: 'Produto não pode ser deletado, produto já vendido.' });
       }
       await product.destroy()
 
