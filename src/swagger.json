@@ -363,30 +363,39 @@
             "name": "sale_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Id da venda"
           },
           {
             "name": "product_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Id do produto"
           },
           {
             "name": "price",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "Preço atualizado do produto"
           }
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Sucesso na atualização do endpoint"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Id do produto enviado não é compatível ao cadastrado na venda, ou preço do produto é igual à zero"
+          },
+          "401": {
+            "description": "Sem permissão para acessar o endpoint"
+          },
+          "403": {
+            "description": "Sem permissão para acessar o endpoint"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Id de produto ou venda não existem"
           }
         }
       }

@@ -4,7 +4,7 @@ const { onlyCanAccessWith } = require("../../middlewares/auth");
 const { UPDATE } = require("../../utils/constants/permissions");
 const productsalesRoutes = express.Router();
 
-productsalesRoutes.patch("/sales/:sale_id/product/:product_id/price/:price", /*onlyCanAccessWith([UPDATE]), */ ProductSalesController.updateOnePrice);
+productsalesRoutes.patch("/sales/:sale_id/product/:product_id/price/:price", onlyCanAccessWith([UPDATE]), ProductSalesController.updateOnePrice);
 
 
 module.exports = productsalesRoutes;
