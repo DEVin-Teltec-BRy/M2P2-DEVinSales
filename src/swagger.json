@@ -327,7 +327,7 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para atualizar um produto, neste Enpoint o usuario logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "product_id",
