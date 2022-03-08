@@ -29,13 +29,13 @@ class Address extends Model {
             
         }, {sequelize})
     }
-    static associate(models) {
-        this.belongsTo(
-            models.City, {
-            foreignKey: 'city_id', 
-            as: 'cities' 
-        });
-    }
+    // static associate(models) {
+    //     this.belongsTo(
+    //         models.City, {
+    //         foreignKey: 'city_id', 
+    //         as: 'cities' 
+    //     });
+    // }
     //     
     //     this.belongsTo(
     //         models.Delivery, {
