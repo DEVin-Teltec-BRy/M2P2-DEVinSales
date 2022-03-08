@@ -27,10 +27,7 @@ class Product extends Model {
     );
   }
   static associate(models) {
-    this.hasMany(models.ProductsSales, {
-      foreignKey: 'product_id',
-      as: 'sales'
-    });
+    this.hasMany(models.ProductsSales);
   }
 }
 
