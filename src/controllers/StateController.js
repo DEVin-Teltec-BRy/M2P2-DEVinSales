@@ -12,10 +12,11 @@ module.exports = {
     //   collectionFormat: 'multi',
     // } 
     try {
-      const { name } = req.query;
-      if (Object.keys(name).length) {
-          return res.status(200).send("Test")
-      } 
+      const query = req.query;
+      console.log(query)
+      if (Object.keys(query).length) {
+          return res.status(200).send(query.name)
+      }
       else {
         const states = await State.findAll();
         if (states.length === 0) 
