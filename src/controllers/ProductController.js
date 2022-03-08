@@ -47,8 +47,9 @@ module.exports = {
         try {
             const { product_id } = req.params
             const {name, suggested_price} = req.body
+            const nameData = name.trim()
 
-            if(!name) {
+            if(!nameData) {
                 return res.status(400).send({message: 'O campo name, não foi enviado.'});
             }
             if(!suggested_price){
@@ -59,7 +60,7 @@ module.exports = {
             }
             const hasProductWithSameName = await Product.count({
                 where: {
-                    name : name,
+                    name : nameData,
                     id: {
                      [Op.not]: product_id
                     }
@@ -71,7 +72,7 @@ module.exports = {
             if(!product) {
                 return res.status(404).send({message: 'Product not found.'});
             }
-            product.name = name
+            product.name = nameData
             product.suggested_price = suggested_price
 
             await product.save()
