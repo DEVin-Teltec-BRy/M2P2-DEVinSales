@@ -237,12 +237,12 @@
         }
       }
     },
-    "/api/v1/user/{user_id}/sales": {
+    "/api/v1/sales/{user_id}/sale": {
       "post": {
         "tags": [
           "Vendas"
         ],
-        "description": "Endpoint criar uma venda.",
+        "description": "Endpoint para criar uma venda.",
         "parameters": [
           {
             "name": "user_id",
@@ -269,6 +269,63 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{user_id}/buy": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint para criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "seller_id": {
+                  "example": "any"
+                },
+                "dt_sale": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
