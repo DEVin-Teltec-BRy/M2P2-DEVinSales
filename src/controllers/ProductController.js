@@ -43,7 +43,7 @@ module.exports = {
 
     async putUpdate(req, res){
         // #swagger.tags = ['Produto']
-        // #swagger.description = 'Endpoint para atualizar um produto, neste Enpoint o usuario logado deve ter permissão de UPDATE.'
+        // #swagger.description = 'Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.'
         try {
             const { product_id } = req.params
             const {name, suggested_price} = req.body
