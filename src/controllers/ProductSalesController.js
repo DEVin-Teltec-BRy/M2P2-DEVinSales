@@ -30,17 +30,17 @@ module.exports = {
         if(productSaleResult[0].dataValues.product_id!==Number(product_id)){ //confere se Produto repassado no Params é o mesmo cadastrado na Venda 
           return res.status(400).send({message:"Id do produto enviado não é compatível ao cadastrado na venda."});
         }else {
-          if(amount<=0||isNaN(amount)){ //confere se Produto repassado no Params é o mesmo cadastrado na Venda 
-            return res.status(400).send({message:"Quantidade deve ser um número superior à zero"});
+          if(price<=0||isNaN(price)){ //confere se Produto repassado no Params é o mesmo cadastrado na Venda 
+            return res.status(400).send({message:"Preço deve ser um número superior à zero"});
           }
           const id = Number(productSaleResult[0].dataValues.id)
 
-          /*const result = await ProductsSales.update(
-            {amount: Number(amount)},
+          const result = await ProductsSales.update(
+            {unit_price: Number(price)},
             {where: {id: id}}
           )
-            */
         return res.status(204).send();
+            
         }
       }
       

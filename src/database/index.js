@@ -27,6 +27,7 @@ State.init(connection);
 ProductsSales.init(connection);
 City.init(connection);
 
+
 /**
  * Associação dos models
  * Somente os models com associações devem ser chamados abaixo
@@ -36,6 +37,7 @@ Role.associate(connection.models);
 Permission.associate(connection.models);
 Sale.associate(connection.models);
 Product.associate(connection.models);
+ProductsSales.associate(connection.models);
 //City.associate(connection.models);
 //Product.associate(connection.models)
 module.exports = connection;
