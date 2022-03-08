@@ -204,6 +204,39 @@
         }
       }
     },
+    "/api/v1/user/{user_id}/buy": {
+      "get": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as vendas do usuario pelo buyer_id.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/user/{user_id}/sales": {
       "post": {
         "tags": [
@@ -322,60 +355,9 @@
         }
       }
     },
-    "/api/v1/product/{product_id}": {
-      "put": {
-        "tags": [
-          "Produto"
-        ],
-        "description": "Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.",
-        "parameters": [
-          {
-            "name": "product_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/v1/products/{id}": {
       "delete": {
-        "tags": [
-          "Produto"
-        ],
-        "description": "Endpoint para deletar um produto, neste Endpoint o usuário logado deve ter permissão de DELETE, e não pode ser um produto vendido.",
+        "description": "",
         "parameters": [
           {
             "name": "id",
