@@ -15,17 +15,17 @@ class City extends Model {
       }
     );
   }
-  static associate(models) {
-    this.belongsTo(models.State, {
-      foreignKey: "state_id",
-      as: "states"
-    });
+  // static associate(models) {
+  //   this.belongsTo(models.State, {
+  //     foreignKey: "state_id",
+  //     as: "states"
+  //   });
 
-    this.hasMany(models.Address, {
-      foreignKey: "city_id",
-      as: "cities"
-    });
-  }
+  //   this.hasMany(models.Address, {
+  //     foreignKey: "city_id",
+  //     as: "cities"
+  //   });
+  // }
 }
 
 module.exports = City;

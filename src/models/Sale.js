@@ -31,7 +31,9 @@ class Sale extends Model {
       constraints: true,
     });
   }
-  
+  static associate(models) {
+    this.hasMany(models.ProductsSales);
+  }
 }
 
 module.exports = Sale;

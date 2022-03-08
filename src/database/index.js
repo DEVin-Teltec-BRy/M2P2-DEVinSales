@@ -14,6 +14,7 @@ const Product = require('../models/Product');
 const Address = require('../models/Address');
 const ProductsSales = require("../models/ProductsSales");
 
+
 //   inicialização dos models
 //   todos os models devem ser iniciados passando a connection
 
@@ -34,11 +35,16 @@ User.associate(connection.models);
 Role.associate(connection.models);
 Permission.associate(connection.models);
 Sale.associate(connection.models);
-City.associate(connection.models);
-Address.associate(connection.models);
-
+Address.associate(connection.models)
+//City.associate(connection.models);
 //Product.associate(connection.models)
-Product.associate(connection.models);
 ProductsSales.associate(connection.models);
 
 module.exports = connection;
+
+
+
+
+
+
+
