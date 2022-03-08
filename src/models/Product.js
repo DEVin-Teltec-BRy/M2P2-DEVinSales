@@ -26,9 +26,6 @@ class Product extends Model {
       { sequelize }
     );
   }
-  static associate(models) {
-    this.hasMany(models.ProductsSales);
-  }
 }
 
 module.exports = Product;
