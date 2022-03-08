@@ -5,9 +5,26 @@ const { send } = require("express/lib/response");
 
 module.exports = {
   async index(req, res) {
-    // #swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para buscar produtos conforme critério query params'
+    /* #swagger.tags = ['Produto']
+    #swagger.description = 'Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados.'
+    #swagger.parameters['name'] = {
+      in: 'query',
+      description: 'query para buscar produtos pelo nome',
+      required: false,
+    },
+    #swagger.parameters['price_min'] = {
+    in: 'query',
+    description: 'query para buscar produtos pelo preço mínimo',
+    required: false,
+    type: 'number',
+  },
+   #swagger.parameters['price_max'] = {
+    in: 'query',
+    description: 'query para buscar produtos pelo preço máximo',
+    required: false,
+    type: 'number',
 
+  } */
     try {
       const { name, price_min, price_max } = req.query;
       const query = {};
@@ -42,6 +59,15 @@ module.exports = {
     }
   },
   async delete(req, res) {
+    /* #swagger.tags = ['Produto'],
+     #swagger.description = 'Endpoint para deletar um produto.',
+     #swagger.parameters['id'] = {
+      in: 'path',
+      description: 'params para buscar usuário pelo id para deleção',
+      required: true,
+      type: 'number',
+    },
+    */
     try {
       const { id } = req.params;
       const product = await Product.findByPk(id);
@@ -65,8 +91,9 @@ module.exports = {
     }
   },
   async store(req, res) {
-    // #swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para criar um novo produto.'
+    //#swagger.tags = ['Produto']
+    // #swagger.description = 'Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal.'
+
     try {
       const newProduct = req.body;
 
@@ -90,7 +117,10 @@ module.exports = {
 
       return res.status(200).send({
         message: "Produto criado com sucesso!",
-        novoProduto: product,
+        novoProduto: {
+          nome: product.name,
+          preço_sugerido: product.suggested_price,
+        },
       });
     } catch (error) {
       const message = validateErrors(error);
