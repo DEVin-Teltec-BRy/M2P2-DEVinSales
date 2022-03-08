@@ -8,4 +8,5 @@ usersRoutes.post("/users", UserController.create);
 usersRoutes.post("/session", UserController.session);
 usersRoutes.get("/users", onlyCanAccessWith([READ]), UserController.index);
 
+
 module.exports = usersRoutes;
