@@ -37,7 +37,7 @@ module.exports={
         // const {user_id} = req.params
         // const { buyer_id, dt_sale,} = req.body
            
-       const FindUser = await User.findAll()
+       const FindUser = await Sale.findAll()
       console.log(FindUser)
        return res.status(201).json(FindUser)
 
@@ -51,34 +51,24 @@ module.exports={
 
     },
 
-    async showSalesByBuyer(req, res){
-        // #swagger.tags = ['Vendas']
-        // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
+    async showSaleById(req, res) {
 
-       const {user_id} = req.params;
+        
+        try {
+            const id =  req.params.id
 
-      
-       try{
-       const salesData = await User.findAll({
-            include: [
-                {
-                    association: "buyer_sales",
-                    where: {
-                        buyer_id: user_id
-                    }
-                }
-            ]
-        });     
+            const sales = await Sale.findAll({
+                where: { 
+                    id: Number(id) 
+                  }
+                })
+                return res.status(200).json(sales)
+              } catch (error) {
+                return res.status(500).json(error.message)
+              }
 
-        if(salesData.length == 0){
-            return res.status(204).json({message: "no content"});
         }
-
-        return res.status(200).json(salesData);
-
-        }catch(error){
-            return res.status(201).json({message: "erro ao listar dados de vendas"});
-        }
+        
     }
 
-}
+
