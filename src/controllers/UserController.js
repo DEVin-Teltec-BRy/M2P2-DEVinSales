@@ -11,15 +11,31 @@ module.exports = {
     // #swagger.description = 'Endpoint que criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
-      const badRequest = false
+      let badRequest = false
+
+      const regex = /^[A-Za-z0-9]+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      // ^[A-Za-z0-9]+ começa com uma letra ou numero
+      // ([\.-]?\w+) grupo em que pode ser usado um ou nenhum  . ou - seguido por uma ou mais letras
+      // * info acima em qualquer quantidade
+      // @
+      // (\.\w{2,3}) um ponto seguido por 2 ou 3 letras 
+      // + grupo acima repetindo de um ou mais vezes 
+      // $ fim do regex
+      if(!email.match(regex)){
+        badRequest = true
+      }
+      
+
 
       // Validações para erro (400) Bad Request
-      // const users_email = await User.findAll({
-      //   attributes:['email']
-      // })
-      // if(users_email.some((item)=>item.email == email)){
-      //   badRequest = true
-      // }
+      const users_email = await User.findAll({
+        attributes:['email']
+      })
+      if(users_email.some((item)=>item.email == email)){
+        badRequest = true
+      }
+
+      console.log(email.split('@'))
       console.log(badRequest)
 
 
