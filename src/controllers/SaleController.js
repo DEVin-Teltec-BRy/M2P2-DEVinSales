@@ -49,6 +49,36 @@ module.exports={
         // })
         // return res.status(201).send({ message: "AChou" })
 
+    },
+
+    async showSalesByBuyer(req, res){
+        // #swagger.tags = ['Vendas']
+        // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
+
+       const {user_id} = req.params;
+
+      
+       try{
+       const salesData = await User.findAll({
+            include: [
+                {
+                    association: "buyer_sales",
+                    where: {
+                        buyer_id: user_id
+                    }
+                }
+            ]
+        });     
+
+        if(salesData.length == 0){
+            return res.status(204).json({message: "no content"});
+        }
+
+        return res.status(200).json(salesData);
+
+        }catch(error){
+            return res.status(201).json({message: "erro ao listar dados de vendas"});
+        }
     }
 
 }
