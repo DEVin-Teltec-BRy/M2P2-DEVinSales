@@ -20,6 +20,19 @@ const doc = {
       bearerAuth: [],
     },
   ],
+  definitions: {
+    AddUser: {
+      name: 'John Doe',
+      password: '123',
+      email: 'john.doe@email.com',
+      birth_date: '01/01/1990',
+      roles: [{role_id: 1}]
+    },
+    UserLogin: {
+      name: "JohnDoe",
+      password: "12345"
+    }
+  }
 };
 
 const outputFile = "./src/swagger.json";

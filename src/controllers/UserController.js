@@ -7,8 +7,27 @@ const { validateErrors, stringToDate } = require("../utils/functions");
 
 module.exports = {
   async create(req, res) {
-    // #swagger.tags = ['Usuário']
-    // #swagger.description = 'Endpoint que criar um novo usuário.'
+    /*
+      #swagger.tags = ['Usuário']
+      #swagger.description = 'Endpoint que criar um novo usuário.'
+      #swagger.parameters['obj'] = {
+        in: 'body',
+        required: true,
+        schema: {
+          $ref: '#/definitions/AddUser'
+        }
+      }
+      #swagger.responses[201] = {
+        description: 'Created',
+        schema: {
+          message: 'Usuário salvo com sucesso.'
+        }
+
+      }
+      #swagger.responses[403] = {
+        description: 'Forbidden'
+      }
+    */
     try {
       const { name, password, email, birth_date, roles } = req.body;
       const user = await User.create({
@@ -35,8 +54,29 @@ module.exports = {
   },
 
   async session(req, res) {
-    // #swagger.tags = ['Usuário']
-    // #swagger.description = 'Endpoint para login do usuário, quando email e senha são validos retorna um token.'
+    /*
+      #swagger.tags = ['Usuário']
+      #swagger.description = 'Endpoint para login do usuário, quando email e senha são validos retorna um token.'
+      #swagger.parameters['obj'] = {
+        in: 'body',
+        required: true,
+        schema: {
+          $ref: '#/definitions/UserLogin'
+        }
+      }
+      #swagger.responses[201] = {
+        description: 'Token de acesso',
+        schema: {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGVzIjpbeyJpZCI6Miwi___RANDOM_TOKEN___JPV05FUiJ9XSwiaWF0IjoxNjQ2ODA0MDkxLCJleHAiOjE2NDY4OTA0OTF9.OwvUy0p3BVfbicuCg9YYAk5tlPQ6UKB_bZrHt8-H_CU"
+        }
+      }
+      #swagger.responses[400] = {
+        description: 'Login não efetuado',
+        schema: {
+          "message": "Email ou senha inválidos"
+        }
+      }
+    */
     try {
       const { email, password } = req.body;
 
@@ -82,8 +122,25 @@ module.exports = {
   },
 
   async index(req, res) {
-    // #swagger.tags = ['Usuário']
-    // #swagger.description = 'Endpoint para buscar todos os usuários do banco de dados.'
+    /*
+      #swagger.tags = ['Usuário']
+      #swagger.description = 'Endpoint para buscar todos os usuários do banco de dados.'
+      #swagger.parameters['name'] = {
+        in: 'query',
+        type: 'string',
+        description: 'Nome de um usuário. Exemplo: John Doe'
+      }
+      #swagger.parameters['birth_date_min'] = {
+        in: 'query',
+        type: 'string',
+        description: 'Data limite inferior da consulta. Formato: DD/MM/AAAA'
+      }
+      #swagger.parameters['birth_date_max'] = {
+        in: 'query',
+        type: 'string',
+        description: 'Data limite superior da consulta. Formato: DD/MM/AAAA'
+      }
+    */
     try {
       const { name, birth_date_min, birth_date_max } = req.query;
 
