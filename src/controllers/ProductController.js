@@ -6,7 +6,6 @@ module.exports = {
   async index(req, res) {
     // #swagger.tags = ['Produto']
     // #swagger.description = 'Endpoint para buscar produtos conforme critério query params'
-
     try {
       const { name, price_min, price_max } = req.query;
       const query = {};
@@ -20,7 +19,7 @@ module.exports = {
 
       if (priceMax <= priceMin) {
         return res.status(400).json({
-          message: "Price max must be greater than price min",
+          message: "Preço máximo deve ser maior que o preço minimo",
         });
       }
       query.suggested_price = {
@@ -92,26 +91,34 @@ module.exports = {
     }
   },
   async delete(req, res) {
+    // #swagger.tags = ['Produto']
+    // #swagger.description = 'Endpoint para deletar um produto, neste Endpoint o usuário logado deve ter permissão de DELETE, e não pode ser um produto vendido.'
     try {
       const { id } = req.params;
-      const product = await Product.findByPk(id);
-      if (!product) {
-        return res.status(404).send();
-      }
-      // Como a tabela product_sales ainda não foi criada, a regra de negócio:
-      // "Caso exista algum products_sales com o product_id enviado, deve-se retornar o código de erro 400 (Bad Request)"
-      // foi ignorada no momento, e adicionada a outro card no trello
-
-      await Product.destroy({
-        where: {
-          id: id,
-        },
+      const product = await Product.findByPk(id, {
+        include: [
+          {
+            required: false,
+            association: "sales",
+          },
+        ],
       });
+      if (!product) {
+        return res.status(404).send({ message: "Produto não encontrado." });
+      }
+      if (product.sales.length > 0) {
+        return res
+          .status(400)
+          .send({
+            message: "Produto não pode ser deletado, produto já vendido.",
+          });
+      }
+      await product.destroy();
+
       return res.status(204).send();
     } catch (error) {
-      return res.status(400).send({
-        message: "Error deleting product",
-      });
+      const message = validateErrors(error);
+      return res.status(400).send(message);
     }
   },
   async store(req, res) {
