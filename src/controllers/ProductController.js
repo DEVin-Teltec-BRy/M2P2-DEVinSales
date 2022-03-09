@@ -1,7 +1,6 @@
 const Product = require("../models/Product");
 const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
-const { send } = require("express/lib/response");
 
 module.exports = {
   async index(req, res) {
@@ -36,6 +35,57 @@ module.exports = {
       if (products.length === 0) return res.status(204).send();
 
       return res.status(200).send({ products });
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
+  async putUpdate(req, res) {
+    // #swagger.tags = ['Produto']
+    // #swagger.description = 'Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.'
+    try {
+      const { product_id } = req.params;
+      const { name, suggested_price } = req.body;
+      const nameData = name.trim();
+
+      if (!nameData) {
+        return res
+          .status(400)
+          .send({ message: "O campo name, não foi enviado." });
+      }
+      if (!suggested_price) {
+        return res
+          .status(400)
+          .send({ message: "O campo suggested_price, não foi enviado." });
+      }
+      if (Number(suggested_price) <= 0) {
+        return res
+          .status(400)
+          .send({ message: "O campo suggested_price, deve ser maior que 0." });
+      }
+      const hasProductWithSameName = await Product.count({
+        where: {
+          name: nameData,
+          id: {
+            [Op.not]: product_id,
+          },
+        },
+      });
+      if (hasProductWithSameName) {
+        return res
+          .status(400)
+          .send({ message: "Já existe outro produto com o mesmo nome." });
+      }
+      const product = await Product.findByPk(product_id);
+      if (!product) {
+        return res.status(404).send({ message: "Product not found." });
+      }
+      product.name = nameData;
+      product.suggested_price = suggested_price;
+
+      await product.save();
+
+      return res.status(204).send();
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
@@ -104,20 +154,27 @@ module.exports = {
     try {
       const { id } = req.params;
       const { name, suggested_price } = req.body;
-
-      if (!name && !suggested_price) {
+      const formatedName = name.trim();
+      if (!formatedName && !suggested_price) {
         return res
           .status(400)
           .send({ message: "Não foram enviados dados para atualização." });
       }
 
-      if (name) {
-        const name_Db = await Product.findOne({ where: { name: name } });
+      if (formatedName) {
+        const name_Db = await Product.findOne({
+          where: {
+            name: formatedName,
+            id: {
+              [Op.not]: id,
+            },
+          },
+        });
 
         if (name_Db) {
-          return res
-            .status(400)
-            .send({ message: `Já existe outro produto com o nome ${name}` });
+          return res.status(400).send({
+            message: `Já existe outro produto com o nome ${formatedName}`,
+          });
         }
       }
 
@@ -134,12 +191,12 @@ module.exports = {
           .send({ message: `Não existe produto com o id ${id}` });
       }
 
-      name ? (productExist.name = name) : productExist.name;
+      formatedName ? (productExist.name = formatedName) : productExist.name;
       suggested_price
         ? (productExist.suggested_price = suggested_price)
         : productExist.suggested_price;
 
-      productExist.save();
+      await productExist.save();
 
       return res.status(204).send();
     } catch (error) {

@@ -4,9 +4,9 @@ const productsRoutes = express.Router();
 const { onlyCanAccessWith } = require("../../middlewares/auth");
 const {
   READ,
-  WRITE,
-  DELETE,
   UPDATE,
+  DELETE,
+  WRITE,
 } = require("../../utils/constants/permissions");
 
 productsRoutes.get(
@@ -14,6 +14,12 @@ productsRoutes.get(
   onlyCanAccessWith([READ]),
   ProductController.index
 );
+productsRoutes.put(
+  "/product/:product_id",
+  onlyCanAccessWith([UPDATE]),
+  ProductController.putUpdate
+);
+
 productsRoutes.post(
   "/products",
   onlyCanAccessWith([WRITE]),
