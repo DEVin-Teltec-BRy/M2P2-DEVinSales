@@ -36,8 +36,8 @@ Role.associate(connection.models);
 Permission.associate(connection.models);
 Sale.associate(connection.models);
 Address.associate(connection.models)
-//City.associate(connection.models);
-//Product.associate(connection.models)
+// Product.associate(connection.models);
+City.associate(connection.models);
 ProductsSales.associate(connection.models);
 
 module.exports = connection;
