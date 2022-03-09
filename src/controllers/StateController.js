@@ -1,5 +1,7 @@
 const State = require("../models/State");
 const { validateErrors } = require("../utils/functions");
+const Sequelize = require("Sequelize");
+const { Op } = require("Sequelize");
 
 module.exports = {
   async index(req, res) {
@@ -10,19 +12,48 @@ module.exports = {
     //   description: 'Filtro que identifica o nome integral ou parcial dos estados que serão retornados',
     //   type: 'array',
     //   collectionFormat: 'multi',
-    // } 
+    // }
+    // #swagger.parameters['initials'] = {
+    //   in: 'query',
+    //   description: 'Filtro que identifica as iniciais integral ou parcial dos estados que serão retornados',
+    //   type: 'array',
+    //   collectionFormat: 'multi',
+    // }
+
     try {
-      const query = req.query;
-      console.log(query)
-      if (Object.keys(query).length) {
-          return res.status(200).send(query.name)
+      const names = [req.query.name]
+      const initials = [req.query.initials]
+
+      if (names[0] !== undefined|| initials[0] !== undefined ) {
+        const states = await Promise.all(
+          initials.flat().map(async (initial) => {
+            return await State.findAll({
+              where: { initials: {[Op.iLike]: `%${initial}%`} },
+            });
+          }).concat(
+            names.flat().map(async (name) => {
+              return await State.findAll({
+                where: { name: {[Op.iLike]: `%${name}%`} },
+              });
+            })
+          )
+        );
+
+        const filteredStates =  [...new Map(states.flat().map((state) => [state['id'], state])).values()]
+        return res.status(200).send(filteredStates);
       }
+
+      // No query params
       else {
         const states = await State.findAll();
-        if (states.length === 0) 
-            return res.status(204).send("No Content");
-        else 
-            return res.status(200).send({ states });
+        // Blank DB
+        if (states.length === 0) {
+          return res.status(204).send();
+        }
+        // DB with content
+        else {
+          return res.status(200).send({ states });
+        }
       }
     } catch (error) {
       const message = validateErrors(error);
