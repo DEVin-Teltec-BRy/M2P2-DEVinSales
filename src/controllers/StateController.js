@@ -31,6 +31,10 @@ module.exports = {
         return res.status(404).json({ message: "Not Found." });
       }
 
+      if (state.id !== city.state_id) {
+        return res.status(400).json({ message: "Bad Request" });
+      }
+
       return res.status(200).json({ state, city });
     } catch (error) {
       const message = validateErrors(error);
