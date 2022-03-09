@@ -156,7 +156,7 @@ module.exports = {
       ) {
         unit_price = validProductId.suggested_price;
       }
-      //The hard way of doing it
+      //Creating Product_Sale
         const sale = await Sale.create({
           seller_id,
           buyer_id,
