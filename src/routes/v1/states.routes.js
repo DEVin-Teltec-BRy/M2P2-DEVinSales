@@ -6,4 +6,5 @@ const statesRoutes = express.Router();
 
 statesRoutes.get("/states", onlyCanAccessWith([READ]), StateController.index);
 
+
 module.exports = statesRoutes;
