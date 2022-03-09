@@ -12,7 +12,6 @@ class Deliveries extends Model{
       sequelize,
     })
   }
-  //confirmar nomes e keys, de acordo com tabela Addresses
   static associate(models) {
     this.belongsTo(models.Address, {
         foreignKey: "address_id",
