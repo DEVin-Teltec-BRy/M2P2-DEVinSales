@@ -42,9 +42,24 @@ function validateEmailType(email) {
   return emailValidation;
 }
 
+function verifyAge(PersonAge) {
+  const ageValidation = false;
+  const today = new Date();
+  let age = today.getFullYear() - PersonAge.getFullYear();
+  const month = today.getMonth() - PersonAge.getMonth();
+  if (month < 0 || (month === 0 && today.getDate() < PersonAge.getDate())) {
+    age--;
+  }
+  if (age >= 18) {
+    ageValidation = true;
+  }
+  return ageValidation;
+}
+
 module.exports = {
   validateErrors,
   stringToDate,
   PostUserPasswordValidation,
   validateEmailType,
+  verifyAge,
 };

@@ -24,5 +24,4 @@ module.exports = {
     "22/08/2000",
     "VictorD12."
   ),
-  User5: createUser("Marcos", "marcos3@gmail.com", "14/02/1997", "123445"),
 };

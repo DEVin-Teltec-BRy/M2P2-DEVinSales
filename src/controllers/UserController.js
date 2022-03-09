@@ -8,6 +8,7 @@ const {
   stringToDate,
   PostUserPasswordValidation,
   validateEmailType,
+  verifyAge,
 } = require("../utils/functions");
 
 module.exports = {
@@ -54,6 +55,14 @@ module.exports = {
         const message = validateErrors({
           message:
             "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
+        });
+        return res.status(400).send(message);
+      }
+
+      const ageValidation = verifyAge(stringToDate(birth_date));
+      if (ageValidation === false) {
+        const message = validateErrors({
+          message: "O usuário não é maior de idade",
         });
         return res.status(400).send(message);
       }
