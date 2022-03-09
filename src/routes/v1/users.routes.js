@@ -14,4 +14,3 @@ usersRoutes.delete(
 );
 
 module.exports = usersRoutes;
-s;

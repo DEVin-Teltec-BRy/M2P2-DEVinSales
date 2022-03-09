@@ -7,7 +7,6 @@ const {
   validateErrors,
   stringToDate,
   PostUserPasswordValidation,
-  validateEmailType,
   verifyAge,
 } = require("../utils/functions");
 
@@ -32,14 +31,6 @@ module.exports = {
         if (responseRoles && responseRoles.length > 0) {
           await user.setRoles(responseRoles);
         }
-      }
-
-      const emailTypeValidation = validateEmailType(email);
-      if (emailTypeValidation === false) {
-        const message = validateErrors({
-          message: "E-mail no formato incorreto",
-        });
-        return res.status(400).send(message);
       }
 
       const emailExists = await User.findOne({ where: { email: email } });

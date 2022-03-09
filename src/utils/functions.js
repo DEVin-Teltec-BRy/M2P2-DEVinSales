@@ -49,6 +49,5 @@ module.exports = {
   validateErrors,
   stringToDate,
   PostUserPasswordValidation,
-  validateEmailType,
   verifyAge,
 };
