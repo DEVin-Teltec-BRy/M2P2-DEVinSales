@@ -363,6 +363,11 @@
             "name": "name",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "initials",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -374,12 +379,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         }
       }
