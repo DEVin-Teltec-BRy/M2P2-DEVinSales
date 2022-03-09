@@ -60,13 +60,15 @@ module.exports={
       
        try{
        const salesData = await User.findAll({
+            attributes: ['id','name','email'],
             include: [
                 {
                     association: "buyer_sales",
+                    attributes: ['seller_id','buyer_id','dt_sale'],
                     where: {
                         buyer_id: user_id
                     }
-                }
+                }                
             ]
         });     
 
