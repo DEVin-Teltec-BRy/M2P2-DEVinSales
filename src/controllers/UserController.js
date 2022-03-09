@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const { sign } = require("jsonwebtoken");
-const { Op } = require("sequelize");
+const { Op, DATE } = require("sequelize");
 const bcrypt = require("bcrypt");
 const Role = require("../models/Role");
 const { validateErrors, stringToDate } = require("../utils/functions");
@@ -17,12 +17,7 @@ module.exports = {
       // Validações para erro (400) Bad Request
 
       // validação do email, ser único já é definido na model
-      const users_email = await User.findAll({
-        attributes:['email']
-      })
-      // if(users_email.some((item)=>item.email == email)){
-      //   badRequest = true
-      // }
+ 
       const regex = /^[A-Za-z0-9]+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
       // ^[A-Za-z0-9]+ começa com uma letra ou numero
       // ([\.-]?\w+) grupo em que pode ser usado um ou nenhum  . ou - seguido por uma ou mais letras
@@ -38,7 +33,12 @@ module.exports = {
       }
 
       // validação data no padrão dd//mm/yyyy
-      
+      const hoje = new Date().toLocaleDateString()
+      const outraData = new Date(birth_date).toLocaleDateString()
+      console.log(hoje)
+      console.log(outraData)
+      const age = hoje - outraData
+      console.log(age)
     
       // validação para senha ser pelo menos com 4 caracteres e pelo menos um caracter diferente
       if(password.length <4 || [...new Set(password.split(''))] > 1){
@@ -74,7 +74,7 @@ module.exports = {
       // }
       // return res.status(201).send(users_email);
       }
-      return res.status(201).send(password);
+      return res.status(201).send(birth_date);
 
       return res.status(201).send({ message: "Usuário salvo com sucesso." });
     } catch (error) {
