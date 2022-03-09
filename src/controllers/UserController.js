@@ -11,8 +11,18 @@ module.exports = {
     // #swagger.description = 'Endpoint que criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
-      let badRequest = false
+      let badRequest = false 
+      let message = ''
 
+      // Validações para erro (400) Bad Request
+
+      // validação do email, ser único já é definido na model
+      const users_email = await User.findAll({
+        attributes:['email']
+      })
+      // if(users_email.some((item)=>item.email == email)){
+      //   badRequest = true
+      // }
       const regex = /^[A-Za-z0-9]+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
       // ^[A-Za-z0-9]+ começa com uma letra ou numero
       // ([\.-]?\w+) grupo em que pode ser usado um ou nenhum  . ou - seguido por uma ou mais letras
@@ -23,25 +33,26 @@ module.exports = {
       // $ fim do regex
       if(!email.match(regex)){
         badRequest = true
+        message = "Email informado em padrão incorreto"
+        
+      }
+
+      // validação data no padrão dd//mm/yyyy
+      
+    
+      // validação para senha ser pelo menos com 4 caracteres e pelo menos um caracter diferente
+      if(password.length <4 || [...new Set(password.split(''))] > 1){
+        badRequest = true
+        message = "senha muito curta ou sem variação"
       }
       
-
-
-      // Validações para erro (400) Bad Request
-      const users_email = await User.findAll({
-        attributes:['email']
-      })
-      if(users_email.some((item)=>item.email == email)){
-        badRequest = true
-      }
-
-      console.log(email.split('@'))
-      console.log(badRequest)
-
-
-
+      
+      
+      
       // 
-
+      if(badRequest){
+        return res.status(400).send({message: `Tentativa falhou, ${message}`})
+      
 
 
 
@@ -61,7 +72,9 @@ module.exports = {
       //     await user.setRoles(resposeRoles);
       //   }
       // }
-      return res.status(201).send(users_email);
+      // return res.status(201).send(users_email);
+      }
+      return res.status(201).send(password);
 
       return res.status(201).send({ message: "Usuário salvo com sucesso." });
     } catch (error) {
