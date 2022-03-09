@@ -3,7 +3,7 @@ const { sign } = require("jsonwebtoken");
 const { Op, DATE } = require("sequelize");
 const bcrypt = require("bcrypt");
 const Role = require("../models/Role");
-const { validateErrors, stringToDate } = require("../utils/functions");
+const { validateErrors, stringToDate, checkAge } = require("../utils/functions");
 
 module.exports = {
   async create(req, res) {
@@ -28,17 +28,17 @@ module.exports = {
       // $ fim do regex
       if(!email.match(regex)){
         badRequest = true
-        message = "Email informado em padrão incorreto"
+        message = "email informado em padrão incorreto"
         
       }
 
-      // validação data no padrão dd//mm/yyyy
-      const hoje = new Date().toLocaleDateString()
-      const outraData = new Date(birth_date).toLocaleDateString()
-      console.log(hoje)
-      console.log(outraData)
-      const age = hoje - outraData
-      console.log(age)
+      // validação da idade mínima 18 anos
+      const age = checkAge(birth_date)
+      
+      if(age <18){
+        badRequest = true,
+        message = "idade mínima de 18 anos"
+      }
     
       // validação para senha ser pelo menos com 4 caracteres e pelo menos um caracter diferente
       if(password.length <4 || [...new Set(password.split(''))] > 1){
