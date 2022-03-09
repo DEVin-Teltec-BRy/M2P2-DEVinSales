@@ -1,7 +1,6 @@
 const Product = require("../models/Product");
 const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
-const { send } = require("express/lib/response");
 
 module.exports = {
   async index(req, res) {
@@ -41,7 +40,6 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
-
   async putUpdate(req, res) {
     // #swagger.tags = ['Produto']
     // #swagger.description = 'Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.'
