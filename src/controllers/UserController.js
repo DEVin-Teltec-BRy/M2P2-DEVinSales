@@ -3,7 +3,12 @@ const { sign } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const Role = require("../models/Role");
-const { validateErrors, stringToDate } = require("../utils/functions");
+const {
+  validateErrors,
+  stringToDate,
+  PostUserPasswordValidation,
+  validateEmailType,
+} = require("../utils/functions");
 
 module.exports = {
   async create(req, res) {
@@ -18,14 +23,39 @@ module.exports = {
         birth_date,
       });
       if (roles && roles.length > 0) {
-        const resposeRoles = await Role.findAll({
+        const responseRoles = await Role.findAll({
           where: {
             id: roles.map((role) => role.role_id),
           },
         });
-        if (resposeRoles && resposeRoles.length > 0) {
-          await user.setRoles(resposeRoles);
+        if (responseRoles && responseRoles.length > 0) {
+          await user.setRoles(responseRoles);
         }
+      }
+
+      const emailTypeValidation = validateEmailType(email);
+      if (emailTypeValidation === false) {
+        const message = validateErrors({
+          message: "E-mail no formato incorreto",
+        });
+        return res.status(400).send(message);
+      }
+
+      const emailExists = await User.findOne({ where: { email: email } });
+      if (emailExists) {
+        const message = validateErrors({
+          message: "O E-mail informado já existe",
+        });
+        return res.status(400).send(message);
+      }
+
+      const passwordValidation = PostUserPasswordValidation(password);
+      if (passwordValidation === false) {
+        const message = validateErrors({
+          message:
+            "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
+        });
+        return res.status(400).send(message);
       }
       return res.status(201).send({ message: "Usuário salvo com sucesso." });
     } catch (error) {
@@ -116,5 +146,4 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
-
 };
