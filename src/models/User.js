@@ -56,6 +56,7 @@ class User extends Model {
     );
   }
   static associate(models) {
+
     this.belongsToMany(models.Role, {
       foreignKey: "user_id",
       through: "users_roles",
@@ -66,6 +67,14 @@ class User extends Model {
       as: 'sales_user'
 
     });
+
+    this.hasMany(
+        models.Sale,{
+           foreignKey: 'buyer_id',
+           as: 'buyer_sales'
+        }
+    );
+
   }
 }
 module.exports = User;

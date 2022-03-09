@@ -10,6 +10,8 @@ const Product = require("../models/Product");
 const Sale = require("../models/Sale");
 const State = require("../models/State");
 const ProductsSales = require("../models/ProductsSales");
+const City = require("../models/City");
+const Address = require("../models/Address");
 
 const connection = new Sequelize(dbConfig[nodeEnv]);
 /**
@@ -23,6 +25,9 @@ Product.init(connection);
 Sale.init(connection);
 State.init(connection);
 ProductsSales.init(connection);
+City.init(connection);
+Address.init(connection);
+
 
 /**
  * Associação dos models
@@ -33,5 +38,6 @@ Role.associate(connection.models);
 Permission.associate(connection.models);
 Sale.associate(connection.models);
 Product.associate(connection.models);
+City.associate(connection.models);
 //Product.associate(connection.models)
 module.exports = connection;
