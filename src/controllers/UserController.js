@@ -22,7 +22,6 @@ module.exports = {
         schema: {
           message: 'Usuário salvo com sucesso.'
         }
-
       }
       #swagger.responses[403] = {
         description: 'Forbidden'
@@ -128,17 +127,20 @@ module.exports = {
       #swagger.parameters['name'] = {
         in: 'query',
         type: 'string',
-        description: 'Nome de um usuário. Exemplo: John Doe'
+        description: 'Nome de um usuário.',
+        default: 'John Doe'
       }
       #swagger.parameters['birth_date_min'] = {
         in: 'query',
         type: 'string',
-        description: 'Data limite inferior da consulta. Formato: DD/MM/AAAA'
+        description: 'Data limite inferior da consulta.',
+        default: 'DD/MM/AAAA'
       }
       #swagger.parameters['birth_date_max'] = {
         in: 'query',
         type: 'string',
-        description: 'Data limite superior da consulta. Formato: DD/MM/AAAA'
+        description: 'Data limite superior da consulta.',
+        default: 'DD/MM/AAAA'
       }
     */
     try {

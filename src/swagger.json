@@ -68,19 +68,22 @@
             "name": "name",
             "in": "query",
             "type": "string",
-            "description": "Nome de um usuário. Exemplo: John Doe"
+            "description": "Nome de um usuário.",
+            "default": "John Doe"
           },
           {
             "name": "birth_date_min",
             "in": "query",
             "type": "string",
-            "description": "Data limite inferior da consulta. Formato: DD/MM/AAAA"
+            "description": "Data limite inferior da consulta.",
+            "default": "DD/MM/AAAA"
           },
           {
             "name": "birth_date_max",
             "in": "query",
             "type": "string",
-            "description": "Data limite superior da consulta. Formato: DD/MM/AAAA"
+            "description": "Data limite superior da consulta.",
+            "default": "DD/MM/AAAA"
           }
         ],
         "responses": {
