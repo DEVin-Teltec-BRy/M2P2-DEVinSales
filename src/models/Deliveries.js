@@ -14,10 +14,10 @@ class Deliveries extends Model{
   }
   //confirmar nomes e keys, de acordo com tabela Addresses
   static associate(models) {
-    /*this.belongsTo(models.Addresses, {
+    this.belongsTo(models.Address, {
         foreignKey: "address_id",
         as: "adress",
-    })*/
+    })
     this.belongsTo(models.Sale, {
       foreignKey: "sale_id",
       as: "sale",

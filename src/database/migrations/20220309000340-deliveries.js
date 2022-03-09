@@ -10,14 +10,14 @@ module.exports = {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
-        },  /*      
+        },       
         address_id: {
           type: Sequelize.INTEGER,
           references: {model: 'addresses', key: 'id'},
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
           allowNull: false,
-        },*/
+        },
         sale_id: {
           type: Sequelize.INTEGER,
           references: {model: {

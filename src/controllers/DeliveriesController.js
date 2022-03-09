@@ -11,17 +11,11 @@ module.exports={
         const { address_id, delivery_forecast} = req.body
         const receivedForecast = delivery_forecast;
         const standardForecast = new Date();
-        standardForecast.setDate(standardForecast.getDate()+7)
-        let realForecast = null
-        if (!receivedForecast){
-            realForecast = standardForecast
-        } else {
-            realForecast = receivedForecast
-        }
         try { 
             const result = await Deliveries.create({
                  sale_id:sale_id,
-                 delivery_forecast:realForecast,
+                 address_id: address_id,
+                 delivery_forecast:standardForecast,
             }) 
             res.status(201).send({message: sale_id })
         } catch (error) {
