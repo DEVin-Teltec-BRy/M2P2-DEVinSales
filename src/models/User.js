@@ -27,6 +27,11 @@ class User extends Model {
           unique: {
             msg: "E-mail deve ser único",
           },
+          validate: {
+            isEmail: {
+              msg: "Esse e-mail não é válido",
+            },
+          },
           get() {
             const email = this.getDataValue("email");
             return email;
@@ -56,20 +61,16 @@ class User extends Model {
     );
   }
   static associate(models) {
-
     this.belongsToMany(models.Role, {
       foreignKey: "user_id",
       through: "users_roles",
       as: "roles",
     });
 
-    this.hasMany(
-        models.Sale,{
-           foreignKey: 'buyer_id',
-           as: 'buyer_sales'
-        }
-    );
-
+    this.hasMany(models.Sale, {
+      foreignKey: "buyer_id",
+      as: "buyer_sales",
+    });
   }
 }
 module.exports = User;
