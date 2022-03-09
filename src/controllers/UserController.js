@@ -11,7 +11,24 @@ module.exports = {
     // #swagger.description = 'Endpoint que criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
-      console.log(req.body)
+      const badRequest = false
+
+      // Validações para erro (400) Bad Request
+      // const users_email = await User.findAll({
+      //   attributes:['email']
+      // })
+      // if(users_email.some((item)=>item.email == email)){
+      //   badRequest = true
+      // }
+      console.log(badRequest)
+
+
+
+      // 
+
+
+
+
       // const user = await User.create({
       //   name,
       //   password,
@@ -28,6 +45,8 @@ module.exports = {
       //     await user.setRoles(resposeRoles);
       //   }
       // }
+      return res.status(201).send(users_email);
+
       return res.status(201).send({ message: "Usuário salvo com sucesso." });
     } catch (error) {
       const message = validateErrors(error);
