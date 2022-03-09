@@ -30,10 +30,9 @@ class Sale extends Model {
       through: "user",
       constraints: true,
     });
+    Sale.belongsToMany(models.Product, { through:  models.ProductsSales });
   }
-  static associate(models) {
-    this.hasMany(models.ProductsSales);
-  }
+  
 }
 
 module.exports = Sale;

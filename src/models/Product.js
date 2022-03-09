@@ -27,7 +27,7 @@ class Product extends Model {
     );
   }
   static associate(models) {
-    this.hasMany(models.ProductsSales);
+    Product.belongsToMany(models.Sale, { through: models.ProductsSales });
   }
 }
 

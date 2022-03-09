@@ -237,6 +237,71 @@
         }
       }
     },
+    "/api/v1/user/{seller_id}/saleMade": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "<h2>Endpoint for submitting sales</h2>",
+        "parameters": [
+          {
+            "name": "seller_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "<ul><li>It must be a valid seller_id</li></ul>"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string",
+                  "example": "String"
+                },
+                "unit_price": {
+                  "type": "string",
+                  "example": "Integer"
+                },
+                "amount": {
+                  "type": "string",
+                  "example": "Integer"
+                }
+              },
+              "required": [
+                "product_id"
+              ]
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "<ul><li>If you are already authorized it is not necessary to pass the token </li></ul>",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Sale submitted successfully."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "The user logged-in is unauthorized to submit sales."
+          },
+          "404": {
+            "description": "product_id or seller_id were not found in the database."
+          }
+        }
+      }
+    },
     "/api/v1/user/{user_id}/sales": {
       "post": {
         "tags": [
