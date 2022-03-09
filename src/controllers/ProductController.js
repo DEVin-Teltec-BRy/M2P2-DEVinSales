@@ -63,11 +63,12 @@ module.exports = {
 
   async putUpdate(req, res) {
     /*#swagger.tags = ['Produto']
-    #swagger.description = 'Endpoint para atualizar um produt. Neste Endpoint o usuário logado deve ter permissão de UPDATE.'
-    #swagger.parameters['name'] = {
-      in: 'query',
-      description: 'query para buscar produtos pelo nome',
-      required: false,
+    #swagger.description = 'Endpoint para atualizar um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+    #swagger.parameters['product_id'] = {
+      in: 'path',
+      description: 'parâmetro id para buscar o produto a ser alterado',
+      required: true,
+      type: 'number',
     }*/
 
     try {
@@ -120,7 +121,7 @@ module.exports = {
   },
   async delete(req, res) {
     /* #swagger.tags = ['Produto'],
-     #swagger.description = 'Endpoint para deletar um produto.',
+     #swagger.description = 'Endpoint para deletar um produto. Nesse endpoint o usuário deve ter permissão DELETE.',
      #swagger.parameters['id'] = {
       in: 'path',
       description: 'params para buscar usuário pelo id para deleção',
@@ -152,7 +153,7 @@ module.exports = {
   },
   async store(req, res) {
     //#swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal.'
+    // #swagger.description = 'Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.'
 
     try {
       const newProduct = req.body;
