@@ -11,8 +11,13 @@ salesRoutes.get('/sales', SaleController.showSaler);
 
 salesRoutes.post('/user/:user_id/sales', SaleController.create);
 
+
 salesRoutes.get('/sales/:id', SaleController.showSaleById);
 
+
+
+
+salesRoutes.post('/user/:user_id/sales', SaleController.create);
 
 
 
