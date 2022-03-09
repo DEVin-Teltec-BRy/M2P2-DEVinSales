@@ -40,7 +40,12 @@ module.exports = {
         );
 
         const filteredStates =  [...new Map(states.flat().map((state) => [state['id'], state])).values()]
+        if (filteredStates.length === 0) {
+          return res.status(204).send();
+        } 
+        else {
         return res.status(200).send(filteredStates);
+        }
       }
 
       // No query params
