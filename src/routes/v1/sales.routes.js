@@ -6,7 +6,7 @@ const express = require('express');
 const salesRoutes = express.Router();
 
 
-salesRoutes.get('/sales/:id',onlyCanAccessWith([READ]) ,SaleController.showSaler);
+salesRoutes.get('/user/:id/sales',onlyCanAccessWith([READ]) ,SaleController.showSaler);
 
 salesRoutes.post('/user/:user_id/sales', SaleController.create);
 module.exports = salesRoutes;

@@ -190,12 +190,12 @@
         }
       }
     },
-    "/api/v1/sales/{id}": {
+    "/api/v1/user/{id}/sales": {
       "get": {
         "tags": [
           " Vendas "
         ],
-        "description": "Endpoint pra buscar as vendas do usuario.",
+        "description": "Endpoint pra buscar as vendas do usuario. Digite um id de usuario.",
         "parameters": [
           {
             "name": "id",
@@ -205,8 +205,17 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }

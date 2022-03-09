@@ -1,3 +1,4 @@
+const { user } = require('pg/lib/defaults');
 const Sale = require('../models/Sale')
 const User = require("../models/User");
 const salesRoutes = require('../routes/v1/sales.routes');
@@ -36,25 +37,33 @@ module.exports={
 
          const {id} = req.params;
          
+                
         try {
-            const Finduser = await User.findAll({
-                include: [
-                    {
+            const findUser = await User.findByPk(id);
+
+            const findSaler = await User.findAll({
+                attributes:['name','email'],
+                 include: 
+                    { 
                         association: 'sales_user',
-                        where: {
-                            seller_id: id
-                        }
+                        attributes: [ 'seller_id', 'dt_sale' ],
+                        where: {seller_id: id },
                     }
-                ]
-            });
-            if(Finduser.length === 0){
+        });
+           
+         if(!findUser){
+             return res.status(400).send({message: "Este usuario não existe!"});
+         }
+
+           if(findSaler.length === 0){
                 return res.status(400).send({message: "Este usuario não possui vendas!"});
             }
             
-            return res.status(200).send({message: Finduser})
+            
+            return res.status(200).json( findSaler)
         } catch (error) {
-            console.log(error)
-            return res.status(400).send({message: "Este usuario não existe!"})
+            
+            return res.status(400).send({message: "Erro deconhecido!"})
         }
          
 
