@@ -35,7 +35,15 @@ module.exports = {
         return res.status(400).json({ message: "Bad Request" });
       }
 
-      return res.status(200).json({ state, city });
+      const result = {
+        city_id: city.id,
+        city: city.name,
+        state_id: city.state_id,
+        state: state.name,
+        initials: state.initials,
+      };
+
+      return res.status(200).json({ result });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
