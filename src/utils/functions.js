@@ -31,19 +31,8 @@ function PostUserPasswordValidation(password) {
   } else return res.status(400).send({ message: "Bad Request" });
 }
 
-function validateEmailType(email) {
-  emailValidation = null;
-  const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  if (email.match(mailformat)) {
-    emailValidation = true;
-  } else {
-    emailValidation = false;
-  }
-  return emailValidation;
-}
-
 function verifyAge(PersonAge) {
-  const ageValidation = false;
+  let ageValidation = false;
   const today = new Date();
   let age = today.getFullYear() - PersonAge.getFullYear();
   const month = today.getMonth() - PersonAge.getMonth();
