@@ -3,6 +3,10 @@ const { validateErrors } = require("../utils/functions");
 
 module.exports = {
   async getCitiesByID(req, res) {
+    /* 
+    #swagger.tags = ['State']
+    #swagger.description = 'Endpoint para buscar cidade por ID'
+    */
     try {
       const { state_id, city_id } = req.params;
     } catch (error) {
