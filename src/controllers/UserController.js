@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const Role = require("../models/Role");
 const { validateErrors, stringToDate } = require("../utils/functions");
+const UserServices = require("../services/user.service");
 
 module.exports = {
   async create(req, res) {
@@ -87,25 +88,14 @@ module.exports = {
     try {
       const { name, birth_date_min, birth_date_max } = req.query;
 
-      const query = {};
-      if (name) {
-        query.name = { [Op.iLike]: `%${name}%` };
+      const users = await UserServices.getUsers(
+        name,
+        birth_date_min,
+        birth_date_max
+      );
+      if (users.error) {
+        throw new Error(user.error);
       }
-      if (birth_date_min) {
-        const dateMin = stringToDate(birth_date_min);
-        query.birth_date = {
-          [Op.gt]: dateMin,
-        };
-      }
-      if (birth_date_max) {
-        const dateMax = stringToDate(birth_date_max);
-        query.birth_date = { ...query?.birth_date, [Op.lt]: dateMax };
-      }
-
-      const users = await User.findAll({
-        attributes: ["id", "name", "email", "birth_date"],
-        where: query,
-      });
 
       if (users.length === 0) {
         return res.status(204).send();
