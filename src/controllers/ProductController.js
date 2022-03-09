@@ -104,17 +104,17 @@ module.exports = {
     try {
       const { id } = req.params;
       const { name, suggested_price } = req.body;
-
-      if (!name && !suggested_price) {
+      const formatedName = name.trim();
+      if (!formatedName && !suggested_price) {
         return res
           .status(400)
           .send({ message: "Não foram enviados dados para atualização." });
       }
 
-      if (name) {
+      if (formatedName) {
         const name_Db = await Product.findOne({
           where: {
-            name: name,
+            name: formatedName,
             id: {
               [Op.not]: id,
             },
@@ -122,9 +122,9 @@ module.exports = {
         });
 
         if (name_Db) {
-          return res
-            .status(400)
-            .send({ message: `Já existe outro produto com o nome ${name}` });
+          return res.status(400).send({
+            message: `Já existe outro produto com o nome ${formatedName}`,
+          });
         }
       }
 
@@ -141,14 +141,14 @@ module.exports = {
           .send({ message: `Não existe produto com o id ${id}` });
       }
 
-      name ? (productExist.name = name) : productExist.name;
+      formatedName ? (productExist.name = formatedName) : productExist.name;
       suggested_price
         ? (productExist.suggested_price = suggested_price)
         : productExist.suggested_price;
 
       await productExist.save();
 
-      return res.status(204).send();
+      return res.status(200).send({ message: formatedName });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
