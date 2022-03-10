@@ -130,6 +130,33 @@
         }
       }
     },
+    "/api/v1/user/{user_id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/roles": {
       "post": {
         "description": "",
@@ -466,6 +493,48 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/address": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "city_id",
+            "in": "query",
+            "description": "Filtro que identifica o id da cidade desejada",
+            "type": "number",
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "description": "Filtro que identifica o nome da rua que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "cep",
+            "in": "query",
+            "description": "Filtro que identifica o cep que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
