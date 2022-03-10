@@ -550,9 +550,9 @@
     "UserLogin": {
       "type": "object",
       "properties": {
-        "name": {
+        "email": {
           "type": "string",
-          "example": "JohnDoe"
+          "example": "john.doe@email.com"
         },
         "password": {
           "type": "string",

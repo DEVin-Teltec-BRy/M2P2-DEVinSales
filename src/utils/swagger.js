@@ -29,7 +29,7 @@ const doc = {
       roles: [{role_id: 1}]
     },
     UserLogin: {
-      name: "JohnDoe",
+      email: "john.doe@email.com",
       password: "12345"
     },
     UserInfo: {
