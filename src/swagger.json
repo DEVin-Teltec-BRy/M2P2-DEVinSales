@@ -91,9 +91,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "403": {
             "description": "Forbidden"
           }
@@ -228,9 +225,6 @@
           "204": {
             "description": "No Content"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "403": {
             "description": "Forbidden"
           }
@@ -281,22 +275,28 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para buscar produtos conforme critério query params",
+        "description": "Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.",
         "parameters": [
           {
             "name": "name",
             "in": "query",
+            "description": "query para buscar produtos pelo nome",
+            "required": false,
             "type": "string"
           },
           {
             "name": "price_min",
             "in": "query",
-            "type": "string"
+            "description": "query para buscar produtos pelo preço mínimo",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "price_max",
             "in": "query",
-            "type": "string"
+            "description": "query para buscar produtos pelo preço máximo",
+            "required": false,
+            "type": "number"
           }
         ],
         "responses": {
@@ -309,9 +309,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "403": {
             "description": "Forbidden"
           }
@@ -321,7 +318,7 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para criar um novo produto.",
+        "description": "Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
             "name": "body",
@@ -345,9 +342,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
@@ -360,13 +354,14 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "product_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
           },
           {
             "name": "body",
@@ -391,9 +386,6 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "403": {
             "description": "Forbidden"
           },
@@ -405,13 +397,17 @@
     },
     "/api/v1/products/{id}": {
       "delete": {
-        "description": "",
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para deleção"
           }
         ],
         "responses": {
@@ -421,8 +417,49 @@
           "400": {
             "description": "Bad Request"
           },
-          "401": {
-            "description": "Unauthorized"
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "suggested_price": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "403": {
             "description": "Forbidden"
