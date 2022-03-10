@@ -162,9 +162,13 @@ module.exports = {
           buyer_id,
           dt_sale,
         });
-        sale.addProduct(product_id, { through: { unit_price, amount } });
-
-      return res.status(201).send(sale);
+        let sale_id = await sale.id
+        await sale.addProduct(product_id, { through: { unit_price, amount } });
+        productsSales = await ProductsSales.findOne({
+          attributes: ["id"],
+          where: { sale_id: sale_id, product_id: product_id, unit_price: unit_price, amount: amount}
+        });
+      return res.status(201).send({message: productsSales});
     } catch (error) {
       return res.status(400).send(error.message);
     }

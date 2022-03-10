@@ -32,7 +32,6 @@ class Sale extends Model {
     });
     Sale.belongsToMany(models.Product, { through:  models.ProductsSales });
   }
-  
 }
 
 module.exports = Sale;
