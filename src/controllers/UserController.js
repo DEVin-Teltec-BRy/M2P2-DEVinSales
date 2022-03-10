@@ -169,6 +169,13 @@ module.exports = {
       if (users.length === 0) {
         return res.status(204).send();
       }
+      /*
+        #swagger.responses[200] = {
+        schema: {
+          $ref: '#/definitions/UserInfo'
+        }
+      }
+      */
       return res.status(200).send({ users });
     } catch (error) {
       const message = validateErrors(error);

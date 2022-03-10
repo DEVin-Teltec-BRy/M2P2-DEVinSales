@@ -23,7 +23,7 @@ const doc = {
   definitions: {
     AddUser: {
       name: 'John Doe',
-      password: '123',
+      password: '12345',
       email: 'john.doe@email.com',
       birth_date: '01/01/1990',
       roles: [{role_id: 1}]
@@ -31,6 +31,14 @@ const doc = {
     UserLogin: {
       name: "JohnDoe",
       password: "12345"
+    },
+    UserInfo: {
+      user: [{
+        id: 42,
+        name: "John Doe",
+        email: "john.doe@email.com",
+        birth_date: "01/01/1990"
+      }]
     }
   }
 };
@@ -38,4 +46,4 @@ const doc = {
 const outputFile = "./src/swagger.json";
 const endpointsFiles = ["./src/routes/index.js"];
 
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen(outputFile, endpointsFiles, doc)
