@@ -67,6 +67,14 @@ module.exports = {
   },
 
   async getStateById(req, res) {
+    // #swagger.tags = ['Estado']
+    // #swagger.description = 'Endpoint que retorna um estado de acordo com o state_id fornecido'
+    // #swagger.parameters['state_id'] = {
+    //   description: 'ID do estado que será buscado',
+    //   type: 'number',
+    //   required: 'true',
+    // }
+
     try {
       const { state_id } = req.params;
 
