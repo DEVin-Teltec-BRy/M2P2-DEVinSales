@@ -10,6 +10,42 @@ module.exports = {
     async updateOne(req, res) {
     // #swagger.tags = ['Produtos_Vendas']
     // #swagger.description = 'Endpoint que atualiza a quantidade de produtos de uma venda.'
+        /*#swagger.parameters['sale_id'] = {
+      in: 'path',
+      description: 'Id da venda' ,
+      required: true,
+      type: 'integer',
+      example: 1
+    }*/ 
+        /*#swagger.parameters['product_id'] = {
+      in: 'path',
+      description: 'Id do produto' ,
+      required: true,
+      type: 'integer',
+      example: 2
+    }*/ 
+        /*#swagger.parameters['amount'] = {
+      in: 'path',
+      description: 'Quantidade atualizada do produto' ,
+      required: true,
+      type: 'integer',
+      example: 20
+    }*/ 
+    /* #swagger.responses[204] = {
+        description: 'Sucesso na atualização do endpoint'
+} */
+    /* #swagger.responses[400] = {
+        description: 'Id do produto enviado não é compatível ao cadastrado na venda, ou quantidade atualizada é igual à zero'
+} */
+    /* #swagger.responses[401] = {
+        description: 'Sem permissão para acessar o endpoint'
+} */
+    /* #swagger.responses[403] = {
+        description: 'Sem permissão para acessar o endpoint'
+} */
+    /* #swagger.responses[404] = {
+        description: 'Id de produto ou venda não existem'
+} */
     try {
       const { sale_id, product_id, amount } = req.params;
       const saleResult = await Sale.findByPk(sale_id)

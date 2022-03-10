@@ -21,10 +21,35 @@
     "/api/v1/users": {
       "post": {
         "tags": [
-          "Produtos_Vendas"
+          "Usuário"
         ],
-        "description": "Endpoint criar uma venda.",
-        "parameters": [],
+        "description": "Endpoint que criar um novo usuário.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "birth_date": {
+                  "example": "any"
+                },
+                "roles": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -338,30 +363,42 @@
             "name": "sale_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Id da venda",
+            "example": 1
           },
           {
             "name": "product_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Id do produto",
+            "example": 2
           },
           {
             "name": "amount",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Quantidade atualizada do produto",
+            "example": 20
           }
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Sucesso na atualização do endpoint"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Id do produto enviado não é compatível ao cadastrado na venda, ou quantidade atualizada é igual à zero"
+          },
+          "401": {
+            "description": "Sem permissão para acessar o endpoint"
+          },
+          "403": {
+            "description": "Sem permissão para acessar o endpoint"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Id de produto ou venda não existem"
           }
         }
       }
