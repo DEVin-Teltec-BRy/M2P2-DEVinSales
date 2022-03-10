@@ -8,12 +8,12 @@ const addressesRoutes = express.Router();
 
 addressesRoutes.get(
   '/address',
-  onlyCanAccessWith(permission.READ),
+  onlyCanAccessWith([READ]),
   AddressController.index
 );
 addressesRoutes.delete(
   '/address/:address_id',
-  onlyCanAccessWith(permission),
+  onlyCanAccessWith([DELETE]),
   AddressController.delete
 );
 
