@@ -18,8 +18,6 @@ module.exports = {
     try {
       const { name, password, email, birth_date, roles } = req.body;
 
-      console.log("aqui são as roles", roles);
-
       const dateValidation = verifyDate(birth_date);
       if (dateValidation === false) {
         const message = validateErrors({
@@ -46,16 +44,17 @@ module.exports = {
         return res.status(400).send(message);
       }
 
-      const validateRoles = roles.filter(
+      const roleValidation = roles.filter(
         (role) => role.role_id > 2 || role.role_id < 0
       );
 
-      if (validateRoles.length > 0) {
+      if (roleValidation.length > 0) {
         const message = validateErrors({
           message: "Role não existe",
         });
         return res.status(400).send(message);
       }
+
       const user = await User.create({
         name,
         password,
