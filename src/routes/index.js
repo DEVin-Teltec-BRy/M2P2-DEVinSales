@@ -5,7 +5,7 @@ const rolesRoutes = require('./v1/roles.routes');
 const usersRoutes = require('./v1/users.routes');
 const salesRoutes = require('./v1/sales.routes');
 const productsRoutes = require('./v1/products.routes');
-const addressRoutes = require('./v1/address.routes');
+const addressesRoutes = require('./v1/addresses.routes');
 //const stateRoutes = require('./v1/states.routes');
 
 routes.get('/', (req, res) => {
@@ -18,7 +18,7 @@ routes.use('/api/v1', [
   permissionRoutes,
   salesRoutes,
   productsRoutes,
-  addressRoutes,
+  addressesRoutes,
   //stateRoutes
 ]);
 
