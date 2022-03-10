@@ -11,71 +11,59 @@ module.exports = {
     // #swagger.description = 'Endpoint que criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
-      let badRequest = false 
-      let message = ''
 
-      // Validações para erro (400) Bad Request
-
-
-        
+      // Validações para erro (400) Bad Request      
 
       //validação formato dd/mm/yyyy
       const regex_date = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
       if(!birth_date.match(regex_date) && badRequest == false){
-        badRequest = true
-        message = "data de nascimento informado em padrão incorreto"
+        throw new Error ("data de nascimento informado em padrão incorreto")
       }
       if(['04','06','09','11'].some((x)=> x == birth_date.split('/')[1] ) && birth_date.split('/')[0] == '31' ){
-        badRequest = true
-        message = "data de nascimento informado em padrão incorreto"
+        throw new Error ("data de nascimento informado em padrão incorreto")
       }
 
       if(birth_date.split('/')[1] == "02" && !checkLeapYear(birth_date.split('/')[2]) && ['29','30','31'].some((x)=> x == birth_date.split('/')[0] )){
-        badRequest = true
-        message = "data de nascimento informado em padrão incorreto"
+        throw new Error ("data de nascimento informado em padrão incorreto")
       }
 
 
       // validação da idade mínima 18 anos
       const age = checkAge(birth_date)
       
-      if(age <18 && badRequest == false){
-        badRequest = true,
-        message = "idade mínima de 18 anos"
+      if(age <18){
+        throw new Error( "idade mínima de 18 anos")
       }
     
       // validação para senha ser pelo menos com 4 caracteres e pelo menos um caracter diferente
-      if((password.length <4 || [...new Set(password.split(''))] > 1) && badRequest == false){
-        badRequest = true
-        message = "senha muito curta ou sem variação"
+      if((password.length <4 || [...new Set(password.split(''))] > 1)){
+        throw new Error ("senha muito curta ou sem variação")
       }
       
       
       
       
       // 
-      if(badRequest){
-        return res.status(400).send({message: `Tentativa falhou, ${message}`})
-      }
 
 
 
-      const user = await User.create({
-        name,
-        password,
-        email,
-        birth_date,
-      });
-      if (roles && roles.length > 0) {
-        const resposeRoles = await Role.findAll({
-          where: {
-            id: roles.map((role) => role.role_id),
-          },
-        });
-        if (resposeRoles && resposeRoles.length > 0) {
-          await user.setRoles(resposeRoles);
-        }
-      }
+
+      // const user = await User.create({
+      //   name,
+      //   password,
+      //   email,
+      //   birth_date,
+      // });
+      // if (roles && roles.length > 0) {
+      //   const resposeRoles = await Role.findAll({
+      //     where: {
+      //       id: roles.map((role) => role.role_id),
+      //     },
+      //   });
+      //   if (resposeRoles && resposeRoles.length > 0) {
+      //     await user.setRoles(resposeRoles);
+      //   }
+      // }
       // return res.status(201).send(users_email);
       
       // return res.status(201).send(birth_date);
