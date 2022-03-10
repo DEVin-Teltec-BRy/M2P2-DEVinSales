@@ -69,29 +69,29 @@ module.exports = {
       // 
       if(badRequest){
         return res.status(400).send({message: `Tentativa falhou, ${message}`})
-      
-
-
-
-      // const user = await User.create({
-      //   name,
-      //   password,
-      //   email,
-      //   birth_date,
-      // });
-      // if (roles && roles.length > 0) {
-      //   const resposeRoles = await Role.findAll({
-      //     where: {
-      //       id: roles.map((role) => role.role_id),
-      //     },
-      //   });
-      //   if (resposeRoles && resposeRoles.length > 0) {
-      //     await user.setRoles(resposeRoles);
-      //   }
-      // }
-      // return res.status(201).send(users_email);
       }
-      return res.status(201).send(birth_date);
+
+
+
+      const user = await User.create({
+        name,
+        password,
+        email,
+        birth_date,
+      });
+      if (roles && roles.length > 0) {
+        const resposeRoles = await Role.findAll({
+          where: {
+            id: roles.map((role) => role.role_id),
+          },
+        });
+        if (resposeRoles && resposeRoles.length > 0) {
+          await user.setRoles(resposeRoles);
+        }
+      }
+      // return res.status(201).send(users_email);
+      
+      // return res.status(201).send(birth_date);
 
       return res.status(201).send({ message: "Usuário salvo com sucesso." });
     } catch (error) {

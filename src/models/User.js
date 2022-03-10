@@ -27,6 +27,11 @@ class User extends Model {
           unique: {
             msg: "E-mail deve ser único",
           },
+          validate:{
+            isEmail:{
+              msg:"Esse email é inválido"
+            },
+          },
           get() {
             const email = this.getDataValue("email");
             return email;
@@ -38,6 +43,11 @@ class User extends Model {
           get() {
             const formatedDate = this.getDataValue("birth_date");
             return formatedDate ? formatedDate.toLocaleDateString() : null;
+          },
+          validate:{
+            isDate:{
+              msg: 'oiiii'
+            },
           },
         },
         password: {
