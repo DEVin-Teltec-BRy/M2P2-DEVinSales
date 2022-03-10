@@ -1,5 +1,4 @@
 const Address = require('../models/Address');
-const City = require('../models/City')
 const { Op } = require("sequelize");
 
 module.exports={
