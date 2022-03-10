@@ -5,6 +5,6 @@ const { READ } = require("../../utils/constants/permissions");
 const statesRoutes = express.Router();
 
 statesRoutes.get("/state", onlyCanAccessWith([READ]), StateController.index);
-
+statesRoutes.get("/state/:state_id", onlyCanAccessWith([READ]), StateController.getStateById);
 
 module.exports = statesRoutes;
