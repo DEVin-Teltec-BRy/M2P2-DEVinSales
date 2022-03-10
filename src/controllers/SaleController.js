@@ -62,6 +62,7 @@ module.exports = {
     async createBuy(req, res) {
         // #swagger.tags = ['Vendas']
         // #swagger.description = 'Endpoint para criar uma venda.'
+        
         const { user_id } = req.params
         const { seller_id, dt_sale } = req.body
 
