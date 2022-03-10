@@ -10,6 +10,7 @@ const {
   verifyAge,
   verifyDate,
 } = require("../utils/functions");
+const { READ, WRITE } = require("../utils/constants/permissions");
 
 module.exports = {
   async create(req, res) {
@@ -35,22 +36,47 @@ module.exports = {
         return res.status(400).send(message);
       }
 
+      if (!roles || roles.length === 0) {
+        return res.status(400).send({
+          message: "O novo usuário necessita ter um cargo de WRITE e READ",
+        });
+      }
+
+      const responseRoles = await Role.findAll({
+        where: {
+          id: roles.map((role) => role.role_id),
+        },
+        include: {
+          association: "permissions",
+          through: { attributes: [] },
+          attributes: ["description"],
+        },
+      });
+      if (responseRoles.length === 0) {
+        return res.status(400).send({
+          message: "O novo usuário necessita ter um cargo de WRITE e READ",
+        });
+      }
+
+      const response = responseRoles.filter((role) => {
+        const permissions = role.permissions.filter((permission) => {
+          return (
+            permission.description === READ || permission.description === WRITE
+          );
+        });
+        return permissions.length >= 2;
+      });
+
+      if (response.length === 0) {
+        return res.status(400).send({
+          message: "O novo usuário necessita ter um cargo de WRITE e READ",
+        });
+      }
       const passwordValidation = PostUserPasswordValidation(password);
       if (passwordValidation === false) {
         const message = validateErrors({
           message:
             "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
-        });
-        return res.status(400).send(message);
-      }
-
-      const roleValidation = roles.filter(
-        (role) => role.role_id > 2 || role.role_id < 0
-      );
-
-      if (roleValidation.length > 0) {
-        const message = validateErrors({
-          message: "Role não existe",
         });
         return res.status(400).send(message);
       }
@@ -73,7 +99,7 @@ module.exports = {
         }
       }
       const findUser = await User.findOne({ where: { email: email } });
-      return res.status(201).send({ message: ` Seu id: ${findUser.id} ` });
+      return res.status(201).send({ response });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
