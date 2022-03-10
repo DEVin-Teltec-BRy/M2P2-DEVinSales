@@ -12,6 +12,9 @@ class City extends Model {
       {
         sequelize,
         modelName: "City",
+        // hooks: {
+        //   beforeFind: (city) => {},
+        // },
       }
     );
   }

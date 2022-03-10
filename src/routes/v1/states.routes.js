@@ -6,7 +6,7 @@ const stateRoutes = express.Router();
 
 stateRoutes.get(
   "/state/:state_id/city",
-  onlyCanAccessWith(READ),
+  /* onlyCanAccessWith(READ), */
   StateController.getCitiesByStateID
 );
 

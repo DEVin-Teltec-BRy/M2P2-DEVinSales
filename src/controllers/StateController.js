@@ -1,6 +1,10 @@
 const State = require("../models/State");
+const City = require("../models/City");
 const { validateErrors } = require("../utils/functions");
-const Sequelize = require("sequelize");
+const { Op, where, fn, col, literal } = require("sequelize");
+//const { Sequelize } = require("sequelize");
+
+/*
 const db = require("./../database");
 
 const sequelize = new Sequelize(
@@ -12,6 +16,7 @@ const sequelize = new Sequelize(
     dialect: db.options.dialect,
   }
 );
+*/
 
 module.exports = {
   async getCitiesByStateID(req, res) {
@@ -39,6 +44,46 @@ module.exports = {
         return res.status(404).json({ message: "Not Found." });
       }
 
+      const query = {
+        state_id,
+      };
+
+      if (name) {
+        query.name = {
+          [Op.iLike]: `%${name}%`,
+          // where(fn("translate", "name", accent, unaccent)),
+        };
+      }
+
+      // const lowerCase = fn("lower", name);
+      // const replacedSpaces = fn("replace", name, "a", "b");
+      // fn("lower", col("name"))
+      // $and: where(),
+
+      // fn('regexp_replace', accent, "E'[^\\w -]'", '', 'g')
+      // fn("lower", col("name")),
+      // fn("replace", lowerCase, accent, unaccent)
+      // fn("translate", name, accent, unaccent)
+
+      //fn("translate", name , accent, unaccent)),
+
+      const cities = await City.findAll({
+        where: query,
+        attributes: ["id", "name"],
+        include: [
+          {
+            model: State,
+            as: "states",
+            attributes: ["id", "name", "initials"],
+          },
+        ],
+      });
+
+      if (cities.length < 1) {
+        return res.status(404).json({ message: "Not Found." });
+      }
+
+      /*
       if (name) {
         result = await sequelize.query(
           `SELECT c.id, c.name as city, c.state_id, s.name as state, s.initials FROM cities c INNER JOIN states s ON c.state_id = s.id WHERE c.state_id = ${state_id} and LOWER(TRANSLATE(c.name, '${accent}', '${unaccent}')) = LOWER(TRANSLATE('${name}', '${accent}', '${unaccent}'))`
@@ -54,6 +99,9 @@ module.exports = {
       }
 
       return res.status(200).json({ result: result[0] });
+      */
+
+      return res.status(200).json({ cities });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
