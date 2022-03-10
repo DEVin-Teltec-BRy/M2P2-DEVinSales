@@ -16,20 +16,25 @@ function stringToDate(string) {
 }
 
 function PostUserPasswordValidation(password) {
+  let validation = false;
   if (password.length >= 4) {
-    let validation = true;
     const noRepeatedCharacters = [...password];
     let passwordArray = [...noRepeatedCharacters];
     for (let i = 0; i < noRepeatedCharacters.length; i++) {
       let character = noRepeatedCharacters[i];
       passwordArray.splice(0, 1);
-      if (passwordArray.includes(character) === true) {
-        validation = false;
+      if (passwordArray.includes(character) === false) {
+        validation = true;
       }
     }
     return validation;
-  } else return res.status(400).send({ message: "Bad Request" });
+  } else {
+    return (validation = false);
+  }
 }
+
+password = "ana3";
+passwordArray = "abriel";
 
 function verifyAge(PersonAge) {
   let ageValidation = false;

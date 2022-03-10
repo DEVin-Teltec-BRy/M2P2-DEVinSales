@@ -5,14 +5,6 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          get() {
-            const id = this.getDataValue("id");
-            return id;
-          },
-        },
         name: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -40,6 +32,11 @@ class User extends Model {
         birth_date: {
           type: DataTypes.DATEONLY,
           allowNull: false,
+          validate: {
+            isDate: {
+              msg: "Essa data não é válida",
+            },
+          },
           get() {
             const formatedDate = this.getDataValue("birth_date");
             return formatedDate ? formatedDate.toLocaleDateString() : null;

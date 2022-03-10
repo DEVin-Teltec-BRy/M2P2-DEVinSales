@@ -33,10 +33,10 @@ module.exports = {
         }
       }
 
-      const emailExists = await User.findOne({ where: { email: email } });
-      if (emailExists) {
+      if (!email) {
         const message = validateErrors({
-          message: "O E-mail informado já existe",
+          message:
+            "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
         });
         return res.status(400).send(message);
       }
@@ -53,7 +53,7 @@ module.exports = {
       const ageValidation = verifyAge(stringToDate(birth_date));
       if (ageValidation === false) {
         const message = validateErrors({
-          message: "O usuário não é maior de idade",
+          message: "É necessário que o usuário seja maior de idade",
         });
         return res.status(400).send(message);
       }
