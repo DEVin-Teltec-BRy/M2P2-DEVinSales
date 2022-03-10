@@ -251,16 +251,18 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "buyer_id": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 1
                 },
                 "dt_sale": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "1980/05/19"
                 }
               }
             }
@@ -299,16 +301,18 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "seller_id": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 1
                 },
                 "dt_sale": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "1980/05/19"
                 }
               }
             }
