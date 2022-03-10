@@ -87,6 +87,7 @@ module.exports = {
   },
   async saleMade(req, res) {
     try {
+      // #swagger.auto = false
       // #swagger.tags = ['Vendas']
       // #swagger.description = '<h2>Endpoint for submitting sales</h2>'
       /*  #swagger.parameters[seller_id] = {
@@ -102,10 +103,7 @@ module.exports = {
                     amount: 'Integer'
                 }
       } */
-      /*  #swagger.parameters['authorization'] = {
-                in: 'header',
-                description: '<ul><li>If you are already authorized it is not necessary to pass the token </li></ul>'
-      } */
+
       // #swagger.responses[201] = { description: 'Sale submitted successfully.' }
       // #swagger.responses[403] = { description: 'The user logged-in is unauthorized to submit sales.' }
       // #swagger.responses[404] = { description: 'product_id or seller_id were not found in the database.' }
@@ -157,18 +155,23 @@ module.exports = {
         unit_price = validProductId.suggested_price;
       }
       //Creating Product_Sale
-        const sale = await Sale.create({
-          seller_id,
-          buyer_id,
-          dt_sale,
-        });
-        let sale_id = await sale.id
-        await sale.addProduct(product_id, { through: { unit_price, amount } });
-        productsSales = await ProductsSales.findOne({
-          attributes: ["id"],
-          where: { sale_id: sale_id, product_id: product_id, unit_price: unit_price, amount: amount}
-        });
-      return res.status(201).send({message: productsSales});
+      const sale = await Sale.create({
+        seller_id,
+        buyer_id,
+        dt_sale,
+      });
+      let sale_id = await sale.id;
+      await sale.addProduct(product_id, { through: { unit_price, amount } });
+      productSale = await ProductsSales.findOne({
+        attributes: ["id"],
+        where: {
+          sale_id: sale_id,
+          product_id: product_id,
+          unit_price: unit_price,
+          amount: amount,
+        },
+      });
+      return res.status(201).send({ message: productSale });
     } catch (error) {
       return res.status(400).send(error.message);
     }

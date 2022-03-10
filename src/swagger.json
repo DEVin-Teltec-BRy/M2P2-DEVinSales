@@ -296,20 +296,11 @@
                 "product_id"
               ]
             }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "description": "<ul><li>If you are already authorized it is not necessary to pass the token </li></ul>",
-            "type": "string"
           }
         ],
         "responses": {
           "201": {
             "description": "Sale submitted successfully."
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "403": {
             "description": "The user logged-in is unauthorized to submit sales."

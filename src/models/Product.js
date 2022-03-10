@@ -28,6 +28,7 @@ class Product extends Model {
   }
   static associate(models) {
     Product.belongsToMany(models.Sale, { through: models.ProductsSales });
+  
   }
 }
 
