@@ -60,8 +60,8 @@ module.exports = {
 
         } catch (error) {
 
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("Precisa existir um vendedor")
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("Precisa existir um comprador")
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send({message:"Precisa existir um vendedor"})
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send({message:"Precisa existir um vendedor"})
            
 
             res.status(400).send({message:error.message})
@@ -100,8 +100,8 @@ module.exports = {
             return res.status(201).send({ 'created': "id-" + result.id })
 
         } catch (error) {
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("seller_id inexistente")
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("buyer_id inexistente")
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send({message:"seller_id inexistente"})
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send({message:"buyer_id inexistente"})
            
             
             res.status(400).send({message:error.message})
