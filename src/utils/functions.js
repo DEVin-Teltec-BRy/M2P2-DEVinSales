@@ -33,9 +33,6 @@ function PostUserPasswordValidation(password) {
   }
 }
 
-password = "ana3";
-passwordArray = "abriel";
-
 function verifyAge(PersonAge) {
   let ageValidation = false;
   const today = new Date();
@@ -50,9 +47,43 @@ function verifyAge(PersonAge) {
   return ageValidation;
 }
 
+function verifyDate(date) {
+  const daysInMonth = function (month, year) {
+    switch (month) {
+      case 1:
+        return (year % 4 == 0 && year % 100) || year % 400 == 0 ? 29 : 28;
+      case 8:
+      case 3:
+      case 5:
+      case 10:
+        return 30;
+      default:
+        return 31;
+    }
+  };
+  const isValidDate = function (day, month, year) {
+    month = parseInt(month, 10) - 1;
+    return (
+      month >= 0 && month < 12 && day > 0 && day <= daysInMonth(month, year)
+    );
+  };
+
+  const [day, month, year] = date.split("/");
+
+  let dateValidation = null;
+  const dateFormat = /^[0-9]{2}[\/][0-9]{2}[\/][0-9]{4}$/;
+  if (date.match(dateFormat) && isValidDate(day, month, year)) {
+    dateValidation = true;
+  } else {
+    dateValidation = false;
+  }
+  return dateValidation;
+}
+
 module.exports = {
   validateErrors,
   stringToDate,
   PostUserPasswordValidation,
   verifyAge,
+  verifyDate,
 };

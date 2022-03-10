@@ -34,7 +34,9 @@ class User extends Model {
           allowNull: false,
           get() {
             const formatedDate = this.getDataValue("birth_date");
-            return formatedDate ? formatedDate.toLocaleDateString() : null;
+            return formatedDate
+              ? formatedDate.toLocaleDateString("pt-BR")
+              : null;
           },
         },
         password: {

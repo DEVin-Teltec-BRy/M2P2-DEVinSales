@@ -8,6 +8,7 @@ const {
   stringToDate,
   PostUserPasswordValidation,
   verifyAge,
+  verifyDate,
 } = require("../utils/functions");
 
 module.exports = {
@@ -16,6 +17,15 @@ module.exports = {
     // #swagger.description = 'Endpoint para criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
+
+      const dateValidation = verifyDate(birth_date);
+      if (dateValidation === false) {
+        const message = validateErrors({
+          message:
+            "É necessário que a data informada exista e  seja do tipo dia/mês/ano",
+        });
+        return res.status(400).send(message);
+      }
 
       const ageValidation = verifyAge(stringToDate(birth_date));
       if (ageValidation === false) {
@@ -34,11 +44,13 @@ module.exports = {
         return res.status(400).send(message);
       }
 
+      console.log(stringToDate(birth_date));
+
       const user = await User.create({
         name,
         password,
         email,
-        birth_date,
+        birth_date: stringToDate(birth_date),
       });
       if (roles && roles.length > 0) {
         const responseRoles = await Role.findAll({
