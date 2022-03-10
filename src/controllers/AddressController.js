@@ -1,12 +1,4 @@
 const Address = require('../models/Address');
-<<<<<<< HEAD
-const { validateErrors } = require("../utils/functions");
-
-
-module.exports = {
-
-}
-=======
 const { Op } = require('sequelize');
 
 module.exports = {
@@ -104,4 +96,3 @@ module.exports = {
     }
   },
 };
->>>>>>> sqdNull/DeleteAddressMergeGetStates
