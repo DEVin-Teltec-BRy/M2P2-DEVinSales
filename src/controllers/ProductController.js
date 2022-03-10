@@ -5,9 +5,7 @@ const { Op } = require("sequelize");
 module.exports = {
   async index(req, res) {
     /* #swagger.tags = ['Produto']
-    #swagger.description = 'Endpoint para buscar produtos conforme critério query params. 
-    Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. 
-    Nesse endpoint o usuário deve ter permissão READ.'
+    #swagger.description = 'Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.'
     #swagger.parameters['name'] = {
       in: 'query',
       description: 'query para buscar produtos pelo nome',
@@ -59,13 +57,51 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+  async store(req, res) {
+    //#swagger.tags = ['Produto']
+    // #swagger.description = 'Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.'
 
+    try {
+      const newProduct = req.body;
+
+      const nameWithNoSpaces = newProduct.name.trim();
+
+      const productExist = await Product.findOne({
+        where: {
+          name: nameWithNoSpaces,
+        },
+      });
+      if (productExist) {
+        return res
+          .status(400)
+          .send({ message: "Já existe um produto com esse mesmo nome." });
+      }
+
+      if (newProduct.suggested_price <= 0) {
+        return res
+          .status(400)
+          .send({ message: "O preço deve ser maior que zero." });
+      }
+      const product = await Product.create(newProduct);
+
+      return res.status(200).send({
+        message: "Produto criado com sucesso!",
+        novoProduto: {
+          nome: product.name,
+          preço_sugerido: product.suggested_price,
+        },
+      });
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
   async putUpdate(req, res) {
     /*#swagger.tags = ['Produto']
-    #swagger.description = 'Endpoint para atualizar um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+    #swagger.description = 'Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
     #swagger.parameters['product_id'] = {
       in: 'path',
-      description: 'parâmetro id para buscar o produto a ser alterado',
+      description: 'parâmetro id para buscar um produto para atualização',
       required: true,
       type: 'number',
     }*/
@@ -105,7 +141,7 @@ module.exports = {
       }
       const product = await Product.findByPk(product_id);
       if (!product) {
-        return res.status(404).send({ message: "Product not found." });
+        return res.status(404).send({ message: "Produto não encontrado." });
       }
       product.name = nameData;
       product.suggested_price = suggested_price;
@@ -118,93 +154,64 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
-  async delete(req, res) {
-    /* #swagger.tags = ['Produto'],
-     #swagger.description = 'Endpoint para deletar um produto. Nesse endpoint o usuário deve ter permissão DELETE.',
-     #swagger.parameters['id'] = {
+  async update(req, res) {
+    /* #swagger.tags = ['Produto']
+    #swagger.description = 'Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+    #swagger.parameters['id'] = {
       in: 'path',
-      description: 'params para buscar usuário pelo id para deleção',
+      description: 'parâmetro id para buscar um produto para atualização',
       required: true,
       type: 'number',
-    },
-    */
+    } */
+
     try {
-      const { name, price_min, price_max } = req.query;
-      const query = {};
-      if (name) {
-        query.name = { [Op.iLike]: `%${name}%` };
-      }
-      const priceMin = Number(price_min) ? Number(price_min) : 0;
-      const priceMax = Number(price_max)
-        ? Number(price_max)
-        : Number.MAX_SAFE_INTEGER;
-
-      if (priceMax <= priceMin) {
-        return res.status(400).json({
-          message: "Preço máximo deve ser maior que o preço minimo",
-        });
-      }
-      query.suggested_price = {
-        [Op.between]: [priceMin, priceMax],
-      };
-
-      const products = await Product.findAll({
-        attributes: ["id", "name", "suggested_price"],
-        where: query,
-      });
-
-      if (products.length === 0) return res.status(204).send();
-
-      return res.status(200).send({ products });
-    } catch (error) {
-      const message = validateErrors(error);
-      return res.status(400).send(message);
-    }
-  },
-  async putUpdate(req, res) {
-    // #swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.'
-    try {
-      const { product_id } = req.params;
+      const { id } = req.params;
       const { name, suggested_price } = req.body;
-      const nameData = name.trim();
+      const nameWithNoSpaces = name ? name.trim() : null;
+      if (!nameWithNoSpaces && !suggested_price) {
+        return res
+          .status(400)
+          .send({ message: "Não foram enviados dados para atualização." });
+      }
 
-      if (!nameData) {
-        return res
-          .status(400)
-          .send({ message: "O campo name, não foi enviado." });
-      }
-      if (!suggested_price) {
-        return res
-          .status(400)
-          .send({ message: "O campo suggested_price, não foi enviado." });
-      }
-      if (Number(suggested_price) <= 0) {
-        return res
-          .status(400)
-          .send({ message: "O campo suggested_price, deve ser maior que 0." });
-      }
-      const hasProductWithSameName = await Product.count({
-        where: {
-          name: nameData,
-          id: {
-            [Op.not]: product_id,
+      if (nameWithNoSpaces) {
+        const name_Db = await Product.findOne({
+          where: {
+            name: nameWithNoSpaces,
+            id: {
+              [Op.not]: id,
+            },
           },
-        },
-      });
-      if (hasProductWithSameName) {
+        });
+
+        if (name_Db) {
+          return res.status(400).send({
+            message: `Já existe outro produto com o nome ${nameWithNoSpaces}`,
+          });
+        }
+      }
+
+      if (suggested_price <= 0) {
         return res
           .status(400)
-          .send({ message: "Já existe outro produto com o mesmo nome." });
+          .send({ message: "O preço sugerido deve ser maior que zero." });
       }
-      const product = await Product.findByPk(product_id);
-      if (!product) {
-        return res.status(404).send({ message: "Product not found." });
-      }
-      product.name = nameData;
-      product.suggested_price = suggested_price;
+      const productExist = await Product.findByPk(id);
 
-      await product.save();
+      if (!productExist) {
+        return res
+          .status(404)
+          .send({ message: `Não existe produto com o id ${id}` });
+      }
+
+      nameWithNoSpaces
+        ? (productExist.name = nameWithNoSpaces)
+        : productExist.name;
+      suggested_price
+        ? (productExist.suggested_price = suggested_price)
+        : productExist.suggested_price;
+
+      await productExist.save();
 
       return res.status(204).send();
     } catch (error) {
@@ -213,8 +220,15 @@ module.exports = {
     }
   },
   async delete(req, res) {
-    // #swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para deletar um produto, neste Endpoint o usuário logado deve ter permissão de DELETE, e não pode ser um produto vendido.'
+    /*#swagger.tags = ['Produto']
+    #swagger.description = 'Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.'
+      #swagger.parameters['id'] = {
+      in: 'path',
+      description: 'parâmetro id para buscar um produto para deleção',
+      required: true,
+      type: 'number',
+    } */
+
     try {
       const { id } = req.params;
       const product = await Product.findByPk(id, {
@@ -234,100 +248,6 @@ module.exports = {
         });
       }
       await product.destroy();
-
-      return res.status(204).send();
-    } catch (error) {
-      const message = validateErrors(error);
-      return res.status(400).send(message);
-    }
-  },
-  async store(req, res) {
-    //#swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.'
-
-    try {
-      const newProduct = req.body;
-
-      const productExist = await Product.findOne({
-        where: {
-          name: newProduct.name,
-        },
-      });
-      if (productExist) {
-        return res
-          .status(400)
-          .send({ message: "Já existe um produto com esse mesmo nome." });
-      }
-
-      if (newProduct.suggested_price <= 0) {
-        return res
-          .status(400)
-          .send({ message: "O preço deve ser maior que zero." });
-      }
-      const product = await Product.create(newProduct);
-
-      return res.status(200).send({
-        message: "Produto criado com sucesso!",
-        novoProduto: {
-          nome: product.name,
-          preço_sugerido: product.suggested_price,
-        },
-      });
-    } catch (error) {
-      const message = validateErrors(error);
-      return res.status(400).send(message);
-    }
-  },
-  async update(req, res) {
-    // #swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para criar um novo produto.'
-
-    try {
-      const { id } = req.params;
-      const { name, suggested_price } = req.body;
-      const formatedName = name.trim();
-      if (!formatedName && !suggested_price) {
-        return res
-          .status(400)
-          .send({ message: "Não foram enviados dados para atualização." });
-      }
-
-      if (formatedName) {
-        const name_Db = await Product.findOne({
-          where: {
-            name: formatedName,
-            id: {
-              [Op.not]: id,
-            },
-          },
-        });
-
-        if (name_Db) {
-          return res.status(400).send({
-            message: `Já existe outro produto com o nome ${formatedName}`,
-          });
-        }
-      }
-
-      if (suggested_price <= 0) {
-        return res
-          .status(400)
-          .send({ message: "O preço sugerido deve ser maior que zero." });
-      }
-      const productExist = await Product.findByPk(id);
-
-      if (!productExist) {
-        return res
-          .status(404)
-          .send({ message: `Não existe produto com o id ${id}` });
-      }
-
-      formatedName ? (productExist.name = formatedName) : productExist.name;
-      suggested_price
-        ? (productExist.suggested_price = suggested_price)
-        : productExist.suggested_price;
-
-      await productExist.save();
 
       return res.status(204).send();
     } catch (error) {
