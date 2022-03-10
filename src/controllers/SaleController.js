@@ -56,7 +56,6 @@ module.exports={
         // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
 
        const {user_id} = req.params;
-
       
        try{
        const salesData = await User.findAll({
@@ -66,12 +65,12 @@ module.exports={
                     association: "buyer_sales",
                     attributes: ['seller_id','buyer_id','dt_sale'],
                     where: {
-                        buyer_id: user_id
+                        buyer_id: user_id,
                     }
                 }                
             ]
-        });     
-
+        });          
+     
         if(salesData.length == 0){
             return res.status(204).json({message: "no content"});
         }
@@ -79,7 +78,8 @@ module.exports={
         return res.status(200).json(salesData);
 
         }catch(error){
-            return res.status(201).json({message: "erro ao listar dados de vendas"});
+            
+           return res.status(201).json({message: "erro ao listar dados de vendas"});
         }
     }
 
