@@ -16,21 +16,8 @@ module.exports = {
 
       // Validações para erro (400) Bad Request
 
-      // validação do email, ser único já é definido na model
- 
-      const regex = /^[A-Za-z0-9]+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-      // ^[A-Za-z0-9]+ começa com uma letra ou numero
-      // ([\.-]?\w+) grupo em que pode ser usado um ou nenhum  . ou - seguido por uma ou mais letras
-      // * info acima em qualquer quantidade
-      // @
-      // (\.\w{2,3}) um ponto seguido por 2 ou 3 letras 
-      // + grupo acima repetindo de um ou mais vezes 
-      // $ fim do regex
-      if(!email.match(regex) && badRequest == false){
-        badRequest = true
-        message = "email informado em padrão incorreto"
+
         
-      }
 
       //validação formato dd/mm/yyyy
       const regex_date = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
