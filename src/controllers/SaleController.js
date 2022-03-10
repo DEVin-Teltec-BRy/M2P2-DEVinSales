@@ -1,5 +1,6 @@
 const Sale = require('../models/Sale')
 const User = require("../models/User");
+const ProductsSales  = require('../models/ProductsSales')
 const salesRoutes = require('../routes/v1/sales.routes');
 const { validateErrors } = require('../utils/functions')
 
@@ -54,6 +55,26 @@ module.exports = {
             return res.status(500).json(error.message)
         }
 
+    },
+
+    async saleMade(req, res) {
+        const { seller_id } = req.params;
+           // const { authorization } = req.headers;
+            const  {sales_id, product_id, unit_price, amount } = req.body;
+        try {
+            console.log('slslsl')
+            //criando o registro product_sale
+            const product_sale = await ProductsSales.create({
+                sales_id :sales_id,
+                product_id :product_id,
+                unit_price :unit_price,
+                amount :amount,
+            });
+          console.log(product_sale)
+            res.status(201).send({ 'created': "id-" + product_sale.id });
+        } catch (error) {
+            return res.status(400).send(error.message);
+        }
     }
 }
 

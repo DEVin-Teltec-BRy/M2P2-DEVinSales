@@ -15,9 +15,8 @@ salesRoutes.post('/user/:user_id/sales', SaleController.create);
 salesRoutes.get('/sales/:id', SaleController.showSaleById);
 
 
+salesRoutes.post("/sales/:seller_id/item", SaleController.saleMade);
 
-
-salesRoutes.post('/user/:user_id/sales', SaleController.create);
 
 
 
