@@ -1,6 +1,5 @@
 const SaleController = require('../../controllers/SaleController');
 const express = require('express');
-const { WRITE} = require('../../utils/constants/permissions')
 const salesRoutes = express.Router();
 const { onlyCanAccessWith } = require("../../middlewares/auth");
 const { READ, WRITE, UPDATE, DELETE } = require("../../utils/constants/permissions");
