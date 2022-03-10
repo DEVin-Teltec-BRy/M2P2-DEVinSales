@@ -30,10 +30,10 @@ function checkAge(birth_date) {
   const birth_d = birth.getDate();
   let age = now_y - birth_y;
   if (now_m == birth_m) {
-    if (birth_d < now_d) {
+    if (birth_d > now_d) {
       age--;
     }
-  } else if (birth_m - now_m) {
+  } else if (birth_m >= now_m) {
     age--;
   }
   return age
