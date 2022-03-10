@@ -3,7 +3,7 @@ const { sign } = require("jsonwebtoken");
 const { Op, DATE } = require("sequelize");
 const bcrypt = require("bcrypt");
 const Role = require("../models/Role");
-const { validateErrors, stringToDate, checkAge } = require("../utils/functions");
+const { validateErrors, stringToDate, checkAge, checkLeapYear } = require("../utils/functions");
 
 module.exports = {
   async create(req, res) {
@@ -26,22 +26,39 @@ module.exports = {
       // (\.\w{2,3}) um ponto seguido por 2 ou 3 letras 
       // + grupo acima repetindo de um ou mais vezes 
       // $ fim do regex
-      if(!email.match(regex)){
+      if(!email.match(regex) && badRequest == false){
         badRequest = true
         message = "email informado em padrão incorreto"
         
       }
 
+      //validação formato dd/mm/yyyy
+      const regex_date = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
+      if(!birth_date.match(regex_date) && badRequest == false){
+        badRequest = true
+        message = "data de nascimento informado em padrão incorreto"
+      }
+      if(['04','06','09','11'].some((x)=> x == birth_date.split('/')[1] ) && birth_date.split('/')[0] == '31' ){
+        badRequest = true
+        message = "data de nascimento informado em padrão incorreto"
+      }
+
+      if(birth_date.split('/')[1] == "02" && !checkLeapYear(birth_date.split('/')[2]) && ['29','30','31'].some((x)=> x == birth_date.split('/')[0] )){
+        badRequest = true
+        message = "data de nascimento informado em padrão incorreto"
+      }
+
+
       // validação da idade mínima 18 anos
       const age = checkAge(birth_date)
       
-      if(age <18){
+      if(age <18 && badRequest == false){
         badRequest = true,
         message = "idade mínima de 18 anos"
       }
     
       // validação para senha ser pelo menos com 4 caracteres e pelo menos um caracter diferente
-      if(password.length <4 || [...new Set(password.split(''))] > 1){
+      if((password.length <4 || [...new Set(password.split(''))] > 1) && badRequest == false){
         badRequest = true
         message = "senha muito curta ou sem variação"
       }

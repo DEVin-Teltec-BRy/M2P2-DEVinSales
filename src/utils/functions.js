@@ -39,8 +39,18 @@ function checkAge(birth_date) {
   return age
 }
 
+function checkLeapYear(year) {
+
+  if ((0 == year % 4) && (0 != year % 100) || (0 == year % 400)) {
+      return true
+  } else {
+      return false
+  }
+}
+
 module.exports = {
   validateErrors,
   stringToDate,
-  checkAge
+  checkAge,
+  checkLeapYear
 };
