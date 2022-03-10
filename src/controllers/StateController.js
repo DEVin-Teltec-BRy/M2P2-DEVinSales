@@ -65,4 +65,28 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+
+  async getStateById(req, res) {
+    try {
+      const { state_id } = req.params;
+
+      if(isNaN(state_id)) {
+        return res.status(400).send({message: "The 'state_id' param must be an integer"})
+      }
+
+      const state = await State.findAll({
+        where: { id: {[Op.eq]: state_id} },
+      });
+
+      if(state.length === 0) {
+        return res.status(404).send({message: "Couldn't find any state with the given 'state_id'"})
+      } else {
+        return res.status(200).send(state[0])
+      }
+
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  }
 };
