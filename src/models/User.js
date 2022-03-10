@@ -44,11 +44,6 @@ class User extends Model {
             const formatedDate = this.getDataValue("birth_date");
             return formatedDate ? formatedDate.toLocaleDateString() : null;
           },
-          validate:{
-            isDate:{
-              msg: 'oiiii'
-            },
-          },
         },
         password: {
           type: DataTypes.STRING,
