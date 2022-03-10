@@ -6,7 +6,15 @@ const permission = require('../../utils/constants/permissions');
 
 const addressesRoutes = express.Router();
 
-addressesRoutes.get('/address', AddressController.index);
-addressesRoutes.delete('/address/:address_id', AddressController.delete);
+addressesRoutes.get(
+  '/address',
+  onlyCanAccessWith(permission.READ),
+  AddressController.index
+);
+addressesRoutes.delete(
+  '/address/:address_id',
+  onlyCanAccessWith(permission),
+  AddressController.delete
+);
 
 module.exports = addressesRoutes;
