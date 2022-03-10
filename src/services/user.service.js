@@ -3,6 +3,8 @@ const User = require("../models/User");
 const {validateErrors,stringToDate} = require('../utils/functions')
 const { sign } = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const Role = require("../models/Role");
+
 
 
 module.exports = {
@@ -36,6 +38,29 @@ module.exports = {
       }
     
 
+  },
+  async createUser(name, password, email, birth_date, roles){
+    try {
+      const user = await User.create({
+        name,
+        password,
+        email,
+        birth_date,
+      });
+      if (roles && roles.length > 0) {
+        const resposeRoles = await Role.findAll({
+          where: {
+            id: roles.map((role) => role.role_id),
+          },
+        });
+        if (resposeRoles && resposeRoles.length > 0) {
+          await user.setRoles(resposeRoles);
+        }
+      }
+      return 'Usuario criado com sucesso'
+    } catch (error) {
+      return {error: error.message}
+    }
   },
   async beginSession(email, password){
     
@@ -79,6 +104,38 @@ module.exports = {
 
     } catch (error) {
       return {error: error.message}
+    }
+  },
+  async deleteUser(user_id){
+    try {
+      const userId = Number(user_id);
+
+      if (!userId) 
+        throw new Error("Formato de id invalido!");
+
+      const findUserById = await User.findOne({
+        where: {
+          id: {
+            [Op.eq]: userId,
+          },
+        },
+      });
+
+      if (!findUserById)
+        throw new Error("Não se encontrou nenhum usuario como o id informado ")
+
+      await User.destroy({
+        where: {
+          id: {
+            [Op.eq]: userId,
+          },
+        },
+      });
+
+      return 'Usuario deletado com sucesso'
+    } catch (error) {
+      return {error: error.message}
+      
     }
   }
 
