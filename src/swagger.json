@@ -355,22 +355,28 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para buscar produtos conforme critério query params",
+        "description": "Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.",
         "parameters": [
           {
             "name": "name",
             "in": "query",
+            "description": "query para buscar produtos pelo nome",
+            "required": false,
             "type": "string"
           },
           {
             "name": "price_min",
             "in": "query",
-            "type": "string"
+            "description": "query para buscar produtos pelo preço mínimo",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "price_max",
             "in": "query",
-            "type": "string"
+            "description": "query para buscar produtos pelo preço máximo",
+            "required": false,
+            "type": "number"
           }
         ],
         "responses": {
@@ -392,7 +398,7 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para criar um novo produto.",
+        "description": "Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
             "name": "body",
@@ -428,13 +434,14 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "product_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
           },
           {
             "name": "body",
@@ -473,13 +480,14 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para deletar um produto, neste Endpoint o usuário logado deve ter permissão de DELETE, e não pode ser um produto vendido.",
+        "description": "Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para deleção"
           }
         ],
         "responses": {
@@ -501,13 +509,14 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para criar um novo produto.",
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
           },
           {
             "name": "body",
@@ -537,6 +546,42 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/address": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "city_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cep",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
