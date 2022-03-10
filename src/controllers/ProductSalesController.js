@@ -14,19 +14,22 @@ module.exports = {
       in: 'path',
       description: 'Id da venda' ,
       required: true,
-      type: 'integer'
+      type: 'integer',
+      example: 1
     }*/ 
         /*#swagger.parameters['product_id'] = {
       in: 'path',
       description: 'Id do produto' ,
       required: true,
-      type: 'integer'
+      type: 'integer',
+      example: 2
     }*/ 
         /*#swagger.parameters['price'] = {
       in: 'path',
       description: 'Preço atualizado do produto' ,
       required: true,
-      type: 'number'
+      type: 'number',
+      example: 999.99
     }*/ 
     /* #swagger.responses[204] = {
         description: 'Sucesso na atualização do endpoint'

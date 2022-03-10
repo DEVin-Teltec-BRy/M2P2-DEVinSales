@@ -364,21 +364,24 @@
             "in": "path",
             "required": true,
             "type": "integer",
-            "description": "Id da venda"
+            "description": "Id da venda",
+            "example": 1
           },
           {
             "name": "product_id",
             "in": "path",
             "required": true,
             "type": "integer",
-            "description": "Id do produto"
+            "description": "Id do produto",
+            "example": 2
           },
           {
             "name": "price",
             "in": "path",
             "required": true,
             "type": "number",
-            "description": "Preço atualizado do produto"
+            "description": "Preço atualizado do produto",
+            "example": 999.99
           }
         ],
         "responses": {
