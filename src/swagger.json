@@ -7,9 +7,7 @@
   },
   "host": "localhost:3333",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "securityDefinitions": {
     "bearerAuth": {
       "type": "apiKey",
@@ -20,9 +18,7 @@
   "paths": {
     "/api/v1/users": {
       "post": {
-        "tags": [
-          "Usuário"
-        ],
+        "tags": ["Usuário"],
         "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
@@ -60,9 +56,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Usuário"
-        ],
+        "tags": ["Usuário"],
         "description": "Endpoint para buscar todos os usuários do banco de dados.",
         "parameters": [
           {
@@ -99,9 +93,7 @@
     },
     "/api/v1/session": {
       "post": {
-        "tags": [
-          "Usuário"
-        ],
+        "tags": ["Usuário"],
         "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
         "parameters": [
           {
@@ -216,9 +208,7 @@
     },
     "/api/v1/sales/{id}": {
       "get": {
-        "tags": [
-          " Vendas "
-        ],
+        "tags": [" Vendas "],
         "description": "Endpoint pra buscar as vendas do usuario.",
         "parameters": [
           {
@@ -243,9 +233,7 @@
     },
     "/api/v1/user/{user_id}/sales": {
       "post": {
-        "tags": [
-          "Vendas"
-        ],
+        "tags": ["Vendas"],
         "description": "Endpoint para criar uma venda.",
         "parameters": [
           {
@@ -285,9 +273,7 @@
     },
     "/api/v1/user/{seller_id}/item": {
       "post": {
-        "tags": [
-          "Sales"
-        ],
+        "tags": ["Sales"],
         "description": "nao sei o que ele faz.",
         "parameters": [
           {
@@ -338,9 +324,7 @@
     },
     "/api/v1/user/{user_id}/buy": {
       "get": {
-        "tags": [
-          "Vendas"
-        ],
+        "tags": ["Vendas"],
         "description": "Endpoint pra buscar as vendas do usuario pelo buyer_id.",
         "parameters": [
           {
@@ -395,9 +379,7 @@
     },
     "/api/v1/product/{product_id}": {
       "put": {
-        "tags": [
-          "Produto"
-        ],
+        "tags": ["Produto"],
         "description": "Endpoint para atualizar um produto, neste Enpoint o usuario logado deve ter permissão de UPDATE.",
         "parameters": [
           {
@@ -440,9 +422,7 @@
     },
     "/api/v1/sales/{sale_id}/product/{product_id}/amount/{amount}": {
       "patch": {
-        "tags": [
-          "Produtos_Vendas"
-        ],
+        "tags": ["Produtos_Vendas"],
         "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
         "parameters": [
           {
@@ -482,9 +462,7 @@
     },
     "/api/v1/sales/{sale_id}/product/{product_id}/price/{price}": {
       "patch": {
-        "tags": [
-          "Produtos_Vendas"
-        ],
+        "tags": ["Produtos_Vendas"],
         "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
         "parameters": [
           {

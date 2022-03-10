@@ -1,4 +1,5 @@
 const State = require("../models/State");
+const City = require("../models/City");
 const { validateErrors } = require("../utils/functions");
 const Sequelize = require("Sequelize");
 const { Op } = require("Sequelize");
@@ -21,25 +22,32 @@ module.exports = {
     // }
 
     try {
-      const names = [req.query.name]
-      const initials = [req.query.initials]
+      const names = [req.query.name];
+      const initials = [req.query.initials];
 
-      if (names[0] !== undefined|| initials[0] !== undefined ) {
+      if (names[0] !== undefined || initials[0] !== undefined) {
         const states = await Promise.all(
-          initials.flat().map(async (initial) => {
-            return await State.findAll({
-              where: { initials: {[Op.iLike]: `%${initial}%`} },
-            });
-          }).concat(
-            names.flat().map(async (name) => {
+          initials
+            .flat()
+            .map(async (initial) => {
               return await State.findAll({
-                where: { name: {[Op.iLike]: `%${name}%`} },
+                where: { initials: { [Op.iLike]: `%${initial}%` } },
               });
             })
-          )
+            .concat(
+              names.flat().map(async (name) => {
+                return await State.findAll({
+                  where: { name: { [Op.iLike]: `%${name}%` } },
+                });
+              })
+            )
         );
 
-        const filteredStates =  [...new Map(states.flat().map((state) => [state['id'], state])).values()]
+        const filteredStates = [
+          ...new Map(
+            states.flat().map((state) => [state["id"], state])
+          ).values(),
+        ];
         return res.status(200).send(filteredStates);
       }
 
@@ -55,6 +63,53 @@ module.exports = {
           return res.status(200).send({ states });
         }
       }
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
+
+  async getCitiesByID(req, res) {
+    /* 
+    #swagger.tags = ['State']
+    #swagger.description = 'Endpoint para buscar cidade por ID'
+    */
+    try {
+      const { state_id, city_id } = req.params;
+
+      const state = await State.findOne({
+        where: {
+          id: state_id,
+        },
+      });
+
+      if (!state) {
+        return res.status(404).json({ message: "Not Found." });
+      }
+
+      const city = await City.findOne({
+        where: {
+          id: city_id,
+        },
+      });
+
+      if (!city) {
+        return res.status(404).json({ message: "Not Found." });
+      }
+
+      if (state.id !== city.state_id) {
+        return res.status(400).json({ message: "Bad Request" });
+      }
+
+      const result = {
+        city_id: city.id,
+        city: city.name,
+        state_id: city.state_id,
+        state: state.name,
+        initials: state.initials,
+      };
+
+      return res.status(200).json({ result });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
