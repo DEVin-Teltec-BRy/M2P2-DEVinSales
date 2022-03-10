@@ -20,12 +20,27 @@ function PostUserPasswordValidation(password) {
   if (password.length >= 4) {
     const noRepeatedCharacters = [...password];
     let passwordArray = [...noRepeatedCharacters];
+
+    let newArray = [];
     for (let i = 0; i < noRepeatedCharacters.length; i++) {
       let character = noRepeatedCharacters[i];
       passwordArray.splice(0, 1);
-      if (passwordArray.includes(character) === false) {
+      console.log(character);
+      console.log(newArray);
+      console.log(passwordArray);
+      console.log(validation);
+
+      if (
+        passwordArray.includes(character) === true ||
+        newArray.includes(character) === true
+      ) {
+        validation = false;
+      } else {
         validation = true;
       }
+      newArray.push(character);
+
+      console.log(validation);
     }
     return validation;
   } else {
