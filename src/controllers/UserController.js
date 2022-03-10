@@ -13,9 +13,27 @@ const {
 module.exports = {
   async create(req, res) {
     // #swagger.tags = ['Usuário']
-    // #swagger.description = 'Endpoint que criar um novo usuário.'
+    // #swagger.description = 'Endpoint para criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
+
+      const ageValidation = verifyAge(stringToDate(birth_date));
+      if (ageValidation === false) {
+        const message = validateErrors({
+          message: "É necessário que o usuário seja maior de idade",
+        });
+        return res.status(400).send(message);
+      }
+
+      const passwordValidation = PostUserPasswordValidation(password);
+      if (passwordValidation === false) {
+        const message = validateErrors({
+          message:
+            "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
+        });
+        return res.status(400).send(message);
+      }
+
       const user = await User.create({
         name,
         password,
@@ -31,31 +49,6 @@ module.exports = {
         if (responseRoles && responseRoles.length > 0) {
           await user.setRoles(responseRoles);
         }
-      }
-
-      if (!email) {
-        const message = validateErrors({
-          message:
-            "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
-        });
-        return res.status(400).send(message);
-      }
-
-      const passwordValidation = PostUserPasswordValidation(password);
-      if (passwordValidation === false) {
-        const message = validateErrors({
-          message:
-            "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
-        });
-        return res.status(400).send(message);
-      }
-
-      const ageValidation = verifyAge(stringToDate(birth_date));
-      if (ageValidation === false) {
-        const message = validateErrors({
-          message: "É necessário que o usuário seja maior de idade",
-        });
-        return res.status(400).send(message);
       }
       return res.status(201).send({ message: "Usuário salvo com sucesso." });
     } catch (error) {
