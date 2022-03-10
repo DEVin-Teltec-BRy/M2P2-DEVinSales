@@ -1,3 +1,4 @@
+
 {
   "swagger": "2.0",
   "info": {
@@ -355,6 +356,54 @@
         }
       }
     },
+    "/api/v1/product/{product_id}": {
+      "put": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "suggested_price": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products/{id}": {
       "delete": {
         "description": "",
@@ -392,3 +441,4 @@
     }
   ]
 }
+
