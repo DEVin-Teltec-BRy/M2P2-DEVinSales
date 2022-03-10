@@ -32,11 +32,6 @@ class User extends Model {
         birth_date: {
           type: DataTypes.DATEONLY,
           allowNull: false,
-          validate: {
-            isDate: {
-              msg: "Essa data não é válida",
-            },
-          },
           get() {
             const formatedDate = this.getDataValue("birth_date");
             return formatedDate ? formatedDate.toLocaleDateString() : null;
