@@ -24,7 +24,6 @@ function PostUserPasswordValidation(password) {
     for (let i = 0; i < noRepeatedCharacters.length; i++) {
       let character = noRepeatedCharacters[i];
       passwordArray.splice(0, 1);
-
       if (
         passwordArray.includes(character) === true ||
         newArray.includes(character) === true
