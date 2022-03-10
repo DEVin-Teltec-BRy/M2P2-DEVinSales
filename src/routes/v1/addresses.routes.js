@@ -6,6 +6,6 @@ const permission = require('../../utils/constants/permissions');
 
 const addressesRoutes = express.Router();
 
-addressesRoutes.get('/address', AddressController.index);
+addressesRoutes.get('/address', onlyCanAccessWith([permission.READ]), AddressController.index);
 
 module.exports = addressesRoutes;
