@@ -68,20 +68,27 @@ module.exports = {
   async delete(req, res) {
     // #swagger.tags = ['Endereços']
     // #swagger.description = 'Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params'
+    // #swagger.parameters['address_id'] = {
+    //   in: 'parameter',
+    //   description: 'Parâmetro que deve ser passado com o ID do endereço que se deseja deletar',
+    //   type: 'number',
+    //   collectionFormat: 'multi',
 
     try {
       const { address_id } = req.params;
 
       const address = await Address.findByPk(address_id);
-      console.log(address);
 
       if (!address) {
+        // #swagger.responses[r04] = { description: 'Not Found' }
         return res.status(404).send({ message: 'Endereço não encontrado' });
       }
 
       await address.destroy();
+      console.log('DESTROYED');
 
-      return res.status(204).send({ message: 'Endereço deletado.' });
+      // #swagger.responses[204] = { description: 'No Content' }
+      return res.status(204).send();
     } catch (error) {
       console.log(error);
       const message = validateErrors(error);
