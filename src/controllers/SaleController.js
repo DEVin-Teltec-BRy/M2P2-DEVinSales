@@ -38,13 +38,13 @@ module.exports = {
     async showSaleById(req, res) {
 
         try {
-            const id = req.params.id
+            const sale_id = req.params.sale_id
 
-            if (!id) {
+            if (!sale_id) {
                 return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
             }
 
-            const sale = await Sale.findByPk(id)
+            const sale = await Sale.findByPk(sale_id)
             if (!sale) {
                 return res.status(404).send({ message: 'Não existe venda para este ID' })
             }
