@@ -48,8 +48,8 @@ module.exports = {
         const { buyer_id, dt_sale } = req.body
 
         try {
-            if(!buyer_id)throw new Error({message:"Precisa existir um comprador"})
-            if (new Date(dt_sale) == 'Invalid Date') throw new Error({message:'Formato de data inválido'})
+            if(!buyer_id)throw new Error("Precisa existir um comprador")
+            if (new Date(dt_sale) == 'Invalid Date') throw new Error('Formato de data inválido')
               
             const result = await Sale.create({
                 seller_id: user_id,
@@ -60,11 +60,11 @@ module.exports = {
 
         } catch (error) {
 
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send({message:"Precisa existir um vendedor"})
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send({message:"Precisa existir um comprador"})
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("Precisa existir um vendedor")
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("Precisa existir um comprador")
            
 
-            res.status(400).send(error.message)
+            res.status(400).send({message:error.message})
         }
     },
     async createBuy(req, res) {
@@ -89,8 +89,8 @@ module.exports = {
 
         try {
             if(!Number(seller_id))throw new Error('Seller_id deve ser um número')
-            if(!user_id)throw new Error({message:'Precisa enviar o user_id'})
-            if (new Date(dt_sale) == 'Invalid Date') throw new Error({message:'Formato de data inválido'})
+            if(!user_id)throw new Error('Precisa enviar o user_id')
+            if (new Date(dt_sale) == 'Invalid Date') throw new Error('Formato de data inválido')
 
             const result = await Sale.create({
                 seller_id: (seller_id) ? seller_id : null,
@@ -100,11 +100,11 @@ module.exports = {
             return res.status(201).send({ 'created': "id-" + result.id })
 
         } catch (error) {
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send({message:"seller_id inexistente"})
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send({message:"buyer_id inexistente"})
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("seller_id inexistente")
+            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("buyer_id inexistente")
            
             
-            res.status(400).send(error.message)
+            res.status(400).send({message:error.message})
         }
 
     },
