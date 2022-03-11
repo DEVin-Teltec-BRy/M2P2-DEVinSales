@@ -20,13 +20,13 @@ module.exports = {
       const { name, password, email, birth_date, roles } = req.body;
 
       const dateValidation = verifyDate(birth_date);
-      if (dateValidation === false) {
+      if (!dateValidation) {
         throw new Error("É necessário que a data informada exista e  seja do tipo dd/mm/yyyy")
       }
 
       const ageValidation = verifyAge(stringToDate(birth_date));
 
-      if (ageValidation === false) {
+      if (!ageValidation) {
         throw new Error("É necessário que o usuário seja maior de idade")
       }
 
@@ -67,7 +67,7 @@ module.exports = {
         email,
         birth_date: stringToDate(birth_date),
       });
-      
+
       await user.setRoles(responseRoles);
       
       return res.status(201).send({ response: user.id });
