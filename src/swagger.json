@@ -220,23 +220,6 @@
         }
       }
     },
-    "/api/v1/sales": {
-      "get": {
-        "tags": [
-          " Vendas "
-        ],
-        "description": "Endpoint pra buscar as vendas do usuario.",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
     "/api/v1/user/{user_id}/buy": {
       "get": {
         "tags": [
