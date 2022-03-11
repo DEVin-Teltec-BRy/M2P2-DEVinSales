@@ -52,14 +52,26 @@ module.exports = {
       if (products.length === 0) return res.status(204).send();
 
       return res.status(200).send({ products });
+
+      /* #swagger.responses[200] = { 
+               schema: { $ref: "#/definitions/GetProduct" },
+               description: "Produtos:" 
+        } */
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
     }
   },
   async store(req, res) {
-    //#swagger.tags = ['Produto']
-    // #swagger.description = 'Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.'
+    /*#swagger.tags = ['Produto']
+    #swagger.description = 'Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.'
+    #swagger.parameters['obj'] = {
+        in: 'body',
+        required: true,
+        schema: {
+          $ref: '#/definitions/AddProduct'
+        }
+      }*/
 
     try {
       const newProduct = req.body;
@@ -84,6 +96,10 @@ module.exports = {
       }
       const product = await Product.create(newProduct);
 
+      /* #swagger.responses[200] = { 
+               schema: { $ref: "#/definitions/ResProduct" },
+               description: "Produto criado com sucesso!" 
+        } */
       return res.status(200).send({
         message: "Produto criado com sucesso!",
         novoProduto: {
@@ -98,13 +114,20 @@ module.exports = {
   },
   async putUpdate(req, res) {
     /*#swagger.tags = ['Produto']
-    #swagger.description = 'Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+    #swagger.description = 'Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
     #swagger.parameters['product_id'] = {
       in: 'path',
       description: 'parâmetro id para buscar um produto para atualização',
       required: true,
       type: 'number',
-    }*/
+    }
+    #swagger.parameters['obj'] = {
+        in: 'body',
+        required: true,
+        schema: {
+          $ref: '#/definitions/PutProduct'
+        }
+      }*/
 
     try {
       const { product_id } = req.params;
@@ -156,13 +179,20 @@ module.exports = {
   },
   async update(req, res) {
     /* #swagger.tags = ['Produto']
-    #swagger.description = 'Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+    #swagger.description = 'Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
     #swagger.parameters['id'] = {
       in: 'path',
       description: 'parâmetro id para buscar um produto para atualização',
       required: true,
       type: 'number',
-    } */
+    } 
+    #swagger.parameters['obj'] = {
+      in: 'body',
+      required: true,
+      schema: {
+        $ref: '#/definitions/PatchProduct'
+      }
+    }*/
 
     try {
       const { id } = req.params;

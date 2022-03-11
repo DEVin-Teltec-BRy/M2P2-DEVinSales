@@ -12,7 +12,7 @@ function validateErrors(error) {
 
 function stringToDate(string) {
   const [day, month, year] = string.split("/");
-  return new Date(year, Number(month) - 1, day);
+  return new Date(Number(year), Number(month) - 1, Number(day) + 1);
 }
 
 module.exports = {
