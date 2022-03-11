@@ -88,18 +88,9 @@ module.exports = {
         birth_date: stringToDate(birth_date),
       });
 
-      if (roles && roles.length > 0) {
-        const responseRoles = await Role.findAll({
-          where: {
-            id: roles.map((role) => role.role_id),
-          },
-        });
-        if (responseRoles && responseRoles.length > 0) {
-          await user.setRoles(responseRoles);
-        }
-      }
-      const findUser = await User.findOne({ where: { email: email } });
-      return res.status(201).send({ response });
+      await user.setRoles(responseRoles);
+      
+      return res.status(201).send({ response: user.id });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
