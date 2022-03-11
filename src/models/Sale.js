@@ -30,9 +30,13 @@ class Sale extends Model {
       through: "user",
       constraints: true,
     });
+
   }
   static associate(models) {
-    this.hasMany(models.ProductsSales);
+    this.hasMany(models.ProductsSales, {
+      foreignKey: 'sales_id',
+      as: 'products'
+    });
   }
 }
 
