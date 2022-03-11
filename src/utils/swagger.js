@@ -38,6 +38,13 @@ const doc = {
         },
       ],
     },
+    PutProduct: {
+      name: "Ipad Air",
+      suggested_price: 4999.99,
+    },
+    PatchProduct: {
+      suggested_price: 3999.99,
+    },
   },
 };
 
