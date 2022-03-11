@@ -1,16 +1,20 @@
-require('dotenv').config();
-const PostgresConnectionStringParser = require('pg-connection-string');
+require("dotenv").config();
+const PostgresConnectionStringParser = require("pg-connection-string");
 
 const databaseUrl = process.env.DATABASE_URL;
 const connectionOptions = PostgresConnectionStringParser.parse(databaseUrl);
 
 module.exports = {
   development: {
-    dialect: 'postgres',
+    dialect: "postgres",
     host: connectionOptions.host,
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
+    dialectoptions: {
+      useUTC: false
+    },
+    timezone: "-03:00",
     define: {
       timestamps: true,
       underscored: true,
@@ -18,11 +22,15 @@ module.exports = {
     },
   },
   test: {
-    dialect: 'postgres',
+    dialect: "postgres",
     host: connectionOptions.host,
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
+    dialectoptions: {
+      useUTC: false
+    },
+    timezone: "-03:00",
     define: {
       timestamps: true,
       underscored: true,
@@ -30,15 +38,19 @@ module.exports = {
     },
   },
   production: {
-    dialect: 'postgres',
+    dialect: "postgres",
     host: connectionOptions.host,
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
+    dialectoptions: {
+      useUTC: false
+    },
+    timezone: "-03:00",
     define: {
       timestamps: true,
       underscored: true,
       underscoredAll: true,
     },
-  }
+  },
 };

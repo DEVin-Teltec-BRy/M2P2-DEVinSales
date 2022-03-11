@@ -10,13 +10,20 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
   "paths": {
     "/api/v1/users": {
       "post": {
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint que criar um novo usuários.",
+        "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
             "name": "body",
@@ -51,11 +58,51 @@
             "description": "Bad Request"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para buscar todos os usuários do banco de dados.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "birth_date_min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "birth_date_max",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
       }
     },
     "/api/v1/session": {
       "post": {
-        "description": "",
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
         "parameters": [
           {
             "name": "body",
@@ -79,6 +126,33 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/user/{user_id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -140,10 +214,314 @@
         }
       }
     },
+    "/api/v1/sales": {
+      "get": {
+        "tags": [
+          "Busca as Vendas do Usuarios"
+        ],
+        "description": "Endpoint pra busacar as vendas do usuario.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/user/{user_id}/buy": {
+      "get": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as vendas do usuario pelo buyer_id.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/user/{user_id}/sales": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buyer_id": {
+                  "example": "any"
+                },
+                "dt_sale": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "query para buscar produtos pelo nome",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "description": "query para buscar produtos pelo preço mínimo",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "description": "query para buscar produtos pelo preço máximo",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produtos:",
+            "schema": {
+              "$ref": "#/definitions/GetProduct"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddProduct"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto criado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/ResProduct"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/product/{product_id}": {
+      "put": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutProduct"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/products/{id}": {
+      "delete": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para deleção"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchProduct"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/address": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "city_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cep",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/state/{state_id}/city": {
       "get": {
         "tags": [
-          "State"
+          "Estado"
         ],
         "description": "Endpoint para buscar cidade(s) por estado",
         "parameters": [
@@ -178,5 +556,85 @@
         }
       }
     }
-  }
+  },
+  "definitions": {
+    "AddProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResProduct": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "preço_sugerido": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "GetProduct": {
+      "type": "object",
+      "properties": {
+        "Products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 2
+              },
+              "name": {
+                "type": "string",
+                "example": "MacBook Pro"
+              },
+              "suggested_price": {
+                "type": "number",
+                "example": 10999.99
+              }
+            }
+          }
+        }
+      }
+    },
+    "PutProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Ipad Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 4999.99
+        }
+      }
+    },
+    "PatchProduct": {
+      "type": "object",
+      "properties": {
+        "suggested_price": {
+          "type": "number",
+          "example": 3999.99
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
 }
