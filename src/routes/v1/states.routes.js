@@ -9,7 +9,7 @@ statesRoutes.get("/states", onlyCanAccessWith([READ]), StateController.index);
 statesRoutes.get(
   "/state/:state_id/city/",
   onlyCanAccessWith([READ]),
-  StateController.getCitiesByID
+  StateController.getCitiesByStateID
 );
 statesRoutes.get(
   "/state/:state_id/city/:city_id",
