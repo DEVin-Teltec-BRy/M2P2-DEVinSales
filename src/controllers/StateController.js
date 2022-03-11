@@ -6,7 +6,7 @@ const { Op, where, fn, col } = require("sequelize");
 module.exports = {
   async getCitiesByStateID(req, res) {
     /* 
-    #swagger.tags = ['State']
+    #swagger.tags = ['Estado']
     #swagger.description = 'Endpoint para buscar cidade(s) por estado'
     */
     try {
@@ -25,7 +25,7 @@ module.exports = {
       });
 
       if (!state) {
-        return res.status(404).json({ message: "Not Found." });
+        return res.status(404).json({ message: "Estado não encontrado." });
       }
 
       const query = {
@@ -56,7 +56,7 @@ module.exports = {
       });
 
       if (!cities.length) {
-        return res.status(204).json({ message: "Not Content." });
+        return res.status(204).json({});
       }
 
       return res.status(200).json({ cities });
