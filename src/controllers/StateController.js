@@ -5,20 +5,22 @@ const { Op } = require("Sequelize");
 
 module.exports = {
   async index(req, res) {
-    // #swagger.tags = ['Estado']
-    // #swagger.description = 'Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada'
-    // #swagger.parameters['name'] = {
-    //   in: 'query',
-    //   description: 'Filtro que identifica o nome integral ou parcial dos estados que serão retornados',
-    //   type: 'array',
-    //   collectionFormat: 'multi',
-    // }
-    // #swagger.parameters['initials'] = {
-    //   in: 'query',
-    //   description: 'Filtro que identifica as iniciais integral ou parcial dos estados que serão retornados',
-    //   type: 'array',
-    //   collectionFormat: 'multi',
-    // }
+    /*
+      #swagger.tags = ['Estado']
+      #swagger.description = 'Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada'
+      #swagger.parameters['name'] = {
+        in: 'query',
+        description: 'Filtro que identifica o nome integral ou parcial dos estados que serão retornados',
+        type: 'array',
+        collectionFormat: 'multi',
+      }
+      #swagger.parameters['initials'] = {
+        in: 'query',
+        description: 'Filtro que identifica as iniciais integral ou parcial dos estados que serão retornados',
+        type: 'array',
+        collectionFormat: 'multi',
+      }
+    */
 
     try {
       const names = [req.query.name]
