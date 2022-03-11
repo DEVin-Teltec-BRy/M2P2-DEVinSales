@@ -183,6 +183,35 @@ module.exports = {
     }
   },
   async delete(req, res) {
+    // #swagger.tags = ['Usuário']
+    // #swagger.description = 'Endpoint para deletar um usuário.'
+    /*
+      #swagger.parameters['user_id'] = {
+        in: 'path',
+        type: 'integer',
+        required: true
+      }
+      #swagger.responses[200] = {
+        schema: {
+          message: 'Usuario deletado com sucesso'
+        }
+      }
+      #swagger.responses[400] = {
+        schema: {
+          error: 'Formato de id invalido!'
+        }
+      }
+      #swagger.responses[403] = {
+        schema: {
+          message: 'Você não tem autorização para este recurso.'
+        }
+      }
+      #swagger.responses[404] = {
+        schema: {
+          message: 'Não se encontrou nenhum usuario como o id informado '
+        }
+      }
+    */
     try {
       const { user_id } = req.params;
       const userId = Number(user_id);
