@@ -20,6 +20,25 @@ const doc = {
       bearerAuth: [],
     },
   ],
+  definitions: {
+    AddProduct: {
+      name: "MacBook Air",
+      suggested_price: 7999.99,
+    },
+    ResProduct: {
+      nome: "MacBook Air",
+      preço_sugerido: 7999.99,
+    },
+    GetProduct: {
+      Products: [
+        {
+          id: 2,
+          name: "MacBook Pro",
+          suggested_price: 10999.99,
+        },
+      ],
+    },
+  },
 };
 
 const outputFile = "./src/swagger.json";
