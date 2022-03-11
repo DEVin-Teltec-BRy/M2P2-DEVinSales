@@ -21,26 +21,17 @@ module.exports = {
 
       const dateValidation = verifyDate(birth_date);
       if (dateValidation === false) {
-        const message = validateErrors({
-          message:
-            "É necessário que a data informada exista e  seja do tipo dia/mês/ano",
-        });
-        return res.status(400).send(message);
+        throw new Error("É necessário que a data informada exista e  seja do tipo dd/mm/yyyy")
       }
 
       const ageValidation = verifyAge(stringToDate(birth_date));
 
       if (ageValidation === false) {
-        const message = validateErrors({
-          message: "É necessário que o usuário seja maior de idade",
-        });
-        return res.status(400).send(message);
+        throw new Error("É necessário que o usuário seja maior de idade")
       }
 
       if (!roles || roles.length === 0) {
-        return res.status(400).send({
-          message: "O novo usuário necessita ter um cargo de WRITE e READ",
-        });
+        throw new Error("O novo usuário necessita ter um cargo de WRITE e READ")
       }
 
       const responseRoles = await Role.findAll({
@@ -54,9 +45,7 @@ module.exports = {
         },
       });
       if (responseRoles.length === 0) {
-        return res.status(400).send({
-          message: "O novo usuário necessita ter um cargo de WRITE e READ",
-        });
+        throw new Error("O novo usuário necessita ter um cargo de WRITE e READ")
       }
 
       const response = responseRoles.filter((role) => {
@@ -69,21 +58,8 @@ module.exports = {
       });
 
       if (response.length === 0) {
-        return res.status(400).send({
-          message: "O novo usuário necessita ter um cargo de WRITE e READ",
-        });
+        throw new Error("O novo usuário necessita ter um cargo de WRITE e READ")
       }
-      // if([...new Set(password.split(''))] > 1){
-      //   throw new Error ("senha muito curta ou sem variação")
-      // }
-      // const passwordValidation = PostUserPasswordValidation(password);
-      // if (passwordValidation === false) {
-        //   const message = validateErrors({
-          //     message:
-      //       "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
-      //   });
-      //   return res.status(400).send(message);
-      // }
 
       const user = await User.create({
         name,
@@ -91,7 +67,7 @@ module.exports = {
         email,
         birth_date: stringToDate(birth_date),
       });
-
+      
       await user.setRoles(responseRoles);
       
       return res.status(201).send({ response: user.id });
