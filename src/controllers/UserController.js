@@ -29,6 +29,7 @@ module.exports = {
       }
 
       const ageValidation = verifyAge(stringToDate(birth_date));
+
       if (ageValidation === false) {
         const message = validateErrors({
           message: "É necessário que o usuário seja maior de idade",
@@ -72,14 +73,17 @@ module.exports = {
           message: "O novo usuário necessita ter um cargo de WRITE e READ",
         });
       }
-      const passwordValidation = PostUserPasswordValidation(password);
-      if (passwordValidation === false) {
-        const message = validateErrors({
-          message:
-            "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
-        });
-        return res.status(400).send(message);
-      }
+      // if([...new Set(password.split(''))] > 1){
+      //   throw new Error ("senha muito curta ou sem variação")
+      // }
+      // const passwordValidation = PostUserPasswordValidation(password);
+      // if (passwordValidation === false) {
+        //   const message = validateErrors({
+          //     message:
+      //       "A senha deve possuir no mínimo 4 caracteres e deve-se ter pelo menos um caractere diferente dos demais.",
+      //   });
+      //   return res.status(400).send(message);
+      // }
 
       const user = await User.create({
         name,
