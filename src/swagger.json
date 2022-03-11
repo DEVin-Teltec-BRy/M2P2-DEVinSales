@@ -206,6 +206,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/v1/sales/{id}": {
       "get": {
         "tags": [" Vendas "],
@@ -512,18 +513,35 @@
           "Estado"
         ],
         "description": "Endpoint que retorna um estado de acordo com o state_id fornecido",
+=======
+    "/api/v1/state/{state_id}/city": {
+      "get": {
+        "tags": [
+          "State"
+        ],
+        "description": "Endpoint para buscar cidade(s) por estado",
+>>>>>>> SQD2/feature/getCitiesByStateID
         "parameters": [
           {
             "name": "state_id",
             "in": "path",
             "required": true,
             "type": "string"
+<<<<<<< HEAD
+=======
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+>>>>>>> SQD2/feature/getCitiesByStateID
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
           },
+<<<<<<< HEAD
           "400": {
             "description": "Bad Request"
           },
@@ -566,20 +584,26 @@
           "200": {
             "description": "Success!"
           },
+=======
+>>>>>>> SQD2/feature/getCitiesByStateID
           "204": {
             "description": "No Content"
           },
           "400": {
             "description": "Bad Request"
           },
+<<<<<<< HEAD
           "401": {
             "description": "Unauthorized"
           },
+=======
+>>>>>>> SQD2/feature/getCitiesByStateID
           "403": {
             "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
+<<<<<<< HEAD
           },
           "r04": {
             "description": "Not Found"
@@ -619,6 +643,8 @@
           },
           "r04": {
             "description": "Not Found"
+=======
+>>>>>>> SQD2/feature/getCitiesByStateID
           }
         }
       }

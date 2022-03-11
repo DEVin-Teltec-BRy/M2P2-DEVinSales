@@ -6,7 +6,20 @@ const statesRoutes = express.Router();
 
 //stateRoutes.get('/state', StateController.index);
 statesRoutes.get("/states", onlyCanAccessWith([READ]), StateController.index);
-statesRoutes.get("/state/:state_id/city/:city_id" /* onlyCanAccessWith(READ), */,StateController.getCitiesByID);
-statesRoutes.get("/state/:state_id", onlyCanAccessWith([READ]), StateController.getStateById);
+statesRoutes.get(
+  "/state/:state_id/city/",
+  onlyCanAccessWith([READ]),
+  StateController.getCitiesByID
+);
+statesRoutes.get(
+  "/state/:state_id/city/:city_id",
+  onlyCanAccessWith([READ]),
+  StateController.getCitiesByID
+);
+statesRoutes.get(
+  "/state/:state_id",
+  onlyCanAccessWith([READ]),
+  StateController.getStateById
+);
 
 module.exports = statesRoutes;
