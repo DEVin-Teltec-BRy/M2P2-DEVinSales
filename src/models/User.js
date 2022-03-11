@@ -44,7 +44,7 @@ class User extends Model {
           allowNull: false,
           validate:{
             is:{
-              arg: /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]{4,}$/,
+              args: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z]).{4,}$/,
               msg: "A senha deve conter pelo menos 4 caractéres, sendo um minúsculo ou um maiúsculo, desde que diferente dos demais."
             },
           }
