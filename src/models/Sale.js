@@ -31,7 +31,12 @@ class Sale extends Model {
       constraints: true,
     });
     Sale.belongsToMany(models.Product, { through:  models.ProductsSales });
-  }
+
+      this.hasMany(models.ProductsSales, {
+        foreignKey: 'sale_id',
+        as: 'products'
+      });
+      }
 }
 
 module.exports = Sale;

@@ -46,18 +46,75 @@ module.exports = {
                 return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
             }
 
-            const sale = await Sale.findByPk(sale_id)
-            if (!sale) {
-                return res.status(404).send({ message: 'Não existe venda para este ID' })
-            }
+            const sales = await Sale.findByPk(sale_id, {
+                include: [
+                  {
+                    //required: false,
+                    association: "products",
+                    //attributes: [ 'seller_id', 'dt_sale' ],
+                    where: {sale_id },
+                  },
+                ],
+              });
+            console.log(sales)
+            
+            // if (!sale) {
+            //     return res.status(404).send({ message: 'Não existe venda para este ID' })
+            // }
 
-            return res.status(200).json(sale)
+            return res.status(200).json(sales)
 
         } catch (error) {
             return res.status(500).json(error.message)
         }
 
     },
+    async showSaler(req, res) {
+        
+        // #swagger.tags = [' Vendas ']
+       // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
+
+       const {id} = req.params;
+        
+               
+       try {
+           const findUser = await User.findByPk(id);
+
+           const findSaler = await User.findAll({
+               attributes:['name','email'],
+                include: 
+                   { 
+                       association: 'sales_user',
+                       attributes: [ 'seller_id', 'dt_sale' ],
+                       where: {seller_id: id },
+                   }
+       });
+          
+        if(!findUser){
+            return res.status(400).send({message: "Este usuario não existe!"});
+        }
+
+          if(findSaler.length === 0){
+               return res.status(400).send({message: "Este usuario não possui vendas!"});
+           }
+           
+           
+           return res.status(200).json( findSaler)
+       } catch (error) {
+           
+           return res.status(400).send({message: "Erro deconhecido!"})
+       }
+  
+   },
+
+
+
+
+
+
+
+
+
   async saleMade(req, res) {
     try {
       // #swagger.auto = false
