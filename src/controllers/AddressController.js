@@ -1,4 +1,5 @@
 const Address = require('../models/Address');
+const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
 
 module.exports={
@@ -8,24 +9,24 @@ module.exports={
         // #swagger.tags = ['Endereços']
         // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
 
-        // #swagger.parameters['city_id'] = {
-        //   in: 'query',
-        //   description: 'Filtro que identifica o id da cidade desejada',
-        //   type: 'number',
-        //   collectionFormat: 'multi',
-        // }
-        // #swagger.parameters['street'] = {
-        //   in: 'query',
-        //   description: 'Filtro que identifica o nome da rua que será retornada',
-        //   type: 'string',
-        //   collectionFormat: 'multi',
-        // }
-        // #swagger.parameters['cep'] = {
-        //   in: 'query',
-        //   description: 'Filtro que identifica o cep que será retornada',
-        //   type: 'string',
-        //   collectionFormat: 'multi',
-        // }
+        /* #swagger.parameters['city_id'] = {
+             in: 'query',
+             description: 'Filtro que identifica o id da cidade desejada',
+             type: 'number',
+             collectionFormat: 'multi',
+        }*/
+        /* #swagger.parameters['street'] = {
+             in: 'query',
+             description: 'Filtro que identifica o nome da rua que será retornada',
+             type: 'string',
+             collectionFormat: 'multi',
+           }*/
+        /* #swagger.parameters['cep'] = {
+             in: 'query',
+             description: 'Filtro que identifica o cep que será retornada',
+             type: 'string',
+             collectionFormat: 'multi',
+           }*/
 
         try {
             const {
@@ -68,6 +69,45 @@ module.exports={
           } catch (error) {
               const message = validateErrors(error);
               // #swagger.responses[403] = { description: 'Forbidden' }
+              return res.status(403).send(message);
+          }
+
+    },
+
+    async update(req,res){
+
+        try {
+            const { address_id } = req.params;
+            const { street, number, complement, cep } = req.body;
+
+            const address = await Address.findByPk(address_id);
+
+            if(!address) {
+                return res.status(404).json({ message: "Endereço não localizado!"});
+            }
+
+            if(!street && !number && !complement && !cep) {
+                return res.status(400).json({ message: "É necessário passar pelo menos um parâmetro!" });
+            }
+
+            Address.update(
+                {
+                    street: street ? street : address.street,
+                    number: number ? number : address.number,
+                    complement: complement ? complement : address.complement,
+                    cep: cep ? cep : address.cep,
+                },
+                {
+                    where: {
+                        id: address_id,
+                    }
+                }
+            )
+
+            return res.status(200).json({ message: "Endereço alterado com sucesso!" });
+
+          } catch (error) {
+              const message = validateErrors(error);
               return res.status(403).send(message);
           }
 
