@@ -6,6 +6,7 @@ const usersRoutes = require("./v1/users.routes");
 const salesRoutes = require("./v1/sales.routes");
 const productsRoutes = require("./v1/products.routes");
 const stateRoutes = require("./v1/states.routes");
+const addressesRoutes = require("./v1/addresses.routes");
 
 routes.get("/", (req, res) => {
   // #swagger.ignore = true
@@ -18,6 +19,7 @@ routes.use("/api/v1", [
   salesRoutes,
   productsRoutes,
   stateRoutes,
+  addressesRoutes,
 ]);
 
 module.exports = routes;

@@ -1,7 +1,5 @@
 "use strict";
-
 const { Model, DataTypes } = require("sequelize");
-
 class Sale extends Model {
   static init(sequelize) {
     super.init(
@@ -30,10 +28,13 @@ class Sale extends Model {
       through: "user",
       constraints: true,
     });
+
   }
   static associate(models) {
-    this.hasMany(models.ProductsSales);
+    this.hasMany(models.ProductsSales, {
+      foreignKey: 'sales_id',
+      as: 'products'
+    });
   }
 }
-
 module.exports = Sale;

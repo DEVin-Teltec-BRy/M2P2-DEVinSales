@@ -47,7 +47,7 @@ function onlyCanAccessWith(permissionsCanAccess) {
     });
     if (!existPermission) {
       return res
-        .status(401)
+        .status(403)
         .send({ message: "Você não tem autorização para este recurso." });
     }
     next();
