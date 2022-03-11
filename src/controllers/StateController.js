@@ -5,7 +5,7 @@ const { validateErrors } = require("../utils/functions");
 module.exports = {
   async getCitiesByID(req, res) {
     /* 
-    #swagger.tags = ['State']
+    #swagger.tags = ['Estado']
     #swagger.description = 'Endpoint para buscar cidade por ID'
     */
     try {
@@ -18,7 +18,7 @@ module.exports = {
       });
 
       if (!state) {
-        return res.status(404).json({ message: "Not Found." });
+        return res.status(404).json({ message: "Estado não encontrado." });
       }
 
       const city = await City.findOne({
@@ -28,11 +28,13 @@ module.exports = {
       });
 
       if (!city) {
-        return res.status(404).json({ message: "Not Found." });
+        return res.status(404).json({ message: "Cidade não encontrada." });
       }
 
       if (state.id !== city.state_id) {
-        return res.status(400).json({ message: "Bad Request" });
+        return res
+          .status(400)
+          .json({ message: "Cidade não pertence ao estado." });
       }
 
       const result = {
