@@ -6,7 +6,7 @@ const stateRoutes = express.Router();
 
 //stateRoutes.get('/state', StateController.index);
 
-stateRoutes.post('/state/:state_id/city', StateController.store)
+stateRoutes.post('/state/:state_id/city', StateController.postStateIdCity)
 
 
 module.exports = stateRoutes;

@@ -1,46 +1,54 @@
-const State = require('../models/State');
-const City = require('../models/City')
-const { validateErrors } = require('../utils/functions');
-const { Op } = require('sequelize')
+const State = require("../models/State");
+const City = require("../models/City");
+const { validateErrors } = require("../utils/functions");
+const { Op, where, fn, col } = require("sequelize");
 
 module.exports = {
-    async store(req,res) {
+  async postStateIdCity(req, res) {
+    try {
+      const { state_id } = req.params;
+      const { name } = req.body;
 
-        try {
-        const { state_id } = req.params
-        const state = await State.findByPk(state_id)
-        
-        if(!state){
-            return res.status(404).send({message: "Nenhum Estado foi encontrado"})
-        }
+      if (!name) {
+        return res.status(400).send({ message: "Você precisa enviar o nome da Cidade" });
+      }
+      const state = await State.findByPk(state_id);
+      
+      if (!state) {
+        return res.status(404).send({ message: "O Estado não existe no Banco de Dado" });
+      }
 
-        const { name } = req.body
-        const city = await City.findOne({
-            where: {
-                name
-            }
-        })
+      const accent = "Á,À,Ã,Â,Ä,á,à,ã,â,ä,É,È,Ê,Ë,é,è,ê,ë,Í,Ì,Î,Ï,í,ì,î,ï,Ó,Ò,Ô,Õ,Ö,ó,ò,ô,õ,ö,Ú,Ù,Û,Ü,ú,ù,û,ü,Ç,ç,Ñ,ñ";
 
-        if(city.name === name ){
-            return res.status(400).send({message: "Esta cidade já existe."})
-        }
+      const unaccent ="A,A,A,A,A,a,a,a,a,a,E,E,E,E,e,e,e,e,I,I,I,I,i,i,i,i,O,O,O,O,O,o,o,o,o,o,U,U,U,U,u,u,u,u,C,c,N,n";
+      
+      const city = await City.findOne({
+        where: {
+            name: where(
+                fn("translate", fn("lower", col("City.name")), accent, unaccent),
+                {
+                  [Op.iLike]: `%${name
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")}%`,
+                }
+              ), 
+              state_id: state.id
+        },
+      });
 
-        
+      if(city){
+        return res.status(400).send({ message: `Já existe uma cidade com nome de ${name} no Estado de ${state.name}`});
+      }
 
-        // //Cria a cidade
-        // const cidade = await State.create({
-        //     city_id,
-        //     city,
-        //     state
-        // })
-        // return res.status(201).send({message: 'Cidade criada com sucesso!'})
-    
-        } 
-        catch (error) {
-        const message = validateErrors(error);
-        return res.status(403).send(message);
-        }
-    
+      const newCity = await City.create({
+        name,
+        state_id
+    })
+    return res.status(201).send({city: newCity.id})
+
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(403).send(message);
     }
-
-}
+  },
+};
