@@ -62,6 +62,11 @@ class User extends Model {
       through: "users_roles",
       as: "roles",
     });
+    this.hasMany(models.Sale, {
+      foreignKey: "seller_id",
+      as: 'sales_user'
+
+    });
 
     this.hasMany(
         models.Sale,{
@@ -70,11 +75,6 @@ class User extends Model {
         }
     );
 
-    this.hasMany(models.Sale, {
-      foreignKey: "seller_id",
-      as: 'sales_user'
-
-    });
   }
 }
 module.exports = User;
