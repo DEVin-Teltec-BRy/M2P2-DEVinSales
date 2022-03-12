@@ -13,9 +13,7 @@ module.exports = {
       : Number.MAX_SAFE_INTEGER;
 
     if (priceMax <= priceMin) {
-      return res.status(400).json({
-        message: "Price max must be greater than price min",
-      });
+      throw new Error("O preço máximo deve ser maior que o preço mínimo.");
     }
     query.suggested_price = {
       [Op.between]: [priceMin, priceMax],
@@ -25,8 +23,6 @@ module.exports = {
       attributes: ["id", "name", "suggested_price"],
       where: query,
     });
-
-    if (products.length === 0) return res.status(204).send();
     return products;
   },
 
@@ -53,6 +49,9 @@ module.exports = {
   async updateProductService(id, name, suggested_price) {
     const nameWithNoSpaces = name ? name.trim() : null;
 
+    if (!Number(id)) {
+      throw new Error("O id deve ser um número.");
+    }
     if (!nameWithNoSpaces && !suggested_price) {
       throw new Error("Não foram enviados dados para atualização.");
     }
@@ -77,6 +76,7 @@ module.exports = {
     if (suggested_price <= 0) {
       throw new Error("O preço sugerido deve ser maior que zero.");
     }
+
     const productExist = await Product.findByPk(id);
     if (!productExist) {
       return null;
