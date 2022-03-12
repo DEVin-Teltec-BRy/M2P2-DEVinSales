@@ -6,7 +6,6 @@ const Role = require("../models/Role");
 const {
   validateErrors,
   stringToDate,
-  PostUserPasswordValidation,
   verifyAge,
   verifyDate,
 } = require("../utils/functions");
