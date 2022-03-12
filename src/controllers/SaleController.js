@@ -1,7 +1,10 @@
 const Sale = require('../models/Sale')
 const User = require("../models/User");
+const Address = require('../models/Address');
+const Delivery = require('../models/Deliveries');
 const salesRoutes = require('../routes/v1/sales.routes');
-const { validateErrors } = require('../utils/functions')
+const { validateErrors, daysToDelivery } = require('../utils/functions');
+const State = require('../models/State');
 
 module.exports={
 
@@ -81,6 +84,73 @@ module.exports={
             
            return res.status(201).json({message: "erro ao listar dados de vendas"});
         }
+    },
+
+    async deliveries(req,res){
+        // #swagger.tags = ['Vendas']
+        // #swagger.description = 'Endpoint pra buscar as entregas.'
+        /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                schema: {
+                    address_id: 'integer',
+                    delivery_forecast: '2022-03-12T11:13:24.848Z'
+                }
+        } */
+    try{
+       const {sale_id} = req.params;
+       const {address_id, delivery_forecast} = req.body;
+
+       // verifica se foi passado a address_id
+       if(address_id.length == 0){
+        return res.status(400).json({message: "Bad Request"});
+       }
+
+       // Verifica se existe o id_sales na tabela sales
+       const sale = await Sale.findAll({
+           where: {
+               id: sale_id,
+           }
+       });
+
+       if(sale.length==0){
+        return res.status(404).json({message: "id_sale not found"});
+       }
+
+       // verifica se existe o id_address na tabela addresses      
+       const address = await Address.findAll({
+           where: {
+               id: address_id,
+           }
+       });
+  
+       if(address.length==0){
+        return res.status(404).json({message: "address_id not found"});
+       }
+
+       // delivery_forecast verifica se a data e hora inserida é menor que a atual 
+       const dateNow = new Date();
+       const dataParsed = Date.parse(dateNow);
+       const dataForecastParsed = Date.parse(delivery_forecast);
+      
+       if(dataForecastParsed < dataParsed){
+        return res.status(400).json({message: "Bad request"});
+       }
+
+       // adiciona 7 dias à data para entrega
+       const deliverydate = daysToDelivery(7);
+
+       // criação do objeto data_entrega na tabela entregas
+       const deliveryDateResult = await Delivery.create({
+        address_id:address_id,
+        sale_id:sale_id,
+        delivery_forecast: deliverydate
+       })
+
+       return res.status(200).json({message: "Entrega agendada com sucesso"});
+    }catch(error){
+        return res.status(400).json({message: "Bad request"});
+    }
+
     }
 
 }
