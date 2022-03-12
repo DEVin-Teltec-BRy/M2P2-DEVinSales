@@ -97,6 +97,10 @@ module.exports={
 
        const {sale_id} = req.params;
        const {address_id} = req.body;
+       // verifica se foi passado a address_id
+       if(address_id.length == 0){
+        return res.status(400).json({message: "Bad Request"});
+       }
 
        // Verifica se existe o id_sales na tabela sales
        const sale = await Sale.findAll({
@@ -109,8 +113,7 @@ module.exports={
         return res.status(404).json({message: "id_sale not found"});
        }
 
-       // verifica se existe o id_address na tabela addresses
-      
+       // verifica se existe o id_address na tabela addresses      
        const address = await Address.findAll({
            where: {
                id: address_id,
