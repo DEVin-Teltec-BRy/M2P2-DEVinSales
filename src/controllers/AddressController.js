@@ -1,31 +1,32 @@
 const Address = require('../models/Address');
+const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
 
 module.exports={
 
     async index(req,res){
-        /*
-         #swagger.tags = ['Endereços']
-         #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
-         #swagger.parameters['city_id'] = {
-           in: 'query',
-           description: 'Filtro que identifica o id da cidade desejada',
-           type: 'number',
-           collectionFormat: 'multi',
-         }
-         #swagger.parameters['street'] = {
-           in: 'query',
-           description: 'Filtro que identifica o nome da rua que será retornada',
-           type: 'string',
-           collectionFormat: 'multi',
-         }
-         #swagger.parameters['cep'] = {
-           in: 'query',
-           description: 'Filtro que identifica o cep que será retornada',
-           type: 'string',
-           collectionFormat: 'multi',
-         }
-         */
+        
+        // #swagger.tags = ['Endereços']
+        // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
+
+        /* #swagger.parameters['city_id'] = {
+             in: 'query',
+             description: 'Filtro que identifica o id da cidade desejada',
+             type: 'number',
+             collectionFormat: 'multi',
+        }*/
+        /* #swagger.parameters['street'] = {
+             in: 'query',
+             description: 'Filtro que identifica o nome da rua que será retornada',
+             type: 'string',
+             collectionFormat: 'multi',
+           }*/
+        /* #swagger.parameters['cep'] = {
+             in: 'query',
+             description: 'Filtro que identifica o cep que será retornada',
+             type: 'string',
+             collectionFormat: 'multi',
+           }*/
 
         try {
             const {
