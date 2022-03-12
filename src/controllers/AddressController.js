@@ -89,7 +89,7 @@ module.exports={
              in: 'body',
              description: 'Dados para alteração do endereço',
              type: 'object',
-             schema: { $ref: "#/definitions/updateAddress" }
+             schema: { $ref: "#/definitions/address" }
            }*/
 
         try {
@@ -99,13 +99,13 @@ module.exports={
             const address = await Address.findByPk(address_id);
 
             if(!address) {
-                // #swagger.responses[404] = { description: 'Not Found' }
+                // #swagger.responses[404] = { description: 'Endereço não localizado!' }
                 return res.status(404).json({ message: "Endereço não localizado!"});
             }
 
             if(!street && !number && !complement && !cep) {
-                // #swagger.responses[400] = { description: 'Bad request' }
-                return res.status(400).json({ message: "É necessário passar pelo menos um parâmetro!" });
+                // #swagger.responses[400] = { description: 'É necessário passar pelo menos um dado para alteração!' }
+                return res.status(400).json({ message: "É necessário passar pelo menos um dado para alteração!" });
             }
 
             Address.update(
@@ -122,12 +122,12 @@ module.exports={
                 }
             )
 
-            // #swagger.responses[200] = { description: 'Success' }
+            // #swagger.responses[200] = { description: 'Endereço alterado com sucesso!' }
             return res.status(200).json({ message: "Endereço alterado com sucesso!" });
 
           } catch (error) {
               const message = validateErrors(error);
-              // #swagger.responses[403] = { description: 'Forbidden' }
+              // #swagger.responses[403] = { description: 'Você não tem autorização para este recurso!' }
               return res.status(403).send(message);
           }
 

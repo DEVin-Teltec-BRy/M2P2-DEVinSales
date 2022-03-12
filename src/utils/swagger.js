@@ -22,7 +22,7 @@ const doc = {
   ],
   definitions: {
 
-    updateAddress: {
+    address: {
       street: "Rua Paralelepípedo",
       number: 10,
       complement: "Apto 1",

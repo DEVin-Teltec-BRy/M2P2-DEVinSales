@@ -558,29 +558,29 @@
             "in": "body",
             "description": "Dados para alteração do endereço",
             "schema": {
-              "$ref": "#/definitions/updateAddress"
+              "$ref": "#/definitions/address"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Endereço alterado com sucesso!"
           },
           "400": {
-            "description": "Bad request"
+            "description": "É necessário passar pelo menos um dado para alteração!"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Você não tem autorização para este recurso!"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Endereço não localizado!"
           }
         }
       }
     }
   },
   "definitions": {
-    "updateAddress": {
+    "address": {
       "type": "object",
       "properties": {
         "street": {
