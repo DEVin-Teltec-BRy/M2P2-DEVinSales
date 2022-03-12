@@ -659,6 +659,23 @@
           }
         }
       }
+    },
+    "/api/v1/address/{address_id}": {
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
     }
   },
   "definitions": {
