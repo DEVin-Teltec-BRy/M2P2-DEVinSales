@@ -23,7 +23,7 @@
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint que criar um novo usuário.",
+        "description": "Endpoint para criar um novo usuário.",
         "parameters": [
           {
             "name": "body",
@@ -56,6 +56,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       },
