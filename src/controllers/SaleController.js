@@ -10,109 +10,109 @@ const { literal } = require('sequelize');
 
 module.exports = {
 
-    async create(req, res) {
-        
-        const { user_id } = req.params
-        const { buyer_id, dt_sale, } = req.body
-        const receivedDate = new Date(dt_sale)
-        const dateNow = new Date()
-        try {
-            const result = await Sale.create({
-                seller_id: user_id,
-                buyer_id: buyer_id,
-                dt_sale: (receivedDate.length > 0) ? receivedDate : dateNow.getTime()
-            })
-            res.status(201).send({ 'created': "id-" + result.id })
-        } catch (error) {
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("user_id inexistente")
-            if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("buyer_id inexistente")
-            res.status(404).send(error.message)
+  async create(req, res) {
+
+    const { user_id } = req.params
+    const { buyer_id, dt_sale, } = req.body
+    const receivedDate = new Date(dt_sale)
+    const dateNow = new Date()
+    try {
+      const result = await Sale.create({
+        seller_id: user_id,
+        buyer_id: buyer_id,
+        dt_sale: (receivedDate.length > 0) ? receivedDate : dateNow.getTime()
+      })
+      res.status(201).send({ 'created': "id-" + result.id })
+    } catch (error) {
+      if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("user_id inexistente")
+      if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("buyer_id inexistente")
+      res.status(404).send(error.message)
+    }
+
+  },
+
+  async showSaler(req, res) {
+
+    const FindUser = await Sale.findAll()
+    console.log(FindUser)
+    return res.status(201).json(FindUser)
+
+  },
+
+  async showSaleById(req, res) {
+
+    try {
+      const sale_id = req.params.sale_id
+
+      if (!sale_id) {
+        return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
+      }
+
+      const sales = await Sale.findByPk(sale_id, {
+        include: [
+          {
+
+            association: "products",
+            attributes: [
+              'product_id',
+              'amount',
+              'unit_price',
+              [literal('unit_price * amount'), 'total'],
+            ],
+            where: { sale_id },
+          },
+        ],
+      });
+
+
+      if (!sales) {
+        return res.status(404).send({ message: 'Não existe venda para este ID' })
+      }
+
+      return res.status(200).json(sales)
+
+    } catch (error) {
+      return res.status(500).json(error.message)
+    }
+
+  },
+  async showSaler(req, res) {
+
+    // #swagger.tags = [' Vendas ']
+    // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
+
+    const { id } = req.params;
+
+
+    try {
+      const findUser = await User.findByPk(id);
+
+      const findSaler = await User.findAll({
+        attributes: ['name', 'email'],
+        include:
+        {
+          association: 'sales_user',
+          attributes: ['seller_id', 'dt_sale'],
+          where: { seller_id: id },
         }
+      });
 
-    },
+      if (!findUser) {
+        return res.status(400).send({ message: "Este usuario não existe!" });
+      }
 
-    async showSaler(req, res) {
+      if (findSaler.length === 0) {
+        return res.status(400).send({ message: "Este usuario não possui vendas!" });
+      }
 
-        const FindUser = await Sale.findAll()
-        console.log(FindUser)
-        return res.status(201).json(FindUser)
 
-    },
+      return res.status(200).json(findSaler)
+    } catch (error) {
 
-    async showSaleById(req, res) {
+      return res.status(400).send({ message: "Erro deconhecido!" })
+    }
 
-        try {
-            const sale_id = req.params.sale_id
-
-            if (!sale_id) {
-                return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
-            }
-
-            const sales = await Sale.findByPk(sale_id, {
-                include: [
-                  {
-                   
-                    association: "products",
-                    attributes: [ 
-                        'product_id', 
-                        'amount', 
-                        'unit_price',
-                        [literal('unit_price * amount'), 'total'],
-                    ],
-                    where: {sale_id },
-                  },
-                ],
-              });
-          
-            
-            if (!sales) {
-                return res.status(404).send({ message: 'Não existe venda para este ID' })
-            }
-
-            return res.status(200).json(sales)
-
-        } catch (error) {
-            return res.status(500).json(error.message)
-        }
-
-    },
-    async showSaler(req, res) {
-        
-        // #swagger.tags = [' Vendas ']
-       // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
-
-       const {id} = req.params;
-        
-               
-       try {
-           const findUser = await User.findByPk(id);
-
-           const findSaler = await User.findAll({
-               attributes:['name','email'],
-                include: 
-                   { 
-                       association: 'sales_user',
-                       attributes: [ 'seller_id', 'dt_sale' ],
-                       where: {seller_id: id },
-                   }
-       });
-          
-        if(!findUser){
-            return res.status(400).send({message: "Este usuario não existe!"});
-        }
-
-          if(findSaler.length === 0){
-               return res.status(400).send({message: "Este usuario não possui vendas!"});
-           }
-           
-           
-           return res.status(200).json( findSaler)
-       } catch (error) {
-           
-           return res.status(400).send({message: "Erro deconhecido!"})
-       }
-  
-   },
+  },
 
 
 

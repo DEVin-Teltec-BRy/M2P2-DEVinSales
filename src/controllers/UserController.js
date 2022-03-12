@@ -70,7 +70,7 @@ module.exports = {
         { userId: user.id, roles: user.roles },
         process.env.SECRET,
         {
-          expiresIn: "99d",
+          expiresIn: "1d",
         }
       );
 
