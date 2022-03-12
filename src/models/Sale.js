@@ -1,7 +1,5 @@
 "use strict";
-
 const { Model, DataTypes } = require("sequelize");
-
 class Sale extends Model {
   static init(sequelize) {
     super.init(
@@ -33,5 +31,4 @@ class Sale extends Model {
     Sale.belongsToMany(models.Product, { through:  models.ProductsSales });
   }
 }
-
 module.exports = Sale;

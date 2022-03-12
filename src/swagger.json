@@ -350,6 +350,53 @@
         }
       }
     },
+    "/api/v1/sales/{sale_id}/deliver": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as entregas.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address_id": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "delivery_forecast": {
+                  "type": "string",
+                  "example": "2022-03-12T11:13:24.848Z"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products": {
       "get": {
         "tags": [
@@ -381,7 +428,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produtos:",
+            "schema": {
+              "$ref": "#/definitions/GetProduct"
+            }
           },
           "204": {
             "description": "No Content"
@@ -398,27 +448,23 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/AddProduct"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produto criado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/ResProduct"
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -429,12 +475,12 @@
         }
       }
     },
-    "/api/v1/product/{product_id}": {
+    "/api/v1/products/{product_id}": {
       "put": {
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "product_id",
@@ -444,18 +490,11 @@
             "description": "parâmetro id para buscar um produto para atualização"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PutProduct"
             }
           }
         ],
@@ -509,7 +548,7 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "id",
@@ -519,24 +558,53 @@
             "description": "parâmetro id para buscar um produto para atualização"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PatchProduct"
             }
           }
         ],
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city/{city_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade por ID",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -560,17 +628,23 @@
           {
             "name": "city_id",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o id da cidade desejada",
+            "type": "number",
+            "collectionFormat": "multi"
           },
           {
             "name": "street",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o nome da rua que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
           },
           {
             "name": "cep",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o cep que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
           }
         ],
         "responses": {
@@ -583,6 +657,81 @@
           "403": {
             "description": "Forbidden"
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AddProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResProduct": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "preço_sugerido": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "GetProduct": {
+      "type": "object",
+      "properties": {
+        "Products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 2
+              },
+              "name": {
+                "type": "string",
+                "example": "MacBook Pro"
+              },
+              "suggested_price": {
+                "type": "number",
+                "example": 10999.99
+              }
+            }
+          }
+        }
+      }
+    },
+    "PutProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Ipad Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 4999.99
+        }
+      }
+    },
+    "PatchProduct": {
+      "type": "object",
+      "properties": {
+        "suggested_price": {
+          "type": "number",
+          "example": 3999.99
         }
       }
     }
