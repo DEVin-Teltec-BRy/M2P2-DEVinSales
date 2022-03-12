@@ -78,8 +78,7 @@ module.exports={
 
        const {user_id} = req.params;
 
-      
-       try{
+        try{
        const salesData = await User.findAll({
             include: [
                 {
