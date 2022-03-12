@@ -7,7 +7,13 @@ class Role extends Model{
         allowNull: false,
         unique: {
           msg: "A descrição deve ser única",
-      },
+        },
+        validate: {
+          len: {
+            msg: "A descrição do cargo deve ter entre 4 e 10 caracteres.",
+            args: [4,10]
+          }
+        }
       }
     }, {
       sequelize,
