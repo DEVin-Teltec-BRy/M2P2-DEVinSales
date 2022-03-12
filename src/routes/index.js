@@ -18,6 +18,7 @@ routes.use("/api/v1", [
   permissionRoutes,
   salesRoutes,
   productsRoutes,
+  stateRoutes,
   addressesRoutes,
   stateRoutes,
 ]);

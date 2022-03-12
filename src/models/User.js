@@ -1,5 +1,5 @@
-const { DataTypes, Model } = require("sequelize");
-const { hashPassword } = require("../hooks/userHooks");
+const { DataTypes, Model } = require('sequelize');
+const { hashPassword } = require('../hooks/userHooks');
 
 class User extends Model {
   static init(sequelize) {
@@ -9,7 +9,7 @@ class User extends Model {
           type: DataTypes.INTEGER,
           primaryKey: true,
           get() {
-            const id = this.getDataValue("id");
+            const id = this.getDataValue('id');
             return id;
           },
         },
@@ -17,7 +17,7 @@ class User extends Model {
           type: DataTypes.STRING,
           allowNull: false,
           get() {
-            const name = this.getDataValue("name");
+            const name = this.getDataValue('name');
             return name;
           },
         },
@@ -25,18 +25,18 @@ class User extends Model {
           type: DataTypes.STRING,
           allowNull: false,
           unique: {
-            msg: "E-mail deve ser único",
+            msg: 'E-mail deve ser único',
           },
           get() {
-            const email = this.getDataValue("email");
+            const email = this.getDataValue('email');
             return email;
           },
         },
         birth_date: {
-          type: DataTypes.DATEONLY,
+          type: DataTypes.DATE,
           allowNull: false,
           get() {
-            const formatedDate = this.getDataValue("birth_date");
+            const formatedDate = this.getDataValue('birth_date');
             return formatedDate ? formatedDate.toLocaleDateString() : null;
           },
         },
@@ -56,20 +56,16 @@ class User extends Model {
     );
   }
   static associate(models) {
-
     this.belongsToMany(models.Role, {
-      foreignKey: "user_id",
-      through: "users_roles",
-      as: "roles",
+      foreignKey: 'user_id',
+      through: 'users_roles',
+      as: 'roles',
     });
 
-    this.hasMany(
-        models.Sale,{
-           foreignKey: 'buyer_id',
-           as: 'buyer_sales'
-        }
-    );
-
+    this.hasMany(models.Sale, {
+      foreignKey: 'buyer_id',
+      as: 'buyer_sales',
+    });
   }
 }
 module.exports = User;
