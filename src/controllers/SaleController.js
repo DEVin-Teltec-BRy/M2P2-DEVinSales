@@ -96,7 +96,7 @@ module.exports={
                     delivery_forecast: '2022-03-12T11:13:24.848Z'
                 }
         } */
-
+    try{
        const {sale_id} = req.params;
        const {address_id, delivery_forecast} = req.body;
 
@@ -147,6 +147,9 @@ module.exports={
        })
 
        return res.status(200).json({message: "Entrega agendada com sucesso"});
+    }catch(error){
+        return res.status(400).json({message: "Bad request"});
+    }
 
     }
 
