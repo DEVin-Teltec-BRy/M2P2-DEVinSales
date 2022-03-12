@@ -49,7 +49,7 @@ module.exports = {
         include: [
           {
             model: State,
-            as: "states",
+            as: "state",
             attributes: ["id", "name", "initials"],
           },
         ],

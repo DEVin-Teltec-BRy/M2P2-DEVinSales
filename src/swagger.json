@@ -664,9 +664,12 @@
         }
       }
     },
-    "/api/v1/state/{state_id}/city/{city_id}": {
+    "/api/v1/state/{state_id}/city/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade(s) por estado",
         "parameters": [
           {
             "name": "state_id",
@@ -675,15 +678,26 @@
             "type": "string"
           },
           {
-            "name": "city_id",
-            "in": "path",
-            "required": true,
+            "name": "name",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
