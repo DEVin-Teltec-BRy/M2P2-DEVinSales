@@ -11,8 +11,8 @@ function validateErrors(error) {
 }
 
 function stringToDate(string) {
-  const [day, month, year] = string.split("/");
-  return new Date(Number(year), Number(month) - 1, Number(day) + 1);
+  const [day, month, year] = string.split('/');
+  return new Date(Number(year), Number(month) - 1, Number(day));
 }
 
 function daysToDelivery(addDays){
