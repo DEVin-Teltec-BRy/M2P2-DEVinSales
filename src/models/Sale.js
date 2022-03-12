@@ -28,18 +28,12 @@ class Sale extends Model {
       through: "user",
       constraints: true,
     });
+    Sale.belongsToMany(models.Product, { through:  models.ProductsSales });
 
-  }
-  static associate(models) {
-    this.hasMany(models.ProductsSales, {
-      foreignKey: 'sales_id',
-      as: 'products'
-    });
-  }
+      this.hasMany(models.ProductsSales, {
+        foreignKey: 'sale_id',
+        as: 'products'
+      });
+      }
 }
-<<<<<<< HEAD
-
 module.exports = Sale;
-=======
-module.exports = Sale;
->>>>>>> TryCatch---Endpoint-POST-Deliveries

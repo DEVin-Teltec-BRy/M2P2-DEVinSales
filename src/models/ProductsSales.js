@@ -1,16 +1,24 @@
 const { DataTypes, Model } = require("sequelize");
+const Product = require("./Product");
+const Sale = require("./Sale");
 
 class ProductsSales extends Model {
   static init(sequelize) {
     super.init(
       {
-        sales_id: {
+        sale_id: {
           type: DataTypes.INTEGER,
-          allowNull:false,
+          references: {
+            model: Sale,
+            key: "id",
+          },
         },
         product_id: {
           type: DataTypes.INTEGER,
-          allowNull: false,
+          references: {
+            model: Product,
+            key: "id",
+          },
         },
         unit_price: {
           type: DataTypes.DECIMAL,
@@ -27,7 +35,7 @@ class ProductsSales extends Model {
   static associate(models){
     this.belongsTo(
         models.Sale, {
-            foreignKey: 'sales_id',
+            foreignKey: 'sale_id',
             as: 'sale'
         }
     )

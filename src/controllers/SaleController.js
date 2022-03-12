@@ -230,6 +230,43 @@ module.exports = {
             return res.status(400).send(error.message);
         }
     },
+    async showSaleById(req, res) {
+
+        try {
+          const sale_id = req.params.sale_id
+    
+          if (!sale_id) {
+            return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
+          }
+    
+          const sales = await Sale.findByPk(sale_id, {
+            include: [
+              {
+    
+                association: "products",
+                attributes: [
+                  'product_id',
+                  'amount',
+                  'unit_price',
+                  [literal('unit_price * amount'), 'total'],
+                ],
+                where: { sale_id },
+              },
+            ],
+          });
+    
+    
+          if (!sales) {
+            return res.status(404).send({ message: 'Não existe venda para este ID' })
+          }
+    
+          return res.status(200).json(sales)
+    
+        } catch (error) {
+          return res.status(500).json(error.message)
+        }
+    
+      },
 
     async deliveries(req,res){
         // #swagger.tags = ['Vendas']

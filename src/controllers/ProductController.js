@@ -3,7 +3,6 @@ const { validateErrors } = require("../utils/functions");
 const { Op } = require("sequelize");
 
 module.exports = {
-<<<<<<< HEAD
     async index(req, res) {
         // #swagger.tags = ['Produto']
         // #swagger.description = 'Endpoint para buscar produtos conforme critério query params'
@@ -60,9 +59,6 @@ module.exports = {
           if (products.length === 0) return res.status(204).send();
 
           return res.status(200).send({ products });
-        } catch (error) {
-          const message = validateErrors(error);
-          return res.status(400).send(message);
         }
     },
     async putUpdate(req, res){
@@ -108,29 +104,14 @@ module.exports = {
         }
     },
     
-=======
-  async index(req, res) {
-    /* #swagger.tags = ['Produto']
-    #swagger.description = 'Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.'
-    #swagger.parameters['name'] = {
-      in: 'query',
-      description: 'query para buscar produtos pelo nome',
-      required: false,
-    },
-    #swagger.parameters['price_min'] = {
-    in: 'query',
-    description: 'query para buscar produtos pelo preço mínimo',
-    required: false,
-    type: 'number',
->>>>>>> TryCatch---Endpoint-POST-Deliveries
-  },
-   #swagger.parameters['price_max'] = {
+  
+   /* #swagger.parameters['price_max'] = {
     in: 'query',
     description: 'query para buscar produtos pelo preço máximo',
     required: false,
     type: 'number',
 
-  } */
+  } 
     try {
       const { name, price_min, price_max } = req.query;
       const query = {};
@@ -163,12 +144,12 @@ module.exports = {
       /* #swagger.responses[200] = { 
                schema: { $ref: "#/definitions/GetProduct" },
                description: "Produtos:" 
-        } */
+        } 
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
-    }
-  },
+    } */
+  
   async store(req, res) {
     /*#swagger.tags = ['Produto']
     #swagger.description = 'Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.'
