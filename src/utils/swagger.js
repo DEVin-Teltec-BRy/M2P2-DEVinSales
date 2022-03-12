@@ -20,6 +20,16 @@ const doc = {
       bearerAuth: [],
     },
   ],
+  definitions: {
+
+    updateAddress: {
+      street: "Rua Paralelepípedo",
+      number: 10,
+      complement: "Apto 1",
+      cep: "12345678",
+    },
+
+  },
 };
 
 const outputFile = "./src/swagger.json";
