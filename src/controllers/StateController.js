@@ -10,12 +10,12 @@ module.exports = {
       const { name } = req.body;
 
       if (!name) {
-        return res.status(400).send({ message: "Você precisa enviar o nome da Cidade" });
+        return res.status(400).send({ message: "É necessário enviar o nome da Cidade" });
       }
       const state = await State.findByPk(state_id);
       
       if (!state) {
-        return res.status(404).send({ message: "O Estado não existe no Banco de Dado" });
+        return res.status(404).send({ message: "O Estado não existe no Banco de Dados" });
       }
 
       const accent = "Á,À,Ã,Â,Ä,á,à,ã,â,ä,É,È,Ê,Ë,é,è,ê,ë,Í,Ì,Î,Ï,í,ì,î,ï,Ó,Ò,Ô,Õ,Ö,ó,ò,ô,õ,ö,Ú,Ù,Û,Ü,ú,ù,û,ü,Ç,ç,Ñ,ñ";
