@@ -45,9 +45,7 @@ module.exports = {
             '@schema': {
                 "properties": { 
                     "description": { 
-                        "type": "string", 
-                        "minLength": 2, 
-                        "maxLength": 250,
+                        "type": "string",
                         "example": "financeiro" 
                     },
                     "permissions": {

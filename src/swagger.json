@@ -173,8 +173,6 @@
               "properties": {
                 "description": {
                   "type": "string",
-                  "minLength": 2,
-                  "maxLength": 250,
                   "example": "financeiro"
                 },
                 "permissions": {
