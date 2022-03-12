@@ -539,17 +539,23 @@
           {
             "name": "city_id",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o id da cidade desejada",
+            "type": "number",
+            "collectionFormat": "multi"
           },
           {
             "name": "street",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o nome da rua que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
           },
           {
             "name": "cep",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o cep que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
           }
         ],
         "responses": {
