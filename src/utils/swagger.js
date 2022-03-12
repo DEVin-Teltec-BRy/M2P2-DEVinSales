@@ -21,6 +21,17 @@ const doc = {
     },
   ],
   definitions: {
+    Permissions: [
+      {
+        permission_id: 1,
+      },
+    ],
+    AddRole: {
+      description: "Financeiro",
+    },
+    AddPermission: {
+      description: "WRITE",
+    },
     AddProduct: {
       name: "MacBook Air",
       suggested_price: 7999.99,
@@ -28,6 +39,9 @@ const doc = {
     ResProduct: {
       nome: "MacBook Air",
       preço_sugerido: 7999.99,
+    },
+    ResRole: {
+      message: "Cargo criado com sucesso."
     },
     GetProduct: {
       Products: [
