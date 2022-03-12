@@ -84,7 +84,31 @@ module.exports={
     },
 
     async deliveries(req,res){
-        
+        // #swagger.tags = ['Vendas']
+        // #swagger.description = 'Endpoint pra buscar as entregas.'
+        /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                schema: {
+                    address_id: 'integer',
+                    delivery_forecast: 'dateTime'
+                }
+        } */
+
+       const {sale_id} = req.params;
+       //const {address_id} = req.body;
+
+       const sale = await Sale.findAll({
+           where: {
+               id: sale_id,
+           }
+       });
+
+       if(sale.length==0){
+        return res.status(404).json({message: "not found"});
+       }
+
+       return res.status(200).json(sale);
+
     }
 
 }

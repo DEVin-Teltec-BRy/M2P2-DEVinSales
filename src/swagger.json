@@ -297,6 +297,50 @@
         }
       }
     },
+    "/api/v1/sales/{sale_id}/deliver": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as entregas.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address_id": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "delivery_forecast": {
+                  "type": "string",
+                  "example": "dateTime"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products": {
       "get": {
         "tags": [
