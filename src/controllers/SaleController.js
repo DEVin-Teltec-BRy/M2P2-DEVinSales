@@ -1,6 +1,7 @@
 const Sale = require('../models/Sale')
 const User = require("../models/User");
 const Address = require('../models/Address');
+const Delivery = require('../models/Deliveries');
 const salesRoutes = require('../routes/v1/sales.routes');
 const { validateErrors, daysToDelivery } = require('../utils/functions');
 const State = require('../models/State');
@@ -138,9 +139,14 @@ module.exports={
        // adiciona 7 dias à data para entrega
        const deliverydate = daysToDelivery(7);
 
-       console.log(deliverydate)
+       // criação do objeto data_entrega na tabela entregas
+       const deliveryDateResult = await Delivery.create({
+        address_id:address_id,
+        sale_id:sale_id,
+        delivery_forecast: deliverydate
+       })
 
-       return res.status(200).json(address);
+       return res.status(200).json({message: "Entrega agendada com sucesso"});
 
     }
 
