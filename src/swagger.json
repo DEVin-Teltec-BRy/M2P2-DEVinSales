@@ -322,7 +322,7 @@
                 },
                 "delivery_forecast": {
                   "type": "string",
-                  "example": "dateTime"
+                  "example": "2022-03-12T11:13:24.848Z"
                 }
               }
             }
@@ -331,6 +331,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "403": {
             "description": "Forbidden"
