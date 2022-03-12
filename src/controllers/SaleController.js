@@ -320,6 +320,17 @@ module.exports = {
        // adiciona 7 dias à data para entrega
        const deliverydate = daysToDelivery(7);
 
+       //verificar se já existe agendamento p essa sale
+       const deliveryBooked = await Delivery.findAll({
+           where: {
+               sale_id: sale_id,
+           }
+       });
+
+       if(deliveryBooked.length>=1){
+          return res.status(400).json({message: "Já existe um agendamento de entrega para esta venda"});
+       }
+
        // criação do objeto data_entrega na tabela entregas
        const deliveryDateResult = await Delivery.create({
         address_id:address_id,
