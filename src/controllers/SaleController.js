@@ -81,6 +81,10 @@ module.exports={
             
            return res.status(201).json({message: "erro ao listar dados de vendas"});
         }
+    },
+
+    async deliveries(req,res){
+        
     }
 
 }
