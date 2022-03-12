@@ -159,19 +159,24 @@
     },
     "/api/v1/roles": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
+            "description": "A lista de permissões pode ser omitido na criação de um novo cargo.",
             "schema": {
-              "type": "object",
               "properties": {
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "financeiro"
                 },
                 "permissions": {
-                  "example": "any"
+                  "$ref": "#/definitions/Permissions"
                 }
               }
             }
@@ -179,10 +184,87 @@
         ],
         "responses": {
           "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResRole"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [],
+        "responses": {
+          "200": {
             "description": "OK"
           },
           "400": {
             "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/{role_id}": {
+      "post": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "description": "A lista de permissões é obrigatória e deve conter ids de permissões cadastradas previamente no sistema.<br>Caso seja enviado um uma permissão que o cargo já tenha, ela será desconsiderada, evitando duplicidade.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "permissions": {
+                  "$ref": "#/definitions/Permissions"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissões vinculadas com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -584,10 +666,7 @@
     },
     "/api/v1/state/{state_id}/city/{city_id}": {
       "get": {
-        "tags": [
-          "Estado"
-        ],
-        "description": "Endpoint para buscar cidade por ID",
+        "description": "",
         "parameters": [
           {
             "name": "state_id",
@@ -603,17 +682,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
           "403": {
             "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -660,46 +730,59 @@
         }
       }
     },
-    "/api/v1/state/{state_id}/city": {
-      "get": {
+    "/api/v1/address/{address_id}": {
+      "delete": {
         "tags": [
-          "Estado"
+          "Endereços"
         ],
-        "description": "Endpoint para buscar cidade(s) por estado",
+        "description": "",
         "parameters": [
           {
-            "name": "state_id",
+            "name": "address_id",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
           "403": {
             "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
     }
   },
   "definitions": {
+    "Permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "permission_id": {
+            "type": "number",
+            "example": 1
+          }
+        }
+      }
+    },
+    "AddRole": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "Financeiro"
+        }
+      }
+    },
+    "AddPermission": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "WRITE"
+        }
+      }
+    },
     "AddProduct": {
       "type": "object",
       "properties": {
@@ -723,6 +806,15 @@
         "preço_sugerido": {
           "type": "number",
           "example": 7999.99
+        }
+      }
+    },
+    "ResRole": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Cargo criado com sucesso."
         }
       }
     },
