@@ -422,7 +422,7 @@
         }
       }
     },
-    "/api/v1/product/{product_id}": {
+    "/api/v1/products/{product_id}": {
       "put": {
         "tags": [
           "Produto"
@@ -529,6 +529,42 @@
         }
       }
     },
+    "/api/v1/state/{state_id}/city/{city_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade por ID",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/address": {
       "get": {
         "tags": [
@@ -563,6 +599,23 @@
             "description": "Forbidden"
           }
         }
+      }
+    },
+    "/api/v1/address/{address_id}": {
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
       }
     }
   },
