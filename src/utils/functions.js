@@ -12,10 +12,21 @@ function validateErrors(error) {
 
 function stringToDate(string) {
   const [day, month, year] = string.split("/");
-  return new Date(year, Number(month) - 1, day);
+  return new Date(Number(year), Number(month) - 1, Number(day) + 1);
+}
+
+function daysToDelivery(number){
+    Date.prototype.addDays = function(days) {
+      const date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    }    
+    const date = new Date();    
+    return date.addDays(7);
 }
 
 module.exports = {
   validateErrors,
   stringToDate,
+  daysToDelivery,
 };

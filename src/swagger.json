@@ -214,7 +214,11 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/v1/user/{id}/sales": {
+=======
+    "/api/v1/sales": {
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
       "get": {
         "tags": [
           " Vendas "
@@ -312,6 +316,56 @@
           }
         }
       }
+<<<<<<< HEAD
+=======
+    },
+    "/api/v1/sales/{sale_id}/deliver": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as entregas.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address_id": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "delivery_forecast": {
+                  "type": "string",
+                  "example": "2022-03-12T11:13:24.848Z"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
     },
     "/api/v1/user/{seller_id}/item": {
       "post": {
@@ -401,27 +455,44 @@
         "tags": [
           "Endereços"
         ],
+<<<<<<< HEAD
         "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
+=======
+        "description": "Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.",
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
         "parameters": [
           {
             "name": "city_id",
             "in": "query",
+            "description": "query para buscar produtos pelo nome",
+            "required": false,
             "type": "string"
           },
           {
             "name": "street",
             "in": "query",
-            "type": "string"
+            "description": "query para buscar produtos pelo preço mínimo",
+            "required": false,
+            "type": "number"
           },
           {
             "name": "cep",
             "in": "query",
-            "type": "string"
+            "description": "query para buscar produtos pelo preço máximo",
+            "required": false,
+            "type": "number"
           }
         ],
         "responses": {
           "200": {
+<<<<<<< HEAD
             "description": "Success!"
+=======
+            "description": "Produtos:",
+            "schema": {
+              "$ref": "#/definitions/GetProduct"
+            }
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
           },
           "204": {
             "description": "No Content"
@@ -429,6 +500,7 @@
           "400": {
             "description": "Bad Request"
           },
+<<<<<<< HEAD
           "403": {
             "description": "Forbidden"
           },
@@ -462,6 +534,8 @@
           "400": {
             "description": "Bad Request"
           },
+=======
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
           "403": {
             "description": "Forbidden"
           },
@@ -479,6 +553,7 @@
         "tags": [
           "Estado"
         ],
+<<<<<<< HEAD
         "description": "Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada",
         "parameters": [
           {
@@ -490,11 +565,25 @@
             "name": "initials",
             "in": "query",
             "type": "string"
+=======
+        "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddProduct"
+            }
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produto criado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/ResProduct"
+            }
           },
           "204": {
             "description": "No Content"
@@ -516,19 +605,33 @@
         "tags": [
           "State"
         ],
+<<<<<<< HEAD
         "description": "Endpoint para buscar cidade por ID",
+=======
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
         "parameters": [
           {
             "name": "state_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
           },
           {
+<<<<<<< HEAD
             "name": "city_id",
             "in": "path",
             "required": true,
             "type": "string"
+=======
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutProduct"
+            }
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
           }
         ],
         "responses": {
@@ -547,18 +650,28 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/v1/state/{state_id}": {
       "get": {
         "tags": [
           "Estado"
         ],
         "description": "Endpoint que retorna um estado de acordo com o state_id fornecido",
+=======
+    "/api/v1/products/{id}": {
+      "delete": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.",
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
         "parameters": [
           {
             "name": "state_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para deleção"
           }
         ],
         "responses": {
@@ -568,6 +681,46 @@
           "400": {
             "description": "Bad Request"
           },
+<<<<<<< HEAD
+=======
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchProduct"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
           "403": {
             "description": "Forbidden"
           },
@@ -576,6 +729,120 @@
           }
         }
       }
+<<<<<<< HEAD
+=======
+    },
+    "/api/v1/address": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "city_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "cep",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AddProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResProduct": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "preço_sugerido": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "GetProduct": {
+      "type": "object",
+      "properties": {
+        "Products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 2
+              },
+              "name": {
+                "type": "string",
+                "example": "MacBook Pro"
+              },
+              "suggested_price": {
+                "type": "number",
+                "example": 10999.99
+              }
+            }
+          }
+        }
+      }
+    },
+    "PutProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Ipad Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 4999.99
+        }
+      }
+    },
+    "PatchProduct": {
+      "type": "object",
+      "properties": {
+        "suggested_price": {
+          "type": "number",
+          "example": 3999.99
+        }
+      }
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
     }
   },
   "security": [

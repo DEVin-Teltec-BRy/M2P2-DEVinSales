@@ -1,7 +1,5 @@
 "use strict";
-
 const { Model, DataTypes } = require("sequelize");
-
 class Sale extends Model {
   static init(sequelize) {
     super.init(
@@ -39,5 +37,9 @@ class Sale extends Model {
     });
   }
 }
+<<<<<<< HEAD
 
 module.exports = Sale;
+=======
+module.exports = Sale;
+>>>>>>> TryCatch---Endpoint-POST-Deliveries
