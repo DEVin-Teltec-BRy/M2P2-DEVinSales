@@ -4,7 +4,9 @@ const ProductsSales = require("../models/ProductsSales");
 const Product = require("../models/Product");
 const { decode } = require("jsonwebtoken");
 const salesRoutes = require('../routes/v1/sales.routes');
-const { validateErrors } = require('../utils/functions')
+const { validateErrors } = require('../utils/functions');
+const { literal } = require('sequelize');
+
 
 module.exports = {
 
@@ -49,18 +51,23 @@ module.exports = {
             const sales = await Sale.findByPk(sale_id, {
                 include: [
                   {
-                    //required: false,
+                   
                     association: "products",
-                    //attributes: [ 'seller_id', 'dt_sale' ],
+                    attributes: [ 
+                        'product_id', 
+                        'amount', 
+                        'unit_price',
+                        [literal('unit_price * amount'), 'total'],
+                    ],
                     where: {sale_id },
                   },
                 ],
               });
-            console.log(sales)
+          
             
-            // if (!sale) {
-            //     return res.status(404).send({ message: 'Não existe venda para este ID' })
-            // }
+            if (!sales) {
+                return res.status(404).send({ message: 'Não existe venda para este ID' })
+            }
 
             return res.status(200).json(sales)
 
