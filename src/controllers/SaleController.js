@@ -276,20 +276,7 @@ module.exports = {
                 schema: {
                     address_id: 'integer',
                     delivery_forecast: '2022-03-12T11:13:24.848Z'
-        // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
-
-       const {user_id} = req.params;
-
-        try{
-       const salesData = await User.findAll({
-            include: [
-                {
-                    association: "buyer_sales",
-                    where: {
-                        buyer_id: user_id
-                    }
-                }
-        } */
+       */
     try{
        const {sale_id} = req.params;
        const {address_id, delivery_forecast} = req.body;

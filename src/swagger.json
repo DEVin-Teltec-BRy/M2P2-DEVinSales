@@ -241,41 +241,6 @@
         }
       }
     },
-    "/api/v1/sales/{sale_id}/": {
-      "get": {
-        "tags": [
-          "Vendas"
-        ],
-        "summary": "Pega uma venda por seu ID",
-        "description": "Endpoint pra buscar uma venda específica retornando id do vendedor, id do comprador como também o produto junto com sua quantidade, preço do item e o total .",
-        "parameters": [
-          {
-            "name": "sale_id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "minimum": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Não existe venda para este ID"
-          },
-          "500": {
-            "description": "Error"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "400": {
-            "description": "É necessário passar o ID de vendas"
-          }
-        }
-      }
-    },
     "/api/v1/user/{user_id}/buy": {
       "get": {
         "tags": [
@@ -302,59 +267,6 @@
           },
           "403": {
             "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/v1/sales/{seller_id}/saleMade": {
-      "post": {
-        "tags": [
-          "Vendas"
-        ],
-        "description": "<h2>Endpoint for submitting sales</h2>",
-        "parameters": [
-          {
-            "name": "seller_id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "<ul><li>It must be a valid seller_id</li></ul>"
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "description": "<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "product_id": {
-                  "type": "string",
-                  "example": "Integer"
-                },
-                "unit_price": {
-                  "type": "string",
-                  "example": "Integer"
-                },
-                "amount": {
-                  "type": "string",
-                  "example": "Integer"
-                }
-              },
-              "required": [
-                "product_id"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Sale submitted successfully."
-          },
-          "403": {
-            "description": "The user logged-in is unauthorized to submit sales."
-          },
-          "404": {
-            "description": "product_id or seller_id were not found in the database."
           }
         }
       }
@@ -454,6 +366,192 @@
         }
       }
     },
+    "/api/v1/sales/{sale_id}/deliver": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as entregas.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address_id": {
+                  "example": "any"
+                },
+                "delivery_forecast": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{sale_id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para buscar produtos conforme critério query params",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "price_min",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "price_max",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddProduct"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto criado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/ResProduct"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/product/{product_id}": {
+      "put": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para atualizar um produto, neste Endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "suggested_price": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products/{id}": {
       "delete": {
         "description": "",
@@ -482,9 +580,45 @@
             "description": "Not Found"
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "Produto"
+        ],
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "parâmetro id para buscar um produto para atualização"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchProduct"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
-    
     "/api/v1/address": {
       "get": {
         "tags": [
@@ -495,31 +629,22 @@
           {
             "name": "city_id",
             "in": "query",
-            "description": "query para buscar produtos pelo nome",
-            "required": false,
             "type": "string"
           },
           {
             "name": "street",
             "in": "query",
-            "description": "query para buscar produtos pelo preço mínimo",
-            "required": false,
-            "type": "number"
+            "type": "string"
           },
           {
             "name": "cep",
             "in": "query",
-            "description": "query para buscar produtos pelo preço máximo",
-            "required": false,
-            "type": "number"
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Produtos:",
-            "schema": {
-              "$ref": "#/definitions/GetProduct"
-            }
+            "description": "Success!"
           },
           "204": {
             "description": "No Content"
@@ -578,24 +703,64 @@
           "Estado"
         ],
         "description": "Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada",
-      
-        
         "parameters": [
           {
-            "name": "obj",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AddProduct"
-            }
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "initials",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Produto criado com sucesso!",
-            "schema": {
-              "$ref": "#/definitions/ResProduct"
-            }
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city/": {
+      "get": {
+        "tags": [
+          "State"
+        ],
+        "description": "Endpoint para buscar cidade(s) por estado",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "204": {
             "description": "No Content"
@@ -617,14 +782,13 @@
         "tags": [
           "State"
         ],
-        "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para buscar cidade por ID",
         "parameters": [
           {
             "name": "state_id",
             "in": "path",
             "required": true,
-            "type": "number",
-            "description": "parâmetro id para buscar um produto para atualização"
+            "type": "string"
           },
           {
             "name": "city_id",
@@ -660,13 +824,20 @@
             "name": "state_id",
             "in": "path",
             "required": true,
-            "type": "number",
-            "description": "parâmetro id para buscar um produto para deleção"
+            "type": "string"
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request"
@@ -754,7 +925,6 @@
           "example": 3999.99
         }
       }
-
     }
   },
   "security": [
