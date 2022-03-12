@@ -1,5 +1,6 @@
 const Sale = require('../models/Sale')
 const User = require("../models/User");
+const Address = require('../models/Address');
 const salesRoutes = require('../routes/v1/sales.routes');
 const { validateErrors } = require('../utils/functions')
 
@@ -95,8 +96,9 @@ module.exports={
         } */
 
        const {sale_id} = req.params;
-       //const {address_id} = req.body;
+       const {address_id} = req.body;
 
+       // Verifica se existe o id_sales na tabela sales
        const sale = await Sale.findAll({
            where: {
                id: sale_id,
@@ -104,10 +106,22 @@ module.exports={
        });
 
        if(sale.length==0){
-        return res.status(404).json({message: "not found"});
+        return res.status(404).json({message: "id_sale not found"});
        }
 
-       return res.status(200).json(sale);
+       // verifica se existe o id_address na tabela addresses
+      
+       const address = await Address.findAll({
+           where: {
+               id: address_id,
+           }
+       });
+  
+       if(address.length==0){
+        return res.status(404).json({message: "address_id not found"});
+       }
+
+       return res.status(200).json(address);
 
     }
 
