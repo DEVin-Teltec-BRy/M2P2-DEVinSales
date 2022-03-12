@@ -19,7 +19,7 @@ routes.use('/api/v1', [
   salesRoutes,
   productsRoutes,
   addressesRoutes,
-  //stateRoutes
+  
 ]);
 
 module.exports = routes;
