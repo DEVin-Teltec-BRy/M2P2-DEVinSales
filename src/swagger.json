@@ -517,8 +517,44 @@
           }
         }
       }
+    },
+    "/api/v1/state/{state_id}/city": {
+      "post": {
+        "tags": [
+          "Estados"
+        ],
+        "description": "O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          
+          "403": {
+            "description": "O usuário não tem permissão(Forbidden)"
+          },
+          "404": {
+            "description": "O Estado não existe no Banco de Dados(No found)"
+          },
+          "400": {
+            "description": "Já existe uma cidade com este nome para o Estado(Bad Request)"
+          },
+          "201": {
+            "description": "city_id(Created)"
+          }
+        }
+      }
     }
   },
+  
   "definitions": {
     "AddProduct": {
       "type": "object",
