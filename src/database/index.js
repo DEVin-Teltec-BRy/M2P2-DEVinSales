@@ -6,8 +6,9 @@ const nodeEnv = process.env.NODE_ENV;
 const User = require("../models/User");
 const Permission = require("../models/Permission");
 const Role = require("../models/Role");
-const Product = require("../models/Product");
 const Sale = require("../models/Sale");
+const Deliveries = require("../models/Deliveries");
+const Product = require("../models/Product");
 const State = require("../models/State");
 const ProductsSales = require("../models/ProductsSales");
 const City = require("../models/City");
@@ -21,13 +22,13 @@ const connection = new Sequelize(dbConfig[nodeEnv]);
 User.init(connection);
 Role.init(connection);
 Permission.init(connection);
-Product.init(connection);
 Sale.init(connection);
+Deliveries.init(connection);
+Product.init(connection);
 State.init(connection);
 ProductsSales.init(connection);
 City.init(connection);
 Address.init(connection);
-
 
 /**
  * Associação dos models
@@ -36,6 +37,7 @@ Address.init(connection);
 User.associate(connection.models);
 Role.associate(connection.models);
 Permission.associate(connection.models);
+Deliveries.associate(connection.models);
 Sale.associate(connection.models);
 Product.associate(connection.models);
 City.associate(connection.models);

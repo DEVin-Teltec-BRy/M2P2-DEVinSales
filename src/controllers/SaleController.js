@@ -1,10 +1,16 @@
 const Sale = require('../models/Sale')
 const User = require("../models/User");
+const ProductsSales = require("../models/ProductsSales");
+const Product = require("../models/Product");
+const { decode } = require("jsonwebtoken");
+const Address = require('../models/Address');
+const Delivery = require('../models/Deliveries');
 const salesRoutes = require('../routes/v1/sales.routes');
-const { validateErrors } = require('../utils/functions')
+const { validateErrors, daysToDelivery } = require('../utils/functions');
+const State = require('../models/State');
 
-module.exports={
-
+module.exports = {
+  
     async create(req,res){
          // #swagger.tags = ['Vendas']
         // #swagger.description = 'Endpoint criar uma venda.'
@@ -56,20 +62,21 @@ module.exports={
         // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
 
        const {user_id} = req.params;
-
       
        try{
        const salesData = await User.findAll({
+            attributes: ['id','name','email'],
             include: [
                 {
                     association: "buyer_sales",
+                    attributes: ['seller_id','buyer_id','dt_sale'],
                     where: {
-                        buyer_id: user_id
+                        buyer_id: user_id,
                     }
-                }
+                }                
             ]
-        });     
-
+        });          
+     
         if(salesData.length == 0){
             return res.status(204).json({message: "no content"});
         }
@@ -77,8 +84,172 @@ module.exports={
         return res.status(200).json(salesData);
 
         }catch(error){
-            return res.status(201).json({message: "erro ao listar dados de vendas"});
+            
+           return res.status(201).json({message: "erro ao listar dados de vendas"});
         }
+    },
+
+    async deliveries(req,res){
+        // #swagger.tags = ['Vendas']
+        // #swagger.description = 'Endpoint pra buscar as entregas.'
+        /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                schema: {
+                    address_id: 'integer',
+                    delivery_forecast: '2022-03-12T11:13:24.848Z'
+                }
+        } */
+    try{
+       const {sale_id} = req.params;
+       const {address_id, delivery_forecast} = req.body;
+
+       // verifica se foi passado a address_id
+       if(address_id.length == 0){
+        return res.status(400).json({message: "Bad Request"});
+       }
+
+       // Verifica se existe o id_sales na tabela sales
+       const sale = await Sale.findAll({
+           where: {
+               id: sale_id,
+           }
+       });
+
+       if(sale.length==0){
+        return res.status(404).json({message: "id_sale not found"});
+       }
+
+       // verifica se existe o id_address na tabela addresses      
+       const address = await Address.findAll({
+           where: {
+               id: address_id,
+           }
+       });
+  
+       if(address.length==0){
+        return res.status(404).json({message: "address_id not found"});
+       }
+
+       // delivery_forecast verifica se a data e hora inserida é menor que a atual 
+       const dateNow = new Date();
+       const dataParsed = Date.parse(dateNow);
+       const dataForecastParsed = Date.parse(delivery_forecast);
+      
+       if(dataForecastParsed < dataParsed){
+        return res.status(400).json({message: "Bad request"});
+       }
+
+       // adiciona 7 dias à data para entrega
+       const deliverydate = daysToDelivery(7);
+
+       //verificar se já existe agendamento p essa sale
+       const deliveryBooked = await Delivery.findAll({
+           where: {
+               sale_id: sale_id,
+           }
+       });
+
+       if(deliveryBooked.length>=1){
+          return res.status(400).json({message: "Já existe um agendamento de entrega para esta venda"});
+       }
+
+       // criação do objeto data_entrega na tabela entregas
+       const deliveryDateResult = await Delivery.create({
+        address_id:address_id,
+        sale_id:sale_id,
+        delivery_forecast: deliverydate
+       })
+
+       return res.status(200).json({message: "Entrega agendada com sucesso"});
+    }catch(error){
+        return res.status(400).json({message: "Bad request"});
     }
 
-}
+    },
+
+  async saleMade(req, res) {
+    try {
+      // #swagger.auto = false
+      // #swagger.tags = ['Vendas']
+      // #swagger.description = '<h2>Endpoint para registrar vendas de produtos.</h2>'
+      /*  #swagger.parameters[seller_id] = {
+                in: 'path',
+                description: '<ul><li>Tem que ser um seller_id valido</li></ul>',
+              
+        } */
+      /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                description: '<h4>product_id</h4><ul><li>Tem que ser um product_id valido</li></ul><h4>unit_price</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado a suggested_price da tabela de produtos.</li><li>O valor tem que ser maior que 0.</li></ul><h4>amount</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado que é igual a 1.</li><li>O valor tem que ser maior que 0.</li></ul>',
+                schema: {
+                    $product_id: 2 ,
+                    unit_price: 1800.79 ,
+                    amount: 10
+                }
+      } */
+
+      // #swagger.responses[201] = { description: 'Venda submetida com sucesso.' }
+      // #swagger.responses[403] = { description: 'O usuário logado não tem autorização para este recurso.' }
+      // #swagger.responses[404] = { description: 'product_id ou seller_id não existe no banco de dados.' }
+      const { seller_id } = req.params;
+      const { product_id } = req.body;
+      let { unit_price, amount } = req.body;
+      const dt_sale = new Date();
+      const buyer = await decode(req.headers.authorization);
+      const buyer_id = buyer.userId;
+      console.log(req.body);
+      // Verificando se o amount foi enviado.
+      if (!amount) {
+        amount = 1;
+      }
+
+      // Verificando se o product_id foi enviado.
+      if (!product_id) {
+        return res.status(400).send({ message: "Tem que enviar product_id" });
+      }
+
+      // Verificando se o amount ou o unit_price tem valores maior que 0.
+      if (unit_price <= 0 || amount <= 0) {
+        return res
+          .status(400)
+          .send({ message: "unit_price e amount tem que ser maior que 0" });
+      }
+
+      // Verificando se o product_id existe no banco de dados.
+      const validProductId = await Product.findByPk(product_id);
+      if (!validProductId) {
+        return res.status(404).send({ message: "product_id não existe" });
+      }
+
+      // Verificando se o seller_id existe no banco de dados.
+      const validSellerId = await User.findByPk(seller_id);
+      if (!validSellerId) {
+        return res.status(404).send({ message: "seller_id não existe" });
+      }
+
+      // Verificando se o unit_price foi enviado.
+      if (!unit_price) {
+        unit_price = validProductId.suggested_price;
+      }
+      // Registrando a venda.
+      const sale = await Sale.create({
+        seller_id,
+        buyer_id,
+        dt_sale,
+      });
+      let sale_id = await sale.id;
+      await sale.addProduct(product_id, { through: { unit_price, amount } });
+      const productSale = await ProductsSales.findOne({
+        attributes: ["id"],
+        where: {
+          sale_id: sale_id,
+          product_id: product_id,
+          unit_price: unit_price,
+          amount: amount,
+        },
+      });
+      return res.status(201).json(`products_sales_id: ${productSale.id} `);
+    } catch (error) {
+      return res.status(400).send(error.message);
+    }
+  },
+};
