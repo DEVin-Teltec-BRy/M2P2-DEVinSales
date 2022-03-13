@@ -1,17 +1,6 @@
 const { validateErrors } = require("../utils/functions");
 const UserServices = require("../services/user.service");
-const User = require("../models/User");
-const { sign } = require("jsonwebtoken");
-const { Op } = require("sequelize");
-const bcrypt = require("bcrypt");
-const Role = require("../models/Role");
-const {
-  validateErrors,
-  stringToDate,
-  verifyAge,
-  verifyDate,
-} = require("../utils/functions");
-const { READ, WRITE } = require("../utils/constants/permissions");
+
 
 module.exports = {
   async create(req, res) {
@@ -62,7 +51,7 @@ module.exports = {
         birth_date_max
       );
       if (users.error) {
-        throw new Error(user.error);
+        throw new Error(users.error);
       }
 
       if (users.length === 0) {
