@@ -756,7 +756,11 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "403": {
+            "description": "Forbidden"
+          }
+        }
       }
     }
   },

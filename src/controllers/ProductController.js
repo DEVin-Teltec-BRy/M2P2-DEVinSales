@@ -6,6 +6,7 @@ const {
   storeProductService,
   updateProductService,
   getProductById,
+  countSalesByProductId,
 } = require("../services/product.service");
 
 module.exports = {
@@ -179,13 +180,13 @@ module.exports = {
     try {
       const { id } = req.params;
 
+      const countSales = await countSalesByProductId(id)
+      if(countSales > 0) {
+        throw new Error("Produto não pode ser deletado, produto já vendido.");
+      }
       const product = await getProductById(Number(id));
-
       if (!product) {
         return res.status(404).send({ message: "Produto não encontrado." });
-      }
-      if (product.sales.length > 0) {
-        throw new Error("Produto não pode ser deletado, produto já vendido.");
       }
       await product.destroy();
 
