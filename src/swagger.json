@@ -340,38 +340,38 @@
         }
       }
     },
-    "/api/v1/sales/{seller_id}/saleMade": {
+    "/api/v1/sales/{seller_id}/item": {
       "post": {
         "tags": [
           "Vendas"
         ],
-        "description": "<h2>Endpoint for submitting sales</h2>",
+        "description": "<h2>Endpoint para registrar vendas.</h2>",
         "parameters": [
           {
             "name": "seller_id",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "<ul><li>It must be a valid seller_id</li></ul>"
+            "description": "<ul><li>Tem que ser um seller_id valido</li></ul>"
           },
           {
             "name": "obj",
             "in": "body",
-            "description": "<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>",
+            "description": "<h4>product_id</h4><ul><li>Tem que um product_id valido</li></ul><h4>unit_price</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado a suggested_price da tabela de produtos.</li><li>O valor tem que ser maior que 0.</li></ul><h4>amount</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado que é igual a 1.</li><li>O valor tem que ser maior que 0.</li></ul>",
             "schema": {
               "type": "object",
               "properties": {
                 "product_id": {
-                  "type": "string",
-                  "example": "Integer"
+                  "type": "number",
+                  "example": 2
                 },
                 "unit_price": {
-                  "type": "string",
-                  "example": "Integer"
+                  "type": "number",
+                  "example": 1800.79
                 },
                 "amount": {
-                  "type": "string",
-                  "example": "Integer"
+                  "type": "number",
+                  "example": 10
                 }
               },
               "required": [
@@ -382,13 +382,13 @@
         ],
         "responses": {
           "201": {
-            "description": "Sale submitted successfully."
+            "description": "Venda submetida com sucesso."
           },
           "403": {
-            "description": "The user logged-in is unauthorized to submit sales."
+            "description": "O usuário logado não tem autorização para este recurso."
           },
           "404": {
-            "description": "product_id or seller_id were not found in the database."
+            "description": "product_id ou seller_id não existe no banco de dados."
           }
         }
       }
