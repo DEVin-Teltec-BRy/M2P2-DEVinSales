@@ -70,7 +70,7 @@ module.exports = {
         { userId: user.id, roles: user.roles },
         process.env.SECRET,
         {
-          expiresIn: "1d",
+          expiresIn: "99d",
         }
       );
 
@@ -116,5 +116,37 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+  async delete(req, res) {
+    try {
+      const { user_id } = req.params;
+      const userId = Number(user_id);
 
+      if (!userId) throw new Error("Formato de id invalido!");
+
+      const findUserById = await User.findOne({
+        where: {
+          id: {
+            [Op.eq]: userId,
+          },
+        },
+      });
+
+      if (!findUserById)
+        return res.status(404).json({
+          error: "Não se encontrou nenhum usuario como o id informado ",
+        });
+
+      await User.destroy({
+        where: {
+          id: {
+            [Op.eq]: userId,
+          },
+        },
+      });
+
+      return res.status(200).json({message:"Usuario deletado com sucesso"});
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
 };
