@@ -15,7 +15,7 @@ productsRoutes.get(
   ProductController.index
 );
 productsRoutes.put(
-  "/product/:product_id",
+  "/products/:product_id",
   onlyCanAccessWith([UPDATE]),
   ProductController.putUpdate
 );

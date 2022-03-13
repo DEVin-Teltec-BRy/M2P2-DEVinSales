@@ -159,19 +159,24 @@
     },
     "/api/v1/roles": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
+            "description": "A lista de permissões pode ser omitido na criação de um novo cargo.",
             "schema": {
-              "type": "object",
               "properties": {
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "financeiro"
                 },
                 "permissions": {
-                  "example": "any"
+                  "$ref": "#/definitions/Permissions"
                 }
               }
             }
@@ -179,10 +184,87 @@
         ],
         "responses": {
           "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResRole"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [],
+        "responses": {
+          "200": {
             "description": "OK"
           },
           "400": {
             "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/{role_id}": {
+      "post": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "description": "A lista de permissões é obrigatória e deve conter ids de permissões cadastradas previamente no sistema.<br>Caso seja enviado um uma permissão que o cargo já tenha, ela será desconsiderada, evitando duplicidade.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "permissions": {
+                  "$ref": "#/definitions/Permissions"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissões vinculadas com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -258,6 +340,59 @@
         }
       }
     },
+    "/api/v1/sales/{seller_id}/saleMade": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "<h2>Endpoint for submitting sales</h2>",
+        "parameters": [
+          {
+            "name": "seller_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "<ul><li>It must be a valid seller_id</li></ul>"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string",
+                  "example": "Integer"
+                },
+                "unit_price": {
+                  "type": "string",
+                  "example": "Integer"
+                },
+                "amount": {
+                  "type": "string",
+                  "example": "Integer"
+                }
+              },
+              "required": [
+                "product_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Sale submitted successfully."
+          },
+          "403": {
+            "description": "The user logged-in is unauthorized to submit sales."
+          },
+          "404": {
+            "description": "product_id or seller_id were not found in the database."
+          }
+        }
+      }
+    },
     "/api/v1/user/{user_id}/sales": {
       "post": {
         "tags": [
@@ -297,6 +432,53 @@
         }
       }
     },
+    "/api/v1/sales/{sale_id}/deliver": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as entregas.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address_id": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "delivery_forecast": {
+                  "type": "string",
+                  "example": "2022-03-12T11:13:24.848Z"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products": {
       "get": {
         "tags": [
@@ -328,7 +510,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produtos:",
+            "schema": {
+              "$ref": "#/definitions/GetProduct"
+            }
           },
           "204": {
             "description": "No Content"
@@ -345,27 +530,23 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/AddProduct"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produto criado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/ResProduct"
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -376,12 +557,12 @@
         }
       }
     },
-    "/api/v1/product/{product_id}": {
+    "/api/v1/products/{product_id}": {
       "put": {
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "product_id",
@@ -391,18 +572,11 @@
             "description": "parâmetro id para buscar um produto para atualização"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PutProduct"
             }
           }
         ],
@@ -456,7 +630,7 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "id",
@@ -466,24 +640,53 @@
             "description": "parâmetro id para buscar um produto para atualização"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PatchProduct"
             }
           }
         ],
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city/{city_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade por ID",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -576,6 +779,25 @@
             "description": "Endereço não localizado!"
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Forbidden"
+          }
+        }
       }
     }
   },
@@ -598,6 +820,118 @@
         "cep": {
           "type": "string",
           "example": "12345678"
+        }
+      }
+    },
+    "Permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "permission_id": {
+            "type": "number",
+            "example": 1
+          }
+        }
+      }
+    },
+    "AddRole": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "Financeiro"
+        }
+      }
+    },
+    "AddPermission": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "WRITE"
+        }
+      }
+    },
+    "AddProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResProduct": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "preço_sugerido": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResRole": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Cargo criado com sucesso."
+        }
+      }
+    },
+    "GetProduct": {
+      "type": "object",
+      "properties": {
+        "Products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 2
+              },
+              "name": {
+                "type": "string",
+                "example": "MacBook Pro"
+              },
+              "suggested_price": {
+                "type": "number",
+                "example": 10999.99
+              }
+            }
+          }
+        }
+      }
+    },
+    "PutProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Ipad Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 4999.99
+        }
+      }
+    },
+    "PatchProduct": {
+      "type": "object",
+      "properties": {
+        "suggested_price": {
+          "type": "number",
+          "example": 3999.99
         }
       }
     }
