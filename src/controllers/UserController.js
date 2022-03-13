@@ -43,19 +43,7 @@ module.exports = {
     // #swagger.description = 'Endpoint para buscar todos os usuários do banco de dados.'
     try {
       const { name, birth_date_min, birth_date_max } = req.query;
-      const date_regex =
-        /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
 
-      if (birth_date_min) {
-        if (!date_regex.test(birth_date_min)) {
-          throw new Error("A data mínima deve ser no formato dd/mm/aaaa.");
-        }
-      }
-      if (birth_date_max) {
-        if (!date_regex.test(birth_date_max)) {
-          throw new Error("A data máxima deve ser no formato dd/mm/aaaa.");
-        }
-      }
       const users = await UserServices.getUsers(
         name,
         birth_date_min,
