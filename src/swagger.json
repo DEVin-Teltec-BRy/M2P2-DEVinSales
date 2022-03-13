@@ -23,7 +23,7 @@
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint que criar um novo usuário.",
+        "description": "Endpoint para criar um novo usuário.",
         "parameters": [
           {
             "name": "obj",
@@ -245,24 +245,15 @@
         }
       }
     },
-    "/api/v1/roles": {
-      "post": {
+    "/api/v1/user/{user_id}": {
+      "delete": {
         "description": "",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "description": {
-                  "example": "any"
-                },
-                "permissions": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -271,6 +262,124 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/roles": {
+      "post": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "description": "A lista de permissões pode ser omitido na criação de um novo cargo.",
+            "schema": {
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "example": "financeiro"
+                },
+                "permissions": {
+                  "$ref": "#/definitions/Permissions"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResRole"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/{role_id}": {
+      "post": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "description": "A lista de permissões é obrigatória e deve conter ids de permissões cadastradas previamente no sistema.<br>Caso seja enviado um uma permissão que o cargo já tenha, ela será desconsiderada, evitando duplicidade.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "permissions": {
+                  "$ref": "#/definitions/Permissions"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissões vinculadas com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -358,6 +467,59 @@
         }
       }
     },
+    "/api/v1/sales/{seller_id}/saleMade": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "<h2>Endpoint for submitting sales</h2>",
+        "parameters": [
+          {
+            "name": "seller_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "<ul><li>It must be a valid seller_id</li></ul>"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string",
+                  "example": "Integer"
+                },
+                "unit_price": {
+                  "type": "string",
+                  "example": "Integer"
+                },
+                "amount": {
+                  "type": "string",
+                  "example": "Integer"
+                }
+              },
+              "required": [
+                "product_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Sale submitted successfully."
+          },
+          "403": {
+            "description": "The user logged-in is unauthorized to submit sales."
+          },
+          "404": {
+            "description": "product_id or seller_id were not found in the database."
+          }
+        }
+      }
+    },
     "/api/v1/user/{user_id}/sales": {
       "post": {
         "tags": [
@@ -397,6 +559,53 @@
         }
       }
     },
+    "/api/v1/sales/{sale_id}/deliver": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint pra buscar as entregas.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address_id": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "delivery_forecast": {
+                  "type": "string",
+                  "example": "2022-03-12T11:13:24.848Z"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/products": {
       "get": {
         "tags": [
@@ -428,7 +637,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produtos:",
+            "schema": {
+              "$ref": "#/definitions/GetProduct"
+            }
           },
           "204": {
             "description": "No Content"
@@ -457,27 +669,23 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para criar um novo produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/AddProduct"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Produto criado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/ResProduct"
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -500,12 +708,12 @@
         }
       }
     },
-    "/api/v1/product/{product_id}": {
+    "/api/v1/products/{product_id}": {
       "put": {
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para atualizar todos as propriedades de um produto. Fornecer um json no body com um nome no formato string e um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "product_id",
@@ -515,18 +723,11 @@
             "description": "parâmetro id para buscar um produto para atualização"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PutProduct"
             }
           }
         ],
@@ -604,7 +805,7 @@
         "tags": [
           "Produto"
         ],
-        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Fornecer um json no body com um nome no formato string ou um preço sugerido no formato number, podendo ser decimal. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
+        "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
             "name": "id",
@@ -614,18 +815,11 @@
             "description": "parâmetro id para buscar um produto para atualização"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "suggested_price": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PatchProduct"
             }
           }
         ],
@@ -657,6 +851,42 @@
         }
       }
     },
+    "/api/v1/state/{state_id}/city/{city_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade por ID",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/address": {
       "get": {
         "tags": [
@@ -667,17 +897,23 @@
           {
             "name": "city_id",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o id da cidade desejada",
+            "type": "number",
+            "collectionFormat": "multi"
           },
           {
             "name": "street",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o nome da rua que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
           },
           {
             "name": "cep",
             "in": "query",
-            "type": "string"
+            "description": "Filtro que identifica o cep que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
           }
         ],
         "responses": {
@@ -688,97 +924,139 @@
             "description": "No Content"
           },
           "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
+            "description": "Forbidden"
           }
         }
+      }
+    },
+    "/api/v1/address/{address_id}": {
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
       }
     }
   },
   "definitions": {
-    "AddUser": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "John Doe"
-        },
-        "password": {
-          "type": "string",
-          "example": "12345"
-        },
-        "email": {
-          "type": "string",
-          "example": "john.doe@email.com"
-        },
-        "birth_date": {
-          "type": "string",
-          "example": "01/01/1990"
-        },
-        "roles": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "role_id": {
-                "type": "number",
-                "example": 1
-              }
-            }
+    "Permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "permission_id": {
+            "type": "number",
+            "example": 1
           }
         }
       }
     },
-    "UserLogin": {
+    "AddRole": {
       "type": "object",
       "properties": {
-        "email": {
+        "description": {
           "type": "string",
-          "example": "john.doe@email.com"
-        },
-        "password": {
-          "type": "string",
-          "example": "12345"
+          "example": "Financeiro"
         }
       }
     },
-    "UserInfo": {
+    "AddPermission": {
       "type": "object",
       "properties": {
-        "user": {
+        "description": {
+          "type": "string",
+          "example": "WRITE"
+        }
+      }
+    },
+    "AddProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResProduct": {
+      "type": "object",
+      "properties": {
+        "nome": {
+          "type": "string",
+          "example": "MacBook Air"
+        },
+        "preço_sugerido": {
+          "type": "number",
+          "example": 7999.99
+        }
+      }
+    },
+    "ResRole": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Cargo criado com sucesso."
+        }
+      }
+    },
+    "GetProduct": {
+      "type": "object",
+      "properties": {
+        "Products": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
               "id": {
                 "type": "number",
-                "example": 42
+                "example": 2
               },
               "name": {
                 "type": "string",
-                "example": "John Doe"
+                "example": "MacBook Pro"
               },
-              "email": {
-                "type": "string",
-                "example": "john.doe@email.com"
-              },
-              "birth_date": {
-                "type": "string",
-                "example": "01/01/1990"
+              "suggested_price": {
+                "type": "number",
+                "example": 10999.99
               }
             }
           }
+        }
+      }
+    },
+    "PutProduct": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Ipad Air"
+        },
+        "suggested_price": {
+          "type": "number",
+          "example": 4999.99
+        }
+      }
+    },
+    "PatchProduct": {
+      "type": "object",
+      "properties": {
+        "suggested_price": {
+          "type": "number",
+          "example": 3999.99
         }
       }
     }

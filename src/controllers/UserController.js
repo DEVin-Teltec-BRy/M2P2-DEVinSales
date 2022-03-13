@@ -3,7 +3,13 @@ const { sign } = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const Role = require("../models/Role");
-const { validateErrors, stringToDate } = require("../utils/functions");
+const {
+  validateErrors,
+  stringToDate,
+  verifyAge,
+  verifyDate,
+} = require("../utils/functions");
+const { READ, WRITE } = require("../utils/constants/permissions");
 
 module.exports = {
   async create(req, res) {
@@ -29,23 +35,59 @@ module.exports = {
     */
     try {
       const { name, password, email, birth_date, roles } = req.body;
+
+      const dateValidation = verifyDate(birth_date);
+      if (!dateValidation) {
+        throw new Error("É necessário que a data informada exista e  seja do tipo dd/mm/yyyy")
+      }
+
+      const ageValidation = verifyAge(stringToDate(birth_date));
+
+      if (!ageValidation) {
+        throw new Error("É necessário que o usuário seja maior de idade")
+      }
+
+      if (!roles || roles.length === 0) {
+        throw new Error("O novo usuário necessita ter um cargo de WRITE e READ")
+      }
+
+      const responseRoles = await Role.findAll({
+        where: {
+          id: roles.map((role) => role.role_id),
+        },
+        include: {
+          association: "permissions",
+          through: { attributes: [] },
+          attributes: ["description"],
+        },
+      });
+      if (responseRoles.length === 0) {
+        throw new Error("O novo usuário necessita ter um cargo de WRITE e READ")
+      }
+
+      const response = responseRoles.filter((role) => {
+        const permissions = role.permissions.filter((permission) => {
+          return (
+            permission.description === READ || permission.description === WRITE
+          );
+        });
+        return permissions.length >= 2;
+      });
+
+      if (response.length === 0) {
+        throw new Error("O novo usuário necessita ter um cargo de WRITE e READ")
+      }
+
       const user = await User.create({
         name,
         password,
         email,
-        birth_date,
+        birth_date: stringToDate(birth_date),
       });
-      if (roles && roles.length > 0) {
-        const resposeRoles = await Role.findAll({
-          where: {
-            id: roles.map((role) => role.role_id),
-          },
-        });
-        if (resposeRoles && resposeRoles.length > 0) {
-          await user.setRoles(resposeRoles);
-        }
-      }
-      return res.status(201).send({ message: "Usuário salvo com sucesso." });
+
+      await user.setRoles(responseRoles);
+
+      return res.status(201).send({ response: user.id });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
@@ -109,7 +151,7 @@ module.exports = {
         { userId: user.id, roles: user.roles },
         process.env.SECRET,
         {
-          expiresIn: "1d",
+          expiresIn: "99d",
         }
       );
 
@@ -239,7 +281,7 @@ module.exports = {
         },
       });
 
-      return res.status(200).json({message:"Usuario deletado com sucesso"});
+      return res.status(200).json({ message: "Usuario deletado com sucesso" });
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
