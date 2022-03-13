@@ -23,7 +23,7 @@
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint para criar um novo usuário.",
+        "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
             "name": "obj",
@@ -40,9 +40,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Usuário salvo com sucesso."
+                "response": {
+                  "type": "number",
+                  "example": 42
                 }
               },
               "xml": {
@@ -51,10 +51,25 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/CreateUserResponses"
+            }
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
@@ -245,33 +260,6 @@
         }
       }
     },
-    "/api/v1/user/{user_id}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/v1/roles": {
       "post": {
         "tags": [
@@ -326,7 +314,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -512,7 +512,19 @@
             "description": "Sale submitted successfully."
           },
           "403": {
-            "description": "The user logged-in is unauthorized to submit sales."
+            "description": "The user logged-in is unauthorized to submit sales.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "product_id or seller_id were not found in the database."
@@ -598,7 +610,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -879,7 +903,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -924,7 +960,19 @@
             "description": "No Content"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -943,11 +991,134 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     }
   },
   "definitions": {
+    "AddUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "password": {
+          "type": "string",
+          "example": "aB12345"
+        },
+        "email": {
+          "type": "string",
+          "example": "john.doe@email.com"
+        },
+        "birth_date": {
+          "type": "string",
+          "example": "01/01/1990"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role_id": {
+                "type": "number",
+                "example": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "john.doe@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "aB12345"
+        }
+      }
+    },
+    "UserInfo": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 42
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "example": "john.doe@email.com"
+              },
+              "birth_date": {
+                "type": "string",
+                "example": "01/01/1990"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CreateUserResponses": {
+      "type": "object",
+      "properties": {
+        "possibleRespone_1": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "É necessário que a data informada exista e  seja do tipo dd/mm/yyyy"
+            }
+          }
+        },
+        "possibleRespone_2": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "É necessário que o usuário seja maior de idade"
+            }
+          }
+        },
+        "possibleRespone_3": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "O novo usuário necessita ter um cargo de WRITE e READ"
+            }
+          }
+        }
+      }
+    },
     "Permissions": {
       "type": "array",
       "items": {

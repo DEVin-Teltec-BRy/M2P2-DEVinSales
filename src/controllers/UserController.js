@@ -86,10 +86,23 @@ module.exports = {
       });
 
       await user.setRoles(responseRoles);
-
+      /*
+        #swagger.responses[201] = {
+          schema: {
+            response: 42
+          }
+        }
+      */
       return res.status(201).send({ response: user.id });
     } catch (error) {
       const message = validateErrors(error);
+      /*
+        #swagger.responses[400] = {
+          schema: {
+            $ref: '#/definitions/CreateUserResponses'
+          }
+        }
+      */
       return res.status(400).send(message);
     }
   },
