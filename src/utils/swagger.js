@@ -21,6 +21,12 @@ const doc = {
     },
   ],
   definitions: {
+    address: {
+      street: "Rua Paralelepípedo",
+      number: 10,
+      complement: "Apto 1",
+      cep: "12345678",
+    },
     Permissions: [
       {
         permission_id: 1,

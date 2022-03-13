@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const Product = require("../models/Product");
+const ProductsSales = require("../models/ProductsSales");
 
 module.exports = {
   async indexProductService(name, price_min, price_max) {
@@ -96,14 +97,17 @@ module.exports = {
     if (!Number(id)) {
       throw new Error("O id deve ser um número.");
     }
-    const product = await Product.findByPk(id, {
-      include: [
-        {
-          required: false,
-          association: "sales",
-        },
-      ],
-    });
-    return product;
+    return await Product.findByPk(id);
+  },
+
+  async countSalesByProductId(id){
+    if (!Number(id)) {
+      throw new Error("O id deve ser um número.");
+    }
+    return await ProductsSales.count({
+      where: {
+        product_id: id
+      }
+    })
   },
 };
