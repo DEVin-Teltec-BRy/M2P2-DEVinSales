@@ -42,5 +42,6 @@ Deliveries.associate(connection.models)
 Sale.associate(connection.models);
 Product.associate(connection.models);
 City.associate(connection.models);
+Address.associate(connection.models);
 //Product.associate(connection.models)
 module.exports = connection;
