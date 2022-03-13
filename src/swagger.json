@@ -7,7 +7,9 @@
   },
   "host": "localhost:3333",
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": [
+    "http"
+  ],
   "securityDefinitions": {
     "bearerAuth": {
       "type": "apiKey",
@@ -18,8 +20,10 @@
   "paths": {
     "/api/v1/users": {
       "post": {
-        "tags": ["Usuário"],
-        "description": "Endpoint que criar um novo usuário.",
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para criar um novo usuário.",
         "parameters": [
           {
             "name": "body",
@@ -52,44 +56,16 @@
           },
           "400": {
             "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/v1/session": {
-      "post": {
-        "tags": ["Usuário"],
-        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
           },
-          "400": {
-            "description": "Bad Request"
+          "403": {
+            "description": "Forbidden"
           }
         }
-      }
-    },
-    "/api/v1/user": {
+      },
       "get": {
-        "tags": ["Usuário"],
+        "tags": [
+          "Usuário"
+        ],
         "description": "Endpoint para buscar todos os usuários do banco de dados.",
         "parameters": [
           {
@@ -124,6 +100,39 @@
         }
       }
     },
+    "/api/v1/session": {
+      "post": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/v1/user/{user_id}": {
       "delete": {
         "description": "",
@@ -144,16 +153,15 @@
           },
           "403": {
             "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
     },
     "/api/v1/roles": {
       "post": {
-        "tags": ["Cargo"],
+        "tags": [
+          "Cargo"
+        ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
           {
@@ -190,7 +198,9 @@
         }
       },
       "get": {
-        "tags": ["Cargo"],
+        "tags": [
+          "Cargo"
+        ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [],
         "responses": {
@@ -208,7 +218,9 @@
     },
     "/api/v1/roles/{role_id}": {
       "post": {
-        "tags": ["Cargo"],
+        "tags": [
+          "Cargo"
+        ],
         "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
           {
@@ -286,7 +298,9 @@
     },
     "/api/v1/sales": {
       "get": {
-        "tags": ["Busca as Vendas do Usuarios"],
+        "tags": [
+          "Busca as Vendas do Usuarios"
+        ],
         "description": "Endpoint pra busacar as vendas do usuario.",
         "parameters": [],
         "responses": {
@@ -298,7 +312,9 @@
     },
     "/api/v1/user/{user_id}/buy": {
       "get": {
-        "tags": ["Vendas"],
+        "tags": [
+          "Vendas"
+        ],
         "description": "Endpoint pra buscar as vendas do usuario pelo buyer_id.",
         "parameters": [
           {
@@ -326,8 +342,10 @@
     },
     "/api/v1/sales/{seller_id}/item": {
       "post": {
-        "tags": ["Vendas"],
-        "description": "<h2>Endpoint para registrar vendas.</h2>",
+        "tags": [
+          "Vendas"
+        ],
+        "description": "<h2>Endpoint para registrar vendas de produtos.</h2>",
         "parameters": [
           {
             "name": "seller_id",
@@ -339,7 +357,7 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "<h4>product_id</h4><ul><li>Tem que um product_id valido</li></ul><h4>unit_price</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado a suggested_price da tabela de produtos.</li><li>O valor tem que ser maior que 0.</li></ul><h4>amount</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado que é igual a 1.</li><li>O valor tem que ser maior que 0.</li></ul>",
+            "description": "<h4>product_id</h4><ul><li>Tem que ser um product_id valido</li></ul><h4>unit_price</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado a suggested_price da tabela de produtos.</li><li>O valor tem que ser maior que 0.</li></ul><h4>amount</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado que é igual a 1.</li><li>O valor tem que ser maior que 0.</li></ul>",
             "schema": {
               "type": "object",
               "properties": {
@@ -356,7 +374,9 @@
                   "example": 10
                 }
               },
-              "required": ["product_id"]
+              "required": [
+                "product_id"
+              ]
             }
           }
         ],
@@ -375,7 +395,9 @@
     },
     "/api/v1/user/{user_id}/sales": {
       "post": {
-        "tags": ["Vendas"],
+        "tags": [
+          "Vendas"
+        ],
         "description": "Endpoint criar uma venda.",
         "parameters": [
           {
@@ -412,7 +434,9 @@
     },
     "/api/v1/sales/{sale_id}/deliver": {
       "post": {
-        "tags": ["Vendas"],
+        "tags": [
+          "Vendas"
+        ],
         "description": "Endpoint pra buscar as entregas.",
         "parameters": [
           {
@@ -457,7 +481,9 @@
     },
     "/api/v1/products": {
       "get": {
-        "tags": ["Produto"],
+        "tags": [
+          "Produto"
+        ],
         "description": "Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.",
         "parameters": [
           {
@@ -501,7 +527,9 @@
         }
       },
       "post": {
-        "tags": ["Produto"],
+        "tags": [
+          "Produto"
+        ],
         "description": "Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
@@ -531,7 +559,9 @@
     },
     "/api/v1/products/{product_id}": {
       "put": {
-        "tags": ["Produto"],
+        "tags": [
+          "Produto"
+        ],
         "description": "Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
@@ -568,7 +598,9 @@
     },
     "/api/v1/products/{id}": {
       "delete": {
-        "tags": ["Produto"],
+        "tags": [
+          "Produto"
+        ],
         "description": "Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.",
         "parameters": [
           {
@@ -595,7 +627,9 @@
         }
       },
       "patch": {
-        "tags": ["Produto"],
+        "tags": [
+          "Produto"
+        ],
         "description": "Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.",
         "parameters": [
           {
@@ -632,7 +666,9 @@
     },
     "/api/v1/state/{state_id}/city/": {
       "get": {
-        "tags": ["Estado"],
+        "tags": [
+          "Estado"
+        ],
         "description": "Endpoint para buscar cidade(s) por estado",
         "parameters": [
           {
@@ -668,7 +704,9 @@
     },
     "/api/v1/address": {
       "get": {
-        "tags": ["Endereços"],
+        "tags": [
+          "Endereços"
+        ],
         "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
         "parameters": [
           {
@@ -708,7 +746,9 @@
     },
     "/api/v1/address/{address_id}": {
       "patch": {
-        "tags": ["Endereços"],
+        "tags": [
+          "Endereços"
+        ],
         "description": "Endpoint que faz a alteração de um endereço com base nos dados passados pelo body",
         "parameters": [
           {
@@ -743,7 +783,9 @@
         }
       },
       "delete": {
-        "tags": ["Endereços"],
+        "tags": [
+          "Endereços"
+        ],
         "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
         "parameters": [
           {

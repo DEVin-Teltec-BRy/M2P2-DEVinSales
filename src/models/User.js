@@ -5,14 +5,6 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          get() {
-            const id = this.getDataValue('id');
-            return id;
-          },
-        },
         name: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -26,6 +18,11 @@ class User extends Model {
           allowNull: false,
           unique: {
             msg: 'E-mail deve ser único',
+          },
+          validate: {
+            isEmail: {
+              msg: "Esse e-mail não é válido",
+            },
           },
           get() {
             const email = this.getDataValue('email');
@@ -43,6 +40,12 @@ class User extends Model {
         password: {
           type: DataTypes.STRING,
           allowNull: false,
+          validate:{
+            is:{
+              args: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z]).{4,}$/,
+              msg: "A senha deve conter pelo menos 4 caractéres, sendo um minúsculo ou um maiúsculo, desde que diferente dos demais."
+            },
+          }
         },
       },
       {
