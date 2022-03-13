@@ -1,6 +1,5 @@
 const State = require("../models/State");
 const City = require("../models/City");
-
 const { validateErrors } = require("../utils/functions");
 const Sequelize = require("Sequelize");
 const { Op, where, fn, col } = require("Sequelize");
@@ -63,6 +62,39 @@ module.exports = {
         else {
           return res.status(200).send({ states });
         }
+      }
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
+
+  async getStateById(req, res) {
+    /*
+      #swagger.tags = ['Estado']
+      #swagger.description = 'Endpoint que retorna um estado de acordo com o state_id fornecido'
+      #swagger.parameters['state_id'] = {
+        description: 'ID do estado que será buscado',
+        type: 'number',
+        required: 'true',
+      }
+    */
+
+    try {
+      const { state_id } = req.params;
+
+      if(isNaN(state_id)) {
+        return res.status(400).send({message: "The 'state_id' param must be an integer"})
+      }
+
+      const state = await State.findAll({
+        where: { id: {[Op.eq]: state_id} },
+      });
+
+      if(state.length === 0) {
+        return res.status(404).send({message: "Couldn't find any state with the given 'state_id'"})
+      } else {
+        return res.status(200).send(state[0])
       }
     } catch (error) {
       const message = validateErrors(error);

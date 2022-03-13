@@ -702,6 +702,37 @@
         }
       }
     },
+    "/api/v1/state/{state_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint que retorna um estado de acordo com o state_id fornecido",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "ID do estado que será buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/state/{state_id}/city/": {
       "get": {
         "tags": [
