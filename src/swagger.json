@@ -745,6 +745,43 @@
       }
     },
     "/api/v1/address/{address_id}": {
+      "patch": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que faz a alteração de um endereço com base nos dados passados pelo body",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "ID do endereço a ser alterado"
+          },
+          {
+            "name": "address",
+            "in": "body",
+            "description": "Dados para alteração do endereço",
+            "schema": {
+              "$ref": "#/definitions/address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço alterado com sucesso!"
+          },
+          "400": {
+            "description": "É necessário passar pelo menos um dado para alteração!"
+          },
+          "403": {
+            "description": "Você não tem autorização para este recurso!"
+          },
+          "404": {
+            "description": "Endereço não localizado!"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Endereços"
@@ -767,6 +804,27 @@
     }
   },
   "definitions": {
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "example": "Rua Paralelepípedo"
+        },
+        "number": {
+          "type": "number",
+          "example": 10
+        },
+        "complement": {
+          "type": "string",
+          "example": "Apto 1"
+        },
+        "cep": {
+          "type": "string",
+          "example": "12345678"
+        }
+      }
+    },
     "Permissions": {
       "type": "array",
       "items": {
