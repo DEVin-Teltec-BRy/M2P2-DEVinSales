@@ -284,27 +284,14 @@
         }
       }
     },
-    "/api/v1/user/{id}/sales": {
+    "/api/v1/sales": {
       "get": {
-        "tags": [" Vendas "],
-        "description": "Endpoint pra buscar as vendas do usuario.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "tags": ["Busca as Vendas do Usuarios"],
+        "description": "Endpoint pra busacar as vendas do usuario.",
+        "parameters": [],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -337,36 +324,36 @@
         }
       }
     },
-    "/api/v1/sales/{seller_id}/saleMade": {
+    "/api/v1/sales/{seller_id}/item": {
       "post": {
         "tags": ["Vendas"],
-        "description": "<h2>Endpoint for submitting sales</h2>",
+        "description": "<h2>Endpoint para registrar vendas.</h2>",
         "parameters": [
           {
             "name": "seller_id",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "<ul><li>It must be a valid seller_id</li></ul>"
+            "description": "<ul><li>Tem que ser um seller_id valido</li></ul>"
           },
           {
             "name": "obj",
             "in": "body",
-            "description": "<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>",
+            "description": "<h4>product_id</h4><ul><li>Tem que um product_id valido</li></ul><h4>unit_price</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado a suggested_price da tabela de produtos.</li><li>O valor tem que ser maior que 0.</li></ul><h4>amount</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado que é igual a 1.</li><li>O valor tem que ser maior que 0.</li></ul>",
             "schema": {
               "type": "object",
               "properties": {
                 "product_id": {
-                  "type": "string",
-                  "example": "Integer"
+                  "type": "number",
+                  "example": 2
                 },
                 "unit_price": {
-                  "type": "string",
-                  "example": "Integer"
+                  "type": "number",
+                  "example": 1800.79
                 },
                 "amount": {
-                  "type": "string",
-                  "example": "Integer"
+                  "type": "number",
+                  "example": 10
                 }
               },
               "required": ["product_id"]
@@ -375,13 +362,13 @@
         ],
         "responses": {
           "201": {
-            "description": "Sale submitted successfully."
+            "description": "Venda submetida com sucesso."
           },
           "403": {
-            "description": "The user logged-in is unauthorized to submit sales."
+            "description": "O usuário logado não tem autorização para este recurso."
           },
           "404": {
-            "description": "product_id or seller_id were not found in the database."
+            "description": "product_id ou seller_id não existe no banco de dados."
           }
         }
       }
@@ -643,10 +630,10 @@
         }
       }
     },
-    "/api/v1/state/{state_id}/city/{city_id}": {
+    "/api/v1/state/{state_id}/city/": {
       "get": {
         "tags": ["Estado"],
-        "description": "Endpoint para buscar cidade por ID",
+        "description": "Endpoint para buscar cidade(s) por estado",
         "parameters": [
           {
             "name": "state_id",
@@ -655,15 +642,17 @@
             "type": "string"
           },
           {
-            "name": "city_id",
-            "in": "path",
-            "required": true,
+            "name": "name",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request"
@@ -718,6 +707,41 @@
       }
     },
     "/api/v1/address/{address_id}": {
+      "patch": {
+        "tags": ["Endereços"],
+        "description": "Endpoint que faz a alteração de um endereço com base nos dados passados pelo body",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "ID do endereço a ser alterado"
+          },
+          {
+            "name": "address",
+            "in": "body",
+            "description": "Dados para alteração do endereço",
+            "schema": {
+              "$ref": "#/definitions/address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço alterado com sucesso!"
+          },
+          "400": {
+            "description": "É necessário passar pelo menos um dado para alteração!"
+          },
+          "403": {
+            "description": "Você não tem autorização para este recurso!"
+          },
+          "404": {
+            "description": "Endereço não localizado!"
+          }
+        }
+      },
       "delete": {
         "tags": ["Endereços"],
         "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
@@ -747,6 +771,27 @@
     }
   },
   "definitions": {
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "example": "Rua Paralelepípedo"
+        },
+        "number": {
+          "type": "number",
+          "example": 10
+        },
+        "complement": {
+          "type": "string",
+          "example": "Apto 1"
+        },
+        "cep": {
+          "type": "string",
+          "example": "12345678"
+        }
+      }
+    },
     "Permissions": {
       "type": "array",
       "items": {
