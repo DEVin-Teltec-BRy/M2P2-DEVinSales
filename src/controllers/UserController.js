@@ -1,13 +1,25 @@
 const { validateErrors } = require("../utils/functions");
 const UserServices = require("../services/user.service");
+const User = require("../models/User");
+const { sign } = require("jsonwebtoken");
+const { Op } = require("sequelize");
+const bcrypt = require("bcrypt");
+const Role = require("../models/Role");
+const {
+  validateErrors,
+  stringToDate,
+  verifyAge,
+  verifyDate,
+} = require("../utils/functions");
+const { READ, WRITE } = require("../utils/constants/permissions");
 
 module.exports = {
   async create(req, res) {
     // #swagger.tags = ['Usuário']
-    // #swagger.description = 'Endpoint que criar um novo usuário.'
+    // #swagger.description = 'Endpoint para criar um novo usuário.'
     try {
       const { name, password, email, birth_date, roles } = req.body;
-      const message = await UserServices.createUser(
+      const user = await UserServices.createUser(
         name,
         password,
         email,
@@ -15,9 +27,9 @@ module.exports = {
         roles
       );
 
-      if (message.error) throw new Error(message.error);
-
-      return res.status(201).send({message});
+      if (user.error) throw new Error(user.error);
+      
+      return res.status(201).send({ response: user.id });
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
@@ -31,7 +43,7 @@ module.exports = {
       const token = await UserServices.beginSession(email, password);
 
       if (token.error) throw new Error(token.error);
-
+      
       return res.status(201).send({ token: token });
     } catch (error) {
       const message = validateErrors(error);
