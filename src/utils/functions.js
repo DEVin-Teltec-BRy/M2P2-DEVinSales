@@ -11,22 +11,11 @@ function validateErrors(error) {
 }
 
 function stringToDate(string) {
-  const [day, month, year] = string.split('/');
-  return new Date(Number(year), Number(month) - 1, Number(day));
-}
-
-function daysToDelivery(addDays){
-    Date.prototype.addDays = function(days) {
-      const date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
-      return date;
-    }    
-    const date = new Date();    
-    return date.addDays(addDays);
+  const [day, month, year] = string.split("/");
+  return new Date(year, Number(month) - 1, day);
 }
 
 module.exports = {
   validateErrors,
   stringToDate,
-  daysToDelivery,
 };

@@ -9,5 +9,4 @@ const swaggerFile = require('./swagger.json')
 app.use(express.json())
 app.use(routes)
 app.use('/api/v1/docs', swaggerUI.serve, swaggerUI.setup(swaggerFile))
-
-app.listen(PORT, () => console.log(`Executando na porta ${PORT}`)) 
+app.listen(PORT, () => console.log(`Executando na porta ${PORT}`))

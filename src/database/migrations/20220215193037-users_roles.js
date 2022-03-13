@@ -9,7 +9,6 @@ module.exports = {
           type: Sequelize.INTEGER,
           references: {model: 'users', key: 'id'},
           onUpdate: 'CASCADE',
-          onDelete:'CASCADE',
           allowNull: false
         },
         role_id: {
