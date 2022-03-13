@@ -58,7 +58,42 @@
             "description": "Bad Request"
           }
         }
-      },
+      }
+    },
+    "/api/v1/session": {
+      "post": {
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/user": {
       "get": {
         "tags": [
           "Usuário"
@@ -93,39 +128,6 @@
           },
           "403": {
             "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/v1/session": {
-      "post": {
-        "tags": [
-          "Usuário"
-        ],
-        "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
           }
         }
       }
@@ -756,7 +758,11 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "403": {
+            "description": "Forbidden"
+          }
+        }
       }
     }
   },
