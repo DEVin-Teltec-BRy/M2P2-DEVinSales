@@ -296,16 +296,29 @@
         }
       }
     },
-    "/api/v1/sales": {
+    "/api/v1/user/{id}/sales": {
       "get": {
         "tags": [
-          "Busca as Vendas do Usuarios"
+          " Vendas "
         ],
-        "description": "Endpoint pra busacar as vendas do usuario.",
-        "parameters": [],
+        "description": "Endpoint pra buscar as vendas do usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -756,7 +769,11 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "403": {
+            "description": "Forbidden"
+          }
+        }
       }
     }
   },

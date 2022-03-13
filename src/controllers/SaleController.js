@@ -1,3 +1,4 @@
+const { user } = require('pg/lib/defaults');
 const Sale = require('../models/Sale')
 const User = require("../models/User");
 const ProductsSales = require("../models/ProductsSales");
@@ -36,24 +37,44 @@ module.exports = {
 
     async showSaler(req,res){
 
-         // #swagger.tags = ['Busca as Vendas do Usuarios']
-        // #swagger.description = 'Endpoint pra busacar as vendas do usuario.'
+         // #swagger.tags = [' Vendas ']
+        // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
 
 
-        // const {user_id} = req.params
-        // const { buyer_id, dt_sale,} = req.body
+         const {id} = req.params;
+         
+                
+        try {
+            const findUser = await User.findByPk(id);
+
+            const findSaler = await User.findAll({
+                attributes:['name','email'],
+                 include: 
+                    { 
+                        association: 'sales_user',
+                        attributes: [ 'seller_id', 'dt_sale' ],
+                        where: {seller_id: id },
+                    }
+        });
            
-       const FindUser = await User.findAll()
-      console.log(FindUser)
-       return res.status(201).json(FindUser)
+         if(!findUser){
+             return res.status(400).send({message: "Este usuario não existe!"});
+         }
+
+           if(findSaler.length === 0){
+                return res.status(400).send({message: "Este usuario não possui vendas!"});
+            }
+            
+            
+            return res.status(200).json( findSaler)
+        } catch (error) {
+            
+            return res.status(400).send({message: "Erro deconhecido!"})
+        }
+         
 
 
-        // const selerUser = await Sale.findAll({
-        //     where: {
-        //         id: salesRoutes.map((sale) => sale.seller_id),
-        //     }
-        // })
-        // return res.status(201).send({ message: "AChou" })
+        
 
     },
 
@@ -62,8 +83,8 @@ module.exports = {
         // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
 
        const {user_id} = req.params;
-      
-       try{
+
+        try{
        const salesData = await User.findAll({
             attributes: ['id','name','email'],
             include: [
