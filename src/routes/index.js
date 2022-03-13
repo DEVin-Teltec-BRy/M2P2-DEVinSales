@@ -6,11 +6,7 @@ const usersRoutes = require("./v1/users.routes");
 const salesRoutes = require("./v1/sales.routes");
 const productsRoutes = require("./v1/products.routes");
 const addressesRoutes = require("./v1/addresses.routes");
-const stateRoutes = require("./v1/states.routes");
-<<<<<<< HEAD
-=======
-const addressesRoutes = require("./v1/addresses.routes");
->>>>>>> TryCatch-Endpoint-POST-Deliveries--Feature
+const statesRoutes = require("./v1/states.routes");
 
 routes.get("/", (req, res) => {
   // #swagger.ignore = true
@@ -22,13 +18,8 @@ routes.use("/api/v1", [
   permissionRoutes,
   salesRoutes,
   productsRoutes,
-<<<<<<< HEAD
   addressesRoutes,
-  stateRoutes,
-=======
-  stateRoutes,
-  addressesRoutes,
->>>>>>> TryCatch-Endpoint-POST-Deliveries--Feature
+  statesRoutes,
 ]);
 
 module.exports = routes;

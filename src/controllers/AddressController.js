@@ -1,30 +1,34 @@
 const Address = require('../models/Address');
-const { Op } = require('sequelize');
+const City = require('../models/City')
+const State = require('../models/State')
+const { validateErrors } = require('../utils/functions')
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
-    // #swagger.tags = ['Endereços']
-    // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
+    /*
+      #swagger.tags = ['Endereços']
+      #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
 
-    // #swagger.parameters['city_id'] = {
-    //   in: 'query',
-    //   description: 'Filtro que identifica o id da cidade desejada',
-    //   type: 'number',
-    //   collectionFormat: 'multi',
-    // }
-    // #swagger.parameters['street'] = {
-    //   in: 'query',
-    //   description: 'Filtro que identifica o nome da rua que será retornada',
-    //   type: 'string',
-    //   collectionFormat: 'multi',
-    // }
-    // #swagger.parameters['cep'] = {
-    //   in: 'query',
-    //   description: 'Filtro que identifica o cep que será retornada',
-    //   type: 'string',
-    //   collectionFormat: 'multi',
-    // }
-
+      #swagger.parameters['city_id'] = {
+        in: 'query',
+        description: 'Filtro que identifica o id da cidade desejada',
+        type: 'number',
+        collectionFormat: 'multi',
+      }
+      #swagger.parameters['street'] = {
+        in: 'query',
+        description: 'Filtro que identifica o nome da rua que será retornada',
+        type: 'string',
+        collectionFormat: 'multi',
+      }
+      #swagger.parameters['cep'] = {
+        in: 'query',
+        description: 'Filtro que identifica o cep que será retornada',
+        type: 'string',
+        collectionFormat: 'multi',
+      }
+    */
     try {
       const { city_id, street, cep } = req.query;
 
@@ -66,28 +70,29 @@ module.exports = {
   },
 
   async delete(req, res) {
-    // #swagger.tags = ['Endereços']
-    // #swagger.description = 'Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params'
-    // #swagger.parameters['address_id'] = {
-    //   in: 'parameter',
-    //   description: 'Parâmetro que deve ser passado com o ID do endereço que se deseja deletar',
-    //   type: 'number',
-    //   collectionFormat: 'multi',
-
+    /*
+      #swagger.tags = ['Endereços']
+      #swagger.description = 'Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params'
+      #swagger.parameters['address_id'] = {
+        in: 'parameter',
+        description: 'Parâmetro que deve ser passado com o ID do endereço que se deseja deletar',
+        type: 'number',
+        collectionFormat: 'multi',
+      #swagger.responses[404] = { description: 'Not Found' }
+      #swagger.responses[204] = { description: 'No Content' }
+    */
     try {
       const { address_id } = req.params;
 
       const address = await Address.findByPk(address_id);
 
       if (!address) {
-        // #swagger.responses[r04] = { description: 'Not Found' }
         return res.status(404).send({ message: 'Endereço não encontrado' });
       }
 
       await address.destroy();
       console.log('DESTROYED');
 
-      // #swagger.responses[204] = { description: 'No Content' }
       return res.status(204).send();
     } catch (error) {
       console.log(error);
@@ -95,4 +100,171 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+
+  async insertNewAddress(req, res) {
+    /*
+      #swagger.tags = ['Endereços']
+      #swagger.description = 'Endpoint para adicionar um novo endereço ao banco de dados'
+      #swagger.consumes = ['application/json']
+      #swagger.parameters['state_id'] = {
+        in: 'path',
+        description: 'Filtro que identifica o id do estado no qual o endereço está localizado',
+        type: 'integer',
+      }
+      #swagger.parameters['city_id'] = {
+        in: 'path',
+        description: 'Filtro que identifica o id da cidade na qual o endereço está localizado',
+        type: 'integer',
+      }
+      #swagger.parameters['obj'] = { 
+          in: 'body', 
+          required: 'true',
+          '@schema': { 
+              "required": ["street", "number", "cep"], 
+              "properties": { 
+                  "street": { 
+                      "required": true,
+                      "type": "string",
+                      "example": "Rua Florianopolis", 
+                  },
+                  "number": {
+                      "required": true,
+                      "type": "number",
+                      "example": 123,
+                  },
+                  "cep": {
+                      "required": true,
+                      "type": "string",
+                      "example": "89229780", 
+                  },
+                  "complement": {
+                      "required": false,
+                      "type": "string",
+                      "example": "Apto. 302", 
+                  },
+              } 
+          } 
+      } 
+    */
+    try {
+      const {state_id, city_id} = req.params;
+      const addressData = req.body;
+
+      // Verifica se os params são inteiros válidos, caso negativo retorna 400
+      if(isNaN(state_id) || isNaN(city_id)) {
+        return isNaN(state_id) ? 
+        (
+          isNaN(city_id) ? res.status(400).send({message: "The 'state_id' and 'city_id' params must be integers"}) 
+          : 
+          res.status(400).send({message: "The 'state_id' param must be an integer"})
+        ) 
+        : 
+        res.status(400).send({message: "The 'city_id' param must be an integer"});
+      }
+      
+      // Busca o estado com base no state_id fornecido, se não encontrar retorna 404
+      const state = await State.findAll({
+        where: { id: {[Op.eq]: state_id} },
+      });
+
+      if(state.length === 0) {
+        return res.status(404).send({message: "Couldn't find any state with the given 'state_id'"})
+      }
+      
+      // Busca a cidade com base no city_id fornecido, se não encontrar retorna 404
+      const city = await City.findAll({
+        where: { id: {[Op.eq]: city_id} },
+      });
+
+      if(city.length === 0) {
+        return res.status(404).send({message: "Couldn't find any city with the given 'city_id'"})
+      }
+
+      // Verifica se a relação entre a cidade e o estado é válida, caso negativo, retorna 400
+      if(city[0].state_id !== state[0].id) {
+        return res.status(400).send({message: "The 'city_id' returned a city that doesn't match with the given 'state_id'"})
+      }
+          
+      //Valida as chaves de endereço
+      const addressObjKeys = ['street', 'number', 'cep']
+      if(addressObjKeys.every(key => key in addressData)) {
+        // Valida typeof street
+        if(typeof addressData.street !== 'string') {
+          return res.status(400).send({message: "The 'street' param must be a string"})
+        } else if (addressData.street.length === 0) {
+          return res.status(400).send({message: "The 'street' param cannot be empty"})
+        }
+
+        // Valida typeof number
+        if(isNaN(addressData.number)) {
+          return res.status(400).send({message: "The 'number' param must be a number"})
+        }
+
+        //Valida cep
+        if(typeof addressData.cep !== 'string') {
+          return res.status(400).send({message: "The 'street' param must be a string"})
+        } 
+        else if (addressData.cep.length < 8 || addressData.cep.length > 9) {
+          return res.status(400).send({message: "The 'cep' param is invalid"})
+        }
+        else if (addressData.cep.length === 9) {
+          if(addressData.cep[5] !== '-') {
+            return res.status(400).send({message: "The 'cep' param format is invalid"})
+          }
+        }
+      } 
+      else {
+        return res.status(400).send({message: "The 'street', 'number' and 'cep' params are required in the req body"})
+      }
+
+      // Verifica se o endereço já existe no DB
+      const checkDuplicate = await Address.findAll({
+        where: { 
+          [Op.and] : [{
+            street: {
+              [Op.iLike]: `${addressData.street}`
+            },
+            number: {
+              [Op.eq]: addressData.number
+            },
+            cep: {
+              [Op.iLike]: `${addressData.cep}`
+            },
+            city_id: {
+              [Op.eq]: `${city[0].id}`
+            },
+          }]
+        }
+      });
+      
+      if(checkDuplicate.length) {
+        return res.status(200).send({ message: "Endereço já existente! Não foi possível adicionar o endereço.", address_id: checkDuplicate[0].id});
+      }
+
+      // Cria objeto que será criado no DB
+      const newAddress =  addressData.hasOwnProperty('complement') ? 
+      {
+        city_id: city[0].id, 
+        street: addressData.street, 
+        number: addressData.number, 
+        complement: addressData.complement,
+        cep: addressData.cep
+      } : {
+        city_id: city[0].id, 
+        street: addressData.street, 
+        number: addressData.number, 
+        complement: "",
+        cep: addressData.cep
+
+      };
+
+      const address = await Address.create(newAddress)
+      return res.status(201).send({address_id: address.id});
+
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(400).send(message);
+    }
+  },
+
 };
