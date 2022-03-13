@@ -6,21 +6,25 @@ module.exports = {
     await queryInterface.bulkInsert('permissions', 
     [
       {
+        id: PERMISSIONS.READ_ID,
         description: PERMISSIONS.READ,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
+        id: PERMISSIONS.WRITE_ID,
         description: PERMISSIONS.WRITE,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
+        id: PERMISSIONS.UPDATE_ID,
         description: PERMISSIONS.UPDATE,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
+        id: PERMISSIONS.DELETE_ID,
         description: PERMISSIONS.DELETE,
         created_at: new Date(),
         updated_at: new Date(),

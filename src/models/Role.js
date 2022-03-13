@@ -7,13 +7,7 @@ class Role extends Model{
         allowNull: false,
         unique: {
           msg: "A descrição deve ser única",
-        },
-        validate: {
-          len: {
-            msg: "A descrição do cargo deve ter entre 4 e 10 caracteres.",
-            args: [4,10]
-          }
-        }
+      },
       }
     }, {
       sequelize,
@@ -29,11 +23,6 @@ class Role extends Model{
       foreignKey: 'role_id',
       through: 'permissions_roles',
       as: 'permissions'
-    })
-    this.belongsToMany(models.User, {
-      foreignKey: 'role_id',
-      through: 'users_roles',
-      as: 'users'
     })
   }
 } 

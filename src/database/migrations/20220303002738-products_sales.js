@@ -9,7 +9,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      sale_id: {
+      sales_id: {
         type: Sequelize.INTEGER,
         references: { model: "sales", key: "id" },
         onUpdate: "CASCADE",

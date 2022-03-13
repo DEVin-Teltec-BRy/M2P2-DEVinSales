@@ -11,10 +11,6 @@ module.exports = {
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
-    dialectoptions: {
-      useUTC: false
-    },
-    timezone: "-03:00",
     define: {
       timestamps: true,
       underscored: true,
@@ -27,10 +23,6 @@ module.exports = {
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
-    dialectoptions: {
-      useUTC: false
-    },
-    timezone: "-03:00",
     define: {
       timestamps: true,
       underscored: true,
@@ -43,10 +35,6 @@ module.exports = {
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
-    dialectoptions: {
-      useUTC: false
-    },
-    timezone: "-03:00",
     define: {
       timestamps: true,
       underscored: true,
