@@ -1,5 +1,4 @@
 const Address = require('../models/Address');
-<<<<<<< HEAD
 const Deliveries = require('../models/Deliveries');
 const City = require('../models/City')
 const State = require('../models/State')
@@ -8,15 +7,6 @@ const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
-=======
-const { validateErrors } = require("../utils/functions");
-const { Op } = require("sequelize");
-const Deliveries = require('../models/Deliveries');
-
-module.exports = {
-  async index(req, res) {
-    
->>>>>>> main
     // #swagger.tags = ['Endereços']
     // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
 
@@ -79,18 +69,6 @@ module.exports = {
     }
   },
 
-<<<<<<< HEAD
-  async delete(req, res) {
-    // #swagger.tags = ['Endereços']
-    // #sagger.description = 'Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.'
-    try {
-      const { address_id } = req.params;
-
-      const address = await Address.findByPk(address_id);
-      
-      if (!address) {
-        //#swagger.response[404] = {description: 'Not Found}
-=======
   async update(req,res){
 
     // #swagger.tags = ['Endereços']
@@ -160,7 +138,6 @@ module.exports = {
 
       if (!address) {
         //#swagger.responses[404] = {description: 'Not Found'}
->>>>>>> main
         return res.status(404).send({ message: 'Endreço não encontrado.' });
       }
 
