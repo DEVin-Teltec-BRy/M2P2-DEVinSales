@@ -2,31 +2,39 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("products_sales", {
+    await queryInterface.createTable("addresses", {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      sale_id: {
+      city_id: {
         type: Sequelize.INTEGER,
-        references: { model: "sales", key: "id" },
-        onUpdate: "CASCADE",
+        allowNull: false,
+        references: {
+          model: {
+            tableName: "cities",
+          },
+          key: "id",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+        },
+      },
+      street: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      product_id: {
+      number: {
         type: Sequelize.INTEGER,
-        references: { model: "products", key: "id" },
-        onUpdate: "CASCADE",
         allowNull: false,
       },
-      unit_price: {
-        type: Sequelize.DECIMAL,
+      complement: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      amount: {
-        type: Sequelize.INTEGER,
+      cep: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       created_at: {
@@ -41,6 +49,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("products_sales");
+    await queryInterface.dropTable("addresses");
   },
 };
