@@ -1116,6 +1116,15 @@
               "example": "O novo usuário necessita ter um cargo de WRITE e READ"
             }
           }
+        },
+        "possibleRespone_4": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "E-mail deve ser único"
+            }
+          }
         }
       }
     },

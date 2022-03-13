@@ -43,7 +43,8 @@ const doc = {
     CreateUserResponses: {
       possibleRespone_1: {message: "É necessário que a data informada exista e  seja do tipo dd/mm/yyyy"},
       possibleRespone_2: {message: "É necessário que o usuário seja maior de idade"},
-      possibleRespone_3: {message: "O novo usuário necessita ter um cargo de WRITE e READ"}
+      possibleRespone_3: {message: "O novo usuário necessita ter um cargo de WRITE e READ"},
+      possibleRespone_4: {message: "E-mail deve ser único"},
     },
     Permissions: [
       {
