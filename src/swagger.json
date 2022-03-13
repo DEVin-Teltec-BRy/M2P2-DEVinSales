@@ -159,19 +159,24 @@
     },
     "/api/v1/roles": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
+            "description": "A lista de permissões pode ser omitido na criação de um novo cargo.",
             "schema": {
-              "type": "object",
               "properties": {
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "financeiro"
                 },
                 "permissions": {
-                  "example": "any"
+                  "$ref": "#/definitions/Permissions"
                 }
               }
             }
@@ -179,10 +184,87 @@
         ],
         "responses": {
           "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResRole"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [],
+        "responses": {
+          "200": {
             "description": "OK"
           },
           "400": {
             "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/roles/{role_id}": {
+      "post": {
+        "tags": [
+          "Cargo"
+        ],
+        "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "description": "A lista de permissões é obrigatória e deve conter ids de permissões cadastradas previamente no sistema.<br>Caso seja enviado um uma permissão que o cargo já tenha, ela será desconsiderada, evitando duplicidade.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "permissions": {
+                  "$ref": "#/definitions/Permissions"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissões vinculadas com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -582,42 +664,6 @@
         }
       }
     },
-    "/api/v1/state/{state_id}/city/{city_id}": {
-      "get": {
-        "tags": [
-          "Estado"
-        ],
-        "description": "Endpoint para buscar cidade por ID",
-        "parameters": [
-          {
-            "name": "state_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "city_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/v1/address": {
       "get": {
         "tags": [
@@ -660,44 +706,137 @@
         }
       }
     },
+    "/api/v1/address/{address_id}": {
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/state/{state_id}/city": {
       "post": {
         "tags": [
-          "Estados"
+          "Estado"
         ],
         "description": "O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
             "name": "state_id",
-            "in": "query",
-            "type": "number"
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do Estado"
           },
           {
             "name": "obj",
             "in": "body",
-            "type": "string"
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCity"
+            }
           }
         ],
         "responses": {
-          
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ResState"
+            }
+          },
+          "400": {
+            "description": "Já existe uma cidade com este nome para o Estado(Bad Request)"
+          },
           "403": {
             "description": "O usuário não tem permissão(Forbidden)"
           },
           "404": {
             "description": "O Estado não existe no Banco de Dados(No found)"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city/{city_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade por ID",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
-            "description": "Já existe uma cidade com este nome para o Estado(Bad Request)"
+            "description": "Bad Request"
           },
-          "201": {
-            "description": "city_id(Created)"
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
     }
   },
-  
   "definitions": {
+    "Permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "permission_id": {
+            "type": "number",
+            "example": 1
+          }
+        }
+      }
+    },
+    "AddRole": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "Financeiro"
+        }
+      }
+    },
+    "AddPermission": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "WRITE"
+        }
+      }
+    },
     "AddProduct": {
       "type": "object",
       "properties": {
@@ -721,6 +860,15 @@
         "preço_sugerido": {
           "type": "number",
           "example": 7999.99
+        }
+      }
+    },
+    "ResRole": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Cargo criado com sucesso."
         }
       }
     },
@@ -768,6 +916,24 @@
         "suggested_price": {
           "type": "number",
           "example": 3999.99
+        }
+      }
+    },
+    "AddCity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Curitiba"
+        }
+      }
+    },
+    "ResState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
         }
       }
     }

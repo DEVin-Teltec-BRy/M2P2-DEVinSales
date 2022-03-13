@@ -57,27 +57,31 @@ module.exports = {
     // #swagger.tags = ['Estado']
     // #swagger.description = 'O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.'
     /*#swagger.parameters['state_id'] = {
-      in: 'query',
+      in: 'path',
       description: 'Id do Estado' ,
       type: 'number'
-    }*/ 
-        /*#swagger.parameters['name'] = {
+    }
+    #swagger.parameters['obj'] = {
       in: 'body',
-      description: 'name da city' ,
-      type: 'string'
-    }*/ 
-    /* #swagger.responses[403] = {
+      required: true,
+      schema: {
+        $ref: '#/definitions/AddCity'
+      }
+    }
+     #swagger.responses[201] = { 
+               schema: { $ref: "#/definitions/ResState" },
+        } 
+    
+     #swagger.responses[403] = {
         description: 'O usuário não tem permissão(Forbidden)'
-} */
-    /* #swagger.responses[404] = {
+} 
+     #swagger.responses[404] = {
         description: 'O Estado não existe no Banco de Dados(No found)'
-} */
-    /* #swagger.responses[400] = {
+} 
+     #swagger.responses[400] = {
         description: 'Já existe uma cidade com este nome para o Estado(Bad Request)'
-} */
-    /* #swagger.responses[403] = {
-        description: 'city_id(Created)'
-} */
+} 
+     */
 
     try {
       const { state_id } = req.params;
