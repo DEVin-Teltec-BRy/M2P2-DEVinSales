@@ -777,17 +777,13 @@
           "Endereços"
         ],
         "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "city_id",
-            "in": "path",
-            "description": "Filtro que identifica o id da cidade na qual o endereço está localizado",
-            "type": "integer",
-            "collectionFormat": "multi",
-            "required": true
+            "in": "query",
+            "description": "Filtro que identifica o id da cidade desejada",
+            "type": "number",
+            "collectionFormat": "multi"
           },
           {
             "name": "street",
@@ -802,84 +798,17 @@
             "description": "Filtro que identifica o cep que será retornada",
             "type": "string",
             "collectionFormat": "multi"
-          },
-          {
-            "name": "address_id",
-            "in": "path",
-            "description": "ID do endereço a ser alterado",
-            "type": "number",
-            "required": true
-          },
-          {
-            "name": "address",
-            "in": "body",
-            "description": "Dados para alteração do endereço",
-            "schema": {
-              "$ref": "#/definitions/address"
-            }
-          },
-          {
-            "name": "state_id",
-            "in": "path",
-            "description": "Filtro que identifica o id do estado no qual o endereço está localizado",
-            "type": "integer",
-            "required": true
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "required": [
-                "street",
-                "number",
-                "cep"
-              ],
-              "properties": {
-                "street": {
-                  "required": true,
-                  "type": "string",
-                  "example": "Rua Florianopolis"
-                },
-                "number": {
-                  "required": true,
-                  "type": "number",
-                  "example": 123
-                },
-                "cep": {
-                  "required": true,
-                  "type": "string",
-                  "example": "89229780"
-                },
-                "complement": {
-                  "required": false,
-                  "type": "string",
-                  "example": "Apto. 302"
-                }
-              }
-            }
-          },
-          {
-            "name": "city_id",
-            "in": "query",
-            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Endereço alterado com sucesso!"
+            "description": "Success!"
           },
           "204": {
             "description": "No Content"
           },
-          "400": {
-            "description": "É necessário passar pelo menos um dado para alteração!"
-          },
           "403": {
-            "description": "Você não tem autorização para este recurso!"
-          },
-          "404": {
-            "description": "Not Found"
+            "description": "Forbidden"
           }
         }
       }
@@ -889,84 +818,24 @@
         "tags": [
           "Endereços"
         ],
-        "description": "Endpoint que faz a alteração de um endereço com base nos dados passados pelo body",
-        "consumes": [
-          "application/json"
-        ],
+        "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
         "parameters": [
           {
             "name": "address_id",
             "in": "path",
             "required": true,
-            "type": "number",
-            "description": "ID do endereço a ser alterado"
-          },
-          {
-            "name": "address",
-            "in": "body",
-            "description": "Dados para alteração do endereço",
-            "schema": {
-              "$ref": "#/definitions/address"
-            }
-          },
-          {
-            "name": "state_id",
-            "in": "path",
-            "description": "Filtro que identifica o id do estado no qual o endereço está localizado",
-            "type": "integer",
-            "required": true
-          },
-          {
-            "name": "city_id",
-            "in": "path",
-            "description": "Filtro que identifica o id da cidade na qual o endereço está localizado",
-            "type": "integer",
-            "required": true
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "required": [
-                "street",
-                "number",
-                "cep"
-              ],
-              "properties": {
-                "street": {
-                  "required": true,
-                  "type": "string",
-                  "example": "Rua Florianopolis"
-                },
-                "number": {
-                  "required": true,
-                  "type": "number",
-                  "example": 123
-                },
-                "cep": {
-                  "required": true,
-                  "type": "string",
-                  "example": "89229780"
-                },
-                "complement": {
-                  "required": false,
-                  "type": "string",
-                  "example": "Apto. 302"
-                }
-              }
-            }
+            "type": "string"
           }
         ],
         "responses": {
-          "200": {
-            "description": "Endereço alterado com sucesso!"
+          "204": {
+            "description": "No Content"
           },
           "400": {
-            "description": "É necessário passar pelo menos um dado para alteração!"
+            "description": "Bad Request"
           },
           "403": {
-            "description": "Você não tem autorização para este recurso!"
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
