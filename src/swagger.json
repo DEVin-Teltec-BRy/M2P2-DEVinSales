@@ -23,42 +23,53 @@
         "tags": [
           "Usuário"
         ],
-        "description": "Endpoint para criar um novo usuário.",
+        "description": "Endpoint que criar um novo usuário.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "birth_date": {
-                  "example": "any"
-                },
-                "roles": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/AddUser"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "response": {
+                  "type": "number",
+                  "example": 42
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/CreateUserResponses"
+            }
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
@@ -71,31 +82,64 @@
           {
             "name": "name",
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "description": "Nome de um usuário.",
+            "default": "John Doe"
           },
           {
             "name": "birth_date_min",
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "description": "Data limite inferior da consulta.",
+            "default": "DD/MM/AAAA"
           },
           {
             "name": "birth_date_max",
             "in": "query",
-            "type": "string"
+            "type": "string",
+            "description": "Data limite superior da consulta.",
+            "default": "DD/MM/AAAA"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserInfo"
+            }
           },
           "204": {
             "description": "No Content"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Informe uma data em um formato válido dd/mm/yyyy"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -108,51 +152,122 @@
         "description": "Endpoint para login do usuário, quando email e senha são validos retorna um token.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/UserLogin"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Token de acesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGVzIjpbeyJpZCI6Miwi___RANDOM_TOKEN___JPV05FUiJ9XSwiaWF0IjoxNjQ2ODA0MDkxLCJleHAiOjE2NDY4OTA0OTF9.OwvUy0p3BVfbicuCg9YYAk5tlPQ6UKB_bZrHt8-H_CU"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Login não efetuado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Email ou senha inválidos"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/api/v1/user/{user_id}": {
       "delete": {
-        "description": "",
+        "tags": [
+          "Usuário"
+        ],
+        "description": "Endpoint para deletar um usuário.",
         "parameters": [
           {
             "name": "user_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Usuario deletado com sucesso"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Formato de id invalido!"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Não se encontrou nenhum usuario como o id informado "
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            },
+            "description": "Not Found"
           }
         }
       }
@@ -211,7 +326,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -335,7 +462,19 @@
             "description": "No Content"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -385,7 +524,19 @@
             "description": "Venda submetida com sucesso."
           },
           "403": {
-            "description": "O usuário logado não tem autorização para este recurso."
+            "description": "O usuário logado não tem autorização para este recurso.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "product_id ou seller_id não existe no banco de dados."
@@ -471,7 +622,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -522,7 +685,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
@@ -552,7 +727,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -588,7 +775,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -619,7 +818,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -656,7 +867,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -763,7 +986,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -808,7 +1043,19 @@
             "description": "No Content"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -872,7 +1119,19 @@
             "description": "É necessário passar pelo menos um dado para alteração!"
           },
           "403": {
-            "description": "Você não tem autorização para este recurso!"
+            "description": "Você não tem autorização para este recurso!",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Endereço não localizado!"
@@ -950,7 +1209,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -960,24 +1231,119 @@
     }
   },
   "definitions": {
-    "address": {
+    "AddUser": {
       "type": "object",
       "properties": {
-        "street": {
+        "name": {
           "type": "string",
-          "example": "Rua Paralelepípedo"
+          "example": "John Doe"
         },
-        "number": {
-          "type": "number",
-          "example": 10
-        },
-        "complement": {
+        "password": {
           "type": "string",
-          "example": "Apto 1"
+          "example": "aB12345"
         },
-        "cep": {
+        "email": {
           "type": "string",
-          "example": "12345678"
+          "example": "john.doe@email.com"
+        },
+        "birth_date": {
+          "type": "string",
+          "example": "01/01/1990"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role_id": {
+                "type": "number",
+                "example": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "john.doe@email.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "aB12345"
+        }
+      }
+    },
+    "UserInfo": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 42
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "example": "john.doe@email.com"
+              },
+              "birth_date": {
+                "type": "string",
+                "example": "01/01/1990"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CreateUserResponses": {
+      "type": "object",
+      "properties": {
+        "possibleResponse_1": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "É necessário que a data informada exista e  seja do tipo dd/mm/yyyy"
+            }
+          }
+        },
+        "possibleResponse_2": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "É necessário que o usuário seja maior de idade"
+            }
+          }
+        },
+        "possibleResponse_3": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "O novo usuário necessita ter um cargo de WRITE e READ"
+            }
+          }
+        },
+        "possibleResponse_4": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "E-mail deve ser único"
+            }
+          }
         }
       }
     },

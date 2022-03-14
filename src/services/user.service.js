@@ -21,9 +21,9 @@ module.exports = {
 
       if (birth_date_min) {
         const vefifyDateBirthMin = verifyDate(birth_date_min);
-        
+
         if (!vefifyDateBirthMin)
-          throw new Error("Informe uma data com formato Valido dd/mm/yyy");
+          throw new Error("Informe uma data em um formato válido dd/mm/yyyy");
 
         const dateMin = stringToDate(birth_date_min);
         query.birth_date = {
@@ -33,7 +33,7 @@ module.exports = {
       if (birth_date_max) {
         const vefifyDateBirthMax = verifyDate(birth_date_max);
         if (!vefifyDateBirthMax)
-          throw new Error("Informe uma data com formato Valido dd/mm/yyy");
+          throw new Error("Informe uma data em um formato válido dd/mm/yyyy");
         const dateMax = stringToDate(birth_date_max);
         query.birth_date = { ...query?.birth_date, [Op.lt]: dateMax };
       }
