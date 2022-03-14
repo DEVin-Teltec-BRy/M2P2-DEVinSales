@@ -8,18 +8,24 @@ const productsRoutes = require('./v1/products.routes');
 const statesRoutes = require('./v1/states.routes');
 const addressesRoutes = require("./v1/addresses.routes");
 
+const productsalesRoutes = require ('./v1/productsales.routes');
+
+
 routes.get("/", (req, res) => {
   // #swagger.ignore = true
   res.redirect("/api/v1/docs");
 });
-routes.use('/api/v1', [
-    usersRoutes,
-    rolesRoutes,
-    permissionRoutes,
-    salesRoutes,
-    productsRoutes,
-    statesRoutes,
-    addressesRoutes
-])
+
+routes.use("/api/v1", [
+  usersRoutes,
+  rolesRoutes,
+  permissionRoutes,
+  salesRoutes,
+  productsRoutes,
+  statesRoutes,
+  addressesRoutes,
+  productsalesRoutes
+]);
+
 
 module.exports = routes;
