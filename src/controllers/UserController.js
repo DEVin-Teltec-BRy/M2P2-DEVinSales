@@ -139,6 +139,13 @@ module.exports = {
       return res.status(200).send({ users });
     } catch (error) {
       const message = validateErrors(error);
+      /*
+        #swagger.responses[400] = {
+        schema: {
+          message: 'Informe uma data em um formato válido dd/mm/yyyy'
+        }
+      }
+      */
       return res.status(400).send(message);
     }
   },
