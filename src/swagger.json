@@ -664,6 +664,75 @@
         }
       }
     },
+    "/api/v1/state": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filtro que identifica o nome integral ou parcial dos estados que serão retornados",
+            "type": "array",
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "initials",
+            "in": "query",
+            "description": "Filtro que identifica as iniciais integral ou parcial dos estados que serão retornados",
+            "type": "array",
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint que retorna um estado de acordo com o state_id fornecido",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "ID do estado que será buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/state/{state_id}/city/": {
       "get": {
         "tags": [
@@ -745,6 +814,34 @@
       }
     },
     "/api/v1/address/{address_id}": {
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "patch": {
         "tags": [
           "Endereços"
@@ -781,23 +878,73 @@
             "description": "Endereço não localizado!"
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/v1/state/{state_id}/city/{city_id}/address": {
+      "post": {
         "tags": [
           "Endereços"
         ],
-        "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
+        "description": "Endpoint para adicionar um novo endereço ao banco de dados",
+        "consumes": [
+          "application/json"
+        ],
         "parameters": [
           {
-            "name": "address_id",
+            "name": "state_id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "integer",
+            "description": "Filtro que identifica o id do estado no qual o endereço está localizado"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Filtro que identifica o id da cidade na qual o endereço está localizado"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "required": [
+                "street",
+                "number",
+                "cep"
+              ],
+              "properties": {
+                "street": {
+                  "required": true,
+                  "type": "string",
+                  "example": "Rua Florianopolis"
+                },
+                "number": {
+                  "required": true,
+                  "type": "number",
+                  "example": 123
+                },
+                "cep": {
+                  "required": true,
+                  "type": "string",
+                  "example": "89229780"
+                },
+                "complement": {
+                  "required": false,
+                  "type": "string",
+                  "example": "Apto. 302"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
