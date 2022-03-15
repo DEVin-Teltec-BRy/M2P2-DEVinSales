@@ -13,7 +13,7 @@ class Product extends Model {
               args: [3, 50],
               msg: "O nome do produto deve conter entre 3 e 50 caractéres.",
             },
-          },
+          }
         },
         suggested_price: {
           type: DataTypes.DECIMAL(7, 2),
@@ -27,7 +27,8 @@ class Product extends Model {
     );
   }
   static associate(models) {
-    this.hasMany(models.ProductsSales);
+    Product.belongsToMany(models.Sale, { through: models.ProductsSales });
+  
   }
 }
 
