@@ -30,6 +30,7 @@ ProductsSales.init(connection);
 City.init(connection);
 Address.init(connection);
 
+
 /**
  * Associação dos models
  * Somente os models com associações devem ser chamados abaixo
@@ -42,5 +43,6 @@ Sale.associate(connection.models);
 Product.associate(connection.models);
 City.associate(connection.models);
 Address.associate(connection.models);
+ProductsSales.associate(connection.models);
 
 module.exports = connection;

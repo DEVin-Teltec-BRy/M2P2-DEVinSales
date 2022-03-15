@@ -36,26 +36,33 @@ module.exports = {
 
     async showSaler(req,res){
 
-         // #swagger.tags = ['Busca as Vendas do Usuarios']
-        // #swagger.description = 'Endpoint pra busacar as vendas do usuario.'
+        // #swagger.tags = [' Vendas ']
+       // #swagger.description = 'Endpoint que buscar as vendas do usuario.'
+     const {id} = req.params;
+         try {
+           const findUser = await User.findByPk(id);
 
-
-        // const {user_id} = req.params
-        // const { buyer_id, dt_sale,} = req.body
+           const findSaler = await User.findAll({
+               attributes:['name','email'],
+                include: 
+                   { 
+                       association: 'sales_user',
+                       attributes: [ 'seller_id', 'dt_sale' ],
+                       where: {seller_id: id },
+                   }
+       });
+          
+        if(!findUser){
+            return res.status(400).send({message: "Este usuario não existe!"});
+        }
+       if(findSaler.length === 0){
+            return res.status(400).send({message: "Este usuario não possui vendas!"});
+           }
+            return res.status(200).json( findSaler)
+       } catch (error) {
            
-       const FindUser = await User.findAll()
-      console.log(FindUser)
-       return res.status(201).json(FindUser)
-
-
-        // const selerUser = await Sale.findAll({
-        //     where: {
-        //         id: salesRoutes.map((sale) => sale.seller_id),
-        //     }
-        // })
-        // return res.status(201).send({ message: "AChou" })
-
-    },
+           return res.status(400).send({message: "Erro deconhecido!"})
+       }},
 
     async showSalesByBuyer(req, res){
         // #swagger.tags = ['Vendas']
