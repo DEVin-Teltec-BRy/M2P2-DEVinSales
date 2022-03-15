@@ -60,7 +60,13 @@ module.exports = {
         include: [
           {
             association: 'cities',
-            attributes: ['id','name', 'state_id'],
+            attributes: ['id','name'],
+            include: [
+              {
+                association: 'state',
+                attributes: ['id','name', 'initials'],
+              },
+            ],
           },
         ],
       });
