@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const User = require("../models/User");
+const Sale = require("../models/Sale");
 const {
   validateErrors,
   stringToDate,
@@ -171,6 +172,17 @@ module.exports = {
 
       if (!findUserById)
         throw new Error("Não se encontrou nenhum usuario como o id informado ");
+
+      const findSale = await Sale.findAll({
+        where: {
+          [Op.or]: [{ buyer_id: userId }, {seller_id: userId}],
+        },
+      });
+
+      if (findSale.length > 0)
+        throw new Error(
+          "Não é possivel deletar usuario, por que tem compras ou vendas registradas"
+        );
 
       await User.destroy({
         where: {
