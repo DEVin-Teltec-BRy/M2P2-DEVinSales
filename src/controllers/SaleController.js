@@ -8,6 +8,7 @@ const { validateErrors } = require('../utils/functions');
 const { literal } = require('sequelize');
 
 
+
 module.exports = {
 
   async create(req, res) {
@@ -48,10 +49,13 @@ module.exports = {
         return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
       }
 
-      const sales = await Sale.findByPk(sale_id, {
+      const sale = await Sale.findByPk(sale_id, {
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+
+        },
         include: [
           {
-
             association: "products",
             attributes: [
               'product_id',
@@ -59,22 +63,58 @@ module.exports = {
               'unit_price',
               [literal('unit_price * amount'), 'total'],
             ],
-            where: { sale_id },
+          },
+          {
+            association: "buyer",
+            attributes: [
+              'name',
+            ]
+          },
+          {
+            association: "seller",
+            attributes: [
+              'name',
+            ]
           },
         ],
       });
 
 
-      if (!sales) {
+      if (!sale) {
         return res.status(404).send({ message: 'Não existe venda para este ID' })
       }
+      const productIdList = sale.products.map(p => p.product_id)
+      const productNames = await Product.findAll({
+        attributes: ['id', 'name'],
+        where: {
+          id: productIdList,
+        }
+      })
 
-      return res.status(200).json(sales)
+      const productsWithName = sale.products.map(p => {
+        const { dataValues: product } = p;
+        return {
+          name: productNames.find(e => e.id === product.product_id).name,
+          amount: product.amount,
+          unit_price: product.unit_price,
+          total: product.total,
+        }
+      })
+
+
+      const response = {
+        id_sale: sale.id,
+        seller_name: sale.seller.name,
+        buyer_name: sale.buyer.name,
+        dt_sale: sale.dt_sale,
+        products: productsWithName
+      }
+
+      return res.status(200).json(response)
 
     } catch (error) {
       return res.status(500).json(error.message)
     }
-
   },
   async showSaler(req, res) {
 

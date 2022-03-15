@@ -69,6 +69,12 @@ class User extends Model {
            as: 'buyer_sales'
         }
     );
+    this.hasMany(
+      models.Sale,{
+         foreignKey: 'seller_id',
+         as: 'buyer_sellers'
+      }
+  );
 
   }
 }
