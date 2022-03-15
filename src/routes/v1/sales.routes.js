@@ -7,7 +7,8 @@ const { READ, WRITE, UPDATE, DELETE } = require("../../utils/constants/permissio
 
 salesRoutes.get('/sales', SaleController.showSaler);
 salesRoutes.get('/user/:user_id/buy',onlyCanAccessWith([READ]), SaleController.showSalesByBuyer);
-salesRoutes.post('/sales/:user_id/sale',onlyCanAccessWith([WRITE]),SaleController.createSale);
+salesRoutes.post('/sales/:user_id/sale',onlyCanAccessWith([WRITE]), SaleController.createSale);
 salesRoutes.post('/sales/:user_id/buy',onlyCanAccessWith([WRITE]), SaleController.createBuy);
 
 module.exports = salesRoutes;
+
