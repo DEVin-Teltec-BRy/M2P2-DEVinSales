@@ -1,6 +1,7 @@
 const State = require("../models/State");
 const City = require("../models/City");
 const { validateErrors } = require("../utils/functions");
+const { ACCENT, UNNACENT } = require("../utils/constants/accents");
 const { Op, where, fn, col } = require("sequelize");
 
 module.exports = {
@@ -12,11 +13,6 @@ module.exports = {
     try {
       const { state_id } = req.params;
       const { name } = req.query;
-
-      const accent =
-        "Á,À,Ã,Â,Ä,á,à,ã,â,ä,É,È,Ê,Ë,é,è,ê,ë,Í,Ì,Î,Ï,í,ì,î,ï,Ó,Ò,Ô,Õ,Ö,ó,ò,ô,õ,ö,Ú,Ù,Û,Ü,ú,ù,û,ü,Ç,ç,Ñ,ñ";
-      const unaccent =
-        "A,A,A,A,A,a,a,a,a,a,E,E,E,E,e,e,e,e,I,I,I,I,i,i,i,i,O,O,O,O,O,o,o,o,o,o,U,U,U,U,u,u,u,u,C,c,N,n";
 
       const state = await State.findOne({
         where: {
@@ -34,7 +30,7 @@ module.exports = {
 
       if (name) {
         query.name = where(
-          fn("translate", fn("lower", col("City.name")), accent, unaccent),
+          fn("translate", fn("lower", col("City.name")), ACCENT, UNNACENT),
           {
             [Op.iLike]: `%${name
               .normalize("NFD")
