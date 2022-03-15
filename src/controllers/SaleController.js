@@ -118,9 +118,6 @@ module.exports = {
   },
   async showSaler(req, res) {
 
-    // #swagger.tags = [' Vendas ']
-    // #swagger.description = 'Endpoint pra buscar as vendas do usuario.'
-
     const { id } = req.params;
 
 
@@ -154,48 +151,18 @@ module.exports = {
 
   },
 
-
-
-
-
-
-
-
-
   async saleMade(req, res) {
     try {
-      // #swagger.auto = false
-      // #swagger.tags = ['Vendas']
-      // #swagger.description = '<h2>Endpoint for submitting sales</h2>'
-      /*  #swagger.parameters[seller_id] = {
-                in: 'path',
-                description: '<ul><li>It must be a valid seller_id</li></ul>'
-        } */
-      /*  #swagger.parameters['obj'] = {
-                in: 'body',
-                description: '<h4>product_id</h4><ul><li>It must be a valid product_id</li></ul><h4>unit_price</h4><ul><li>If no value is sent it will get the default value of product</li><li>The value must be greater than 0</li></ul><h4>amount</h4><ul><li>If no value is sent it will be considered equal to 1</li><li>The value must be greater than 0</li></ul>',
-                schema: {
-                    $product_id: 'Integer',
-                    unit_price: 'Integer',
-                    amount: 'Integer'
-                }
-      } */
 
-      // #swagger.responses[201] = { description: 'Sale submitted successfully.' }
-      // #swagger.responses[403] = { description: 'The user logged-in is unauthorized to submit sales.' }
-      // #swagger.responses[404] = { description: 'product_id or seller_id were not found in the database.' }
       const { seller_id } = req.params;
       const { product_id } = req.body;
       let { unit_price, amount } = req.body;
       const dt_sale = new Date();
       const buyer = await decode(req.headers.authorization);
       const buyer_id = buyer.userId;
-      // verifying if amount was sent
       if (!amount || amount.replace(/\s/g, "") == "") {
         amount = 1;
       }
-
-      // verifying if product_id was sent
       if (
         !product_id ||
         product_id.replace(/\s/g, "") == "" ||
@@ -203,27 +170,20 @@ module.exports = {
       ) {
         return res.status(400).send({ message: "Invalid Product_id" });
       }
-
-      // verifying if amount or unit_price have values greater than 0
       if (unit_price <= 0 || amount <= 0) {
         return res
           .status(400)
           .send({ message: "unit_price or amount aren't valid" });
       }
-
-      // verifying if product_id exists in database
       const validProductId = await Product.findByPk(product_id);
       if (!validProductId) {
         return res.status(404).send({ message: "product_id does not exist" });
       }
 
-      // verifying if seller_id exists in database
       const validSellerId = await User.findByPk(seller_id);
       if (!validSellerId) {
         return res.status(404).send({ message: "seller_id does not exist" });
       }
-
-      // verifying if unit_price was sent
       if (
         !unit_price ||
         unit_price.replace(/\s/g, "") == "" ||
@@ -231,7 +191,6 @@ module.exports = {
       ) {
         unit_price = validProductId.suggested_price;
       }
-      //Creating Product_Sale
       const sale = await Sale.create({
         seller_id,
         buyer_id,
@@ -248,7 +207,7 @@ module.exports = {
           amount: amount,
         },
       });
-      return res.status(201).send({ message: productSale });
+      return res.status(201).send({ 'created': "id-" + productSale.id });
     } catch (error) {
       return res.status(400).send(error.message);
     }
