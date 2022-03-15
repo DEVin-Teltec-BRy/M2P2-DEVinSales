@@ -10,29 +10,84 @@ const { validateErrors, daysToDelivery } = require('../utils/functions');
 const State = require('../models/State');
 
 module.exports = {
-  
-    async create(req,res){
-         // #swagger.tags = ['Vendas']
-        // #swagger.description = 'Endpoint criar uma venda.'
-        
-        const {user_id} = req.params
-        const { buyer_id, dt_sale,} = req.body
-        const receivedDate = new Date(dt_sale)
-        const dateNow = new Date()
+    async createBuy(req, res) {
+        // #swagger.tags = ['Vendas']
+        // #swagger.description = 'Endpoint para criar uma venda.'
+        /* #swagger.parameters['obj'] = {
+                in:'body',
+                schema:{
+                'seller_id':1,
+                'dt_sale':'1980/05/19'
+                }
+            }
+            #swagger.parameters[user_id] = {
+                in:'path'
+            }
+        */
+        const { user_id } = req.params
+        const { seller_id, dt_sale } = req.body
+    
         try {
+            if(!Number(seller_id))throw new Error('Seller_id deve ser um número')
+            if(!user_id)throw new Error('Precisa enviar o user_id')
+            if(dt_sale.length<10) throw new Error('Formato de data inválido')
+            if (new Date(dt_sale) == 'Invalid Date') throw new Error('Formato de data inválido')
+    
             const result = await Sale.create({
-                 seller_id:user_id,
-                 buyer_id:buyer_id,
-                dt_sale:(receivedDate.length>0)?receivedDate:dateNow.getTime()
+                seller_id: (seller_id) ? seller_id : null,
+                buyer_id: user_id,
+                dt_sale: dt_sale
             })
-            res.status(201).send({'created':"id-"+result.id})
+            return res.status(201).send({ 'created': "id-" + result.id })
+    
         } catch (error) {
-            if(error.message==`insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`)return res.status(404).send("user_id inexistente")
-            if(error.message==`insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`)return res.status(404).send("buyer_id inexistente")
-            res.status(404).send(error.message)
+            if (error.message.includes('sales_seller_id_fkey')) return res.status(404).send({message:"seller_id inexistente"})
+            if (error.message.includes('sales_buyer_id_fkey')) return res.status(404).send({message:"buyer_id inexistente"})
+            if(error.message.includes('invalid input syntax')) return res.status(400).send({message:"User_id em formato inválido"})
+            
+            res.status(400).send({message:error.message})
         }
-
+    
     },
+    async createSale(req, res) {
+        // #swagger.tags = ['Vendas']
+        // #swagger.description = 'Endpoint para criar uma venda.'
+        /* #swagger.parameters['obj'] = {
+                in:'body',
+                schema:{
+                'buyer_id':1,
+                'dt_sale':'1980/05/19'
+                }
+            }
+            #swagger.parameters[user_id] = {
+                in:'path'
+            }
+        */
+        const { user_id } = req.params
+        const { buyer_id, dt_sale } = req.body
+        
+        try {
+            if(dt_sale.length<10) throw new Error('Formato de data inválido')
+            if(!buyer_id)throw new Error("Precisa existir um comprador")
+            if (new Date(dt_sale) == 'Invalid Date') throw new Error('Formato de data inválido')
+              
+            const result = await Sale.create({
+                seller_id: user_id,
+                buyer_id: buyer_id,
+                dt_sale: dt_sale
+            })
+            return res.status(201).send({ 'created': "id-" + result.id })
+    
+        } catch (error) {
+    
+            if (error.message.includes('sales_seller_id_fkey')) return res.status(404).send({message:"seller_id inexistente"})
+            if (error.message.includes('sales_buyer_id_fkey')) return res.status(404).send({message:"buyer_id inexistente"})
+            if(error.message.includes('invalid input syntax')) return res.status(400).send({message:"User_id em formato inválido"})
+    
+            res.status(400).send({message:error.message})
+        }
+    },
+
 
     async showSaler(req,res){
 
