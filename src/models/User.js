@@ -64,8 +64,20 @@ class User extends Model {
     this.hasMany(models.Sale, {
       foreignKey: "seller_id",
       as: 'sales_user'
-
-    });
+    }
+    );
+    this.hasMany(
+        models.Sale,{
+           foreignKey: 'buyer_id',
+           as: 'buyer_sales'
+        }
+    );
+    this.hasMany(
+      models.Sale,{
+         foreignKey: 'seller_id',
+         as: 'buyer_sellers'
+      }
+  );
 
     this.hasMany(models.Sale, {
       foreignKey: 'buyer_id',

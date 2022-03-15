@@ -11,6 +11,7 @@ const Delivery = require('../models/Deliveries');
 const { validateErrors, daysToDelivery } = require('../utils/functions');
 const State = require('../models/State');
 
+
 module.exports = {
     async createSale(req, res) {
         // #swagger.tags = ['Vendas']
@@ -47,6 +48,7 @@ module.exports = {
                 return res.status(404).send("buyer_id inexistente");
             res.status(400).send(error.message);
         }
+
 
     },
     async createBuy(req, res) {
@@ -156,117 +158,86 @@ module.exports = {
    
     },
 
-    async saleMade(req, res) {
-        try {
-            // #swagger.tags = ['Sales']
-            // #swagger.description = 'nao sei o que ele faz.'
-            const { seller_id } = req.params;
-            const { product_id } = req.body;
-            const { authorization } = req.headers;
-            let { unit_price, amount } = req.body;
-            const dt_sale = new Date();
-            const buyer = await verify(authorization, process.env.SECRET);
-            const buyer_id = buyer.userId;
-            // se o amount vir vazio bota o valor de 1
-            if (!amount || amount.replace(/\s/g, "") == "") {
-                amount = 1;
-            }
     
-            //verificando se o product_id foi enviado
-            if (
-                !product_id ||
-                product_id.replace(/\s/g, "") == "" ||
-                product_id === "any"
-            ) {
-                return res.status(400).send({ message: "Product_id invalido" });
-            }
 
-            //verificando se o amount ou o unit price estao com valores menores que 0
-            if (unit_price <= 0 || amount <= 0) {
-                return res
-                    .status(400)
-                    .send({ message: "unit_price ou amount com valores invalidos" });
-            }
 
-            //verificando se o product id existe para
-            const validProductId = await Product.findByPk(product_id);
-            if (!validProductId) {
-                return res.status(404).send({ message: "product_id inexistente" });
-            }
+  async showSaleById(req, res) {
 
-            //verificando se o seller_id existe na tabela user_id
-            const validSellerId = await User.findByPk(seller_id);
-            if (!validSellerId) {
-                return res.status(404).send({ message: "seller_id inexistente" });
-            }
+    try {
+      const sale_id = req.params.sale_id
 
-            //verificando se o unit_price foi enviado
-            if (
-                !unit_price ||
-                unit_price.replace(/\s/g, "") == "" ||
-                unit_price === "any"
-            ) {
-                unit_price = validProductId.suggested_price;
-            }
-            //Criando o registro sale
-            const sale = await Sale.create({
-                seller_id,
-                buyer_id,
-                dt_sale,
-            });
-            const sales_id = sale.dataValues.id;
+      if (!sale_id) {
+        return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
+      }
 
-            //criando o registro product_sale
-            const product_sale = await ProductsSales.create({
-                sales_id,
-                product_id,
-                unit_price,
-                amount,
-            });
-            const product_sale_id = product_sale.dataValues.id;
+      const sale = await Sale.findByPk(sale_id, {
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
 
-            return res.status(201).send(`product_sale id: ${product_sale_id}`);
-        } catch (error) {
-            return res.status(400).send(error.message);
-        }
-    },
-    async showSaleById(req, res) {
-
-        try {
-          const sale_id = req.params.sale_id
-    
-          if (!sale_id) {
-            return res.status(400).send({ message: 'É necessário passar o ID de vendas' })
-          }
-    
-          const sales = await Sale.findByPk(sale_id, {
-            include: [
-              {
-    
-                association: "products",
-                attributes: [
-                  'product_id',
-                  'amount',
-                  'unit_price',
-                  [literal('unit_price * amount'), 'total'],
-                ],
-                where: { sale_id },
-              },
+        },
+        include: [
+          {
+            association: "products",
+            attributes: [
+              'product_id',
+              'amount',
+              'unit_price',
+              [literal('unit_price * amount'), 'total'],
             ],
-          });
-    
-    
-          if (!sales) {
-            return res.status(404).send({ message: 'Não existe venda para este ID' })
-          }
-    
-          return res.status(200).json(sales)
-    
-        } catch (error) {
-          return res.status(500).json(error.message)
+          },
+          {
+            association: "buyer",
+            attributes: [
+              'name',
+            ]
+          },
+          {
+            association: "seller",
+            attributes: [
+              'name',
+            ]
+          },
+        ],
+      });
+
+
+      if (!sale) {
+        return res.status(404).send({ message: 'Não existe venda para este ID' })
+      }
+      const productIdList = sale.products.map(p => p.product_id)
+      const productNames = await Product.findAll({
+        attributes: ['id', 'name'],
+        where: {
+          id: productIdList,
         }
-    
-      },
+      })
+
+      const productsWithName = sale.products.map(p => {
+        const { dataValues: product } = p;
+        return {
+          name: productNames.find(e => e.id === product.product_id).name,
+          amount: product.amount,
+          unit_price: product.unit_price,
+          total: product.total,
+        }
+      })
+
+
+      const response = {
+        id_sale: sale.id,
+        seller_name: sale.seller.name,
+        buyer_name: sale.buyer.name,
+        dt_sale: sale.dt_sale,
+        products: productsWithName
+      }
+
+      return res.status(200).json(response)
+
+    } catch (error) {
+      return res.status(500).json(error.message)
+    }
+  },
+  
 
     async deliveries(req,res){
         // #swagger.tags = ['Vendas']
@@ -343,5 +314,66 @@ module.exports = {
         return res.status(400).json({message: "Bad request"});
     }
 
+  },
+
+  async saleMade(req, res) {
+    try {
+
+      const { seller_id } = req.params;
+      const { product_id } = req.body;
+      let { unit_price, amount } = req.body;
+      const dt_sale = new Date();
+      const buyer = await decode(req.headers.authorization);
+      const buyer_id = buyer.userId;
+      if (!amount || amount.replace(/\s/g, "") == "") {
+        amount = 1;
+      }
+      if (
+        !product_id ||
+        product_id.replace(/\s/g, "") == "" ||
+        product_id === "any"
+      ) {
+        return res.status(400).send({ message: "Invalid Product_id" });
+      }
+      if (unit_price <= 0 || amount <= 0) {
+        return res
+          .status(400)
+          .send({ message: "unit_price or amount aren't valid" });
+      }
+      const validProductId = await Product.findByPk(product_id);
+      if (!validProductId) {
+        return res.status(404).send({ message: "product_id does not exist" });
+      }
+
+      const validSellerId = await User.findByPk(seller_id);
+      if (!validSellerId) {
+        return res.status(404).send({ message: "seller_id does not exist" });
+      }
+      if (
+        !unit_price ||
+        unit_price.replace(/\s/g, "") == "" ||
+        unit_price === "any"
+      ) {
+        unit_price = validProductId.suggested_price;
+      }
+      const sale = await Sale.create({
+        seller_id,
+        buyer_id,
+        dt_sale,
+      });
+      let sale_id = await sale.id;
+      await sale.addProduct(product_id, { through: { unit_price, amount } });
+      productSale = await ProductsSales.findOne({
+        attributes: ["id"],
+        where: {
+          sale_id: sale_id,
+          product_id: product_id,
+          unit_price: unit_price,
+          amount: amount,
+        },
+      });
+      return res.status(201).send({ 'created': "id-" + productSale.id });
+    } catch (error) {
+      return res.status(400).send(error.message);
     }
-};
+}};
