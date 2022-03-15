@@ -423,16 +423,41 @@
         }
       }
     },
-    "/api/v1/sales": {
+    "/api/v1/user/{id}/sales": {
       "get": {
         "tags": [
-          "Busca as Vendas do Usuarios"
+          " Vendas "
         ],
-        "description": "Endpoint pra busacar as vendas do usuario.",
-        "parameters": [],
+        "description": "Endpoint que buscar as vendas do usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -920,7 +945,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -948,61 +985,22 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/v1/sales/{sale_id}/product/{product_id}/price/{price}": {
-      "patch": {
-        "tags": [
-          "Produtos_Vendas"
-        ],
-        "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
-        "parameters": [
-          {
-            "name": "sale_id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "description": "Id da venda",
-            "example": 1
-          },
-          {
-            "name": "product_id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "description": "Id do produto",
-            "example": 2
-          },
-          {
-            "name": "price",
-            "in": "path",
-            "required": true,
-            "type": "number",
-            "description": "Preço atualizado do produto",
-            "example": 999.99
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Sucesso na atualização do endpoint"
-          },
-          "400": {
-            "description": "Id do produto enviado não é compatível ao cadastrado na venda, ou preço do produto é igual à zero"
-          },
-          "401": {
-            "description": "Sem permissão para acessar o endpoint"
-          },
-          "403": {
-            "description": "Sem permissão para acessar o endpoint"
-          },
-          "404": {
-            "description": "Id de produto ou venda não existem"
           }
         }
       }
@@ -1133,7 +1131,19 @@
             "description": "Bad Request"
           },
           "403": {
-            "description": "Forbidden"
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -1276,6 +1286,69 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{sale_id}/product/{product_id}/price/{price}": {
+      "patch": {
+        "tags": [
+          "Produtos_Vendas"
+        ],
+        "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Id da venda",
+            "example": 1
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Id do produto",
+            "example": 2
+          },
+          {
+            "name": "price",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Preço atualizado do produto",
+            "example": 999.99
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sucesso na atualização do endpoint"
+          },
+          "400": {
+            "description": "Id do produto enviado não é compatível ao cadastrado na venda, ou preço do produto é igual à zero"
+          },
+          "401": {
+            "description": "Sem permissão para acessar o endpoint"
+          },
+          "403": {
+            "description": "Sem permissão para acessar o endpoint",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Id de produto ou venda não existem"
           }
         }
       }

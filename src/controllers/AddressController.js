@@ -6,28 +6,33 @@ const { validateErrors } = require('../utils/functions')
 const { Op } = require("sequelize");
 
 module.exports = {
+
   async index(req, res) {
     // #swagger.tags = ['Endereços']
     // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
 
-    /* #swagger.parameters['city_id'] = {
+    /*
+    #swagger.tags = ['Endereços']
+    #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
+
+    #swagger.parameters['city_id'] = {
              in: 'query',
              description: 'Filtro que identifica o id da cidade desejada',
              type: 'number',
              collectionFormat: 'multi',
-        }*/
-    /* #swagger.parameters['street'] = {
+    }
+    #swagger.parameters['street'] = {
              in: 'query',
              description: 'Filtro que identifica o nome da rua que será retornada',
              type: 'string',
              collectionFormat: 'multi',
-           }*/
-    /* #swagger.parameters['cep'] = {
+    }
+    #swagger.parameters['cep'] = {
              in: 'query',
              description: 'Filtro que identifica o cep que será retornada',
              type: 'string',
              collectionFormat: 'multi',
-           }*/
+    }*/
 
     try {
       const { city_id, street, cep } = req.query;
@@ -50,17 +55,29 @@ module.exports = {
         };
       }
 
-      const addresses = await Address.findAll({
+      const address = await Address.findAll({
         where: query,
-        attributes: ['id', 'city_id', 'street', 'cep'],
+        attributes: ['id', 'street', 'cep'],
+        include: [
+          {
+            association: 'cities',
+            attributes: ['id','name'],
+            include: [
+              {
+                association: 'state',
+                attributes: ['id','name', 'initials'],
+              },
+            ],
+          },
+        ],
       });
 
-      if (addresses.length === 0) {
+      if (address.length === 0) {
         // #swagger.responses[204] = { description: 'No Content' }
-        return res.status(204).json({ message: 'No Content' });
+        return res.status(204).send();
       } else {
         // #swagger.responses[200] = { description: 'Success!' }
-        return res.status(200).json({ addresses });
+        return res.status(200).json({ address });
       }
     } catch (error) {
       const message = validateErrors(error);
