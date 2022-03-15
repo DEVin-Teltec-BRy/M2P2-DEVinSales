@@ -8,13 +8,11 @@ module.exports = {
       "roles",
       [
         {
-          id: ROLE.HELPER_ID,
           description: ROLE.HELPER,
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          id: ROLE.OWNER_ID,
           description: ROLE.OWNER,
           created_at: new Date(),
           updated_at: new Date(),
