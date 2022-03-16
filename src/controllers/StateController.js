@@ -169,7 +169,6 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
-
   async postStateIdCity(req, res) {
     // #swagger.tags = ['Estado']
     // #swagger.description = 'O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.'
@@ -188,16 +187,16 @@ module.exports = {
      #swagger.responses[201] = { 
                schema: { $ref: "#/definitions/ResState" },
         } 
-    
+      
      #swagger.responses[403] = {
         description: 'O usuário não tem permissão(Forbidden)'
-} 
+      } 
      #swagger.responses[404] = {
         description: 'O Estado não existe no Banco de Dados(No found)'
-} 
+      } 
      #swagger.responses[400] = {
         description: 'Já existe uma cidade com este nome para o Estado(Bad Request)'
-} 
+      } 
      */
 
     try {
@@ -242,8 +241,8 @@ module.exports = {
     } catch (error) {
       const message = validateErrors(error);
       return res.status(403).send(message);
-
     }
-  
-    }
+  }
 };
+
+
