@@ -9,7 +9,7 @@ module.exports = {
         #swagger.parameters['obj'] = { 
             in: 'body', 
             "required":"true",
-            'description':'Para crair uma nova permissão envie os dados como no exemplo.',
+            'description':'Para criar uma nova permissão envie os dados como no exemplo.',
             '@schema': {
                 "properties": { 
                     "description": { 
@@ -22,7 +22,13 @@ module.exports = {
         try {
             const { description } = req.body
             await Permission.create({description})
-
+            /*
+                #swagger.responses[200] = {
+                schema: {
+                message: 'Permissão criado com sucesso.'
+                }
+            }
+            */
             return res.status(200).send({message: 'Permissão criado com sucesso.'})
         } catch (error) {
             const message = validateErrors(error)

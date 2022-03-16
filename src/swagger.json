@@ -407,7 +407,7 @@
             "name": "obj",
             "in": "body",
             "required": true,
-            "description": "Para crair uma nova permissão envie os dados como no exemplo.",
+            "description": "Para criar uma nova permissão envie os dados como no exemplo.",
             "schema": {
               "properties": {
                 "description": {
@@ -420,7 +420,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissão criado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
