@@ -21,6 +21,31 @@ const doc = {
     },
   ],
   definitions: {
+    AddUser: {
+      name: 'John Doe',
+      password: 'aB12345',
+      email: 'john.doe@email.com',
+      birth_date: '01/01/1990',
+      roles: [{role_id: 2}]
+    },
+    UserLogin: {
+      email: "john.doe@email.com",
+      password: "aB12345"
+    },
+    UserInfo: {
+      user: [{
+        id: 42,
+        name: "John Doe",
+        email: "john.doe@email.com",
+        birth_date: "01/01/1990"
+      }]
+    },
+    CreateUserResponses: {
+      possibleResponse_1: {message: "É necessário que a data informada exista e  seja do tipo dd/mm/yyyy"},
+      possibleResponse_2: {message: "É necessário que o usuário seja maior de idade"},
+      possibleResponse_3: {message: "O novo usuário necessita ter um cargo de WRITE e READ"},
+      possibleResponse_4: {message: "E-mail deve ser único"},
+    },
     Permissions: [
       {
         permission_id: 1,
@@ -71,4 +96,4 @@ const doc = {
 const outputFile = "./src/swagger.json";
 const endpointsFiles = ["./src/routes/index.js"];
 
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen(outputFile, endpointsFiles, doc)
