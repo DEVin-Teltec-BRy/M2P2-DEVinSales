@@ -5,7 +5,7 @@ const { validateErrors } = require("../utils/functions");
 module.exports = {
   async index(req, res) {
     /*
-        #swagger.tags = ['Cargo']
+        #swagger.tags = ['Cargos e Permissões']
         #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
     */
     try {
@@ -36,7 +36,7 @@ module.exports = {
   },
   async create(req, res) {
       /*
-        #swagger.tags = ['Cargo']
+        #swagger.tags = ['Cargos e Permissões']
         #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
         #swagger.parameters['obj'] = { 
             in: 'body', 
@@ -83,7 +83,7 @@ module.exports = {
   },
   async addPermission(req, res) {
     /*
-        #swagger.tags = ['Cargo']
+        #swagger.tags = ['Cargos e Permissões']
         #swagger.description = 'Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
         #swagger.parameters['obj'] = { 
             in: 'body', 

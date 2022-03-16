@@ -275,7 +275,7 @@
     "/api/v1/roles": {
       "post": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
@@ -314,7 +314,7 @@
       },
       "get": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [],
@@ -346,7 +346,7 @@
     "/api/v1/roles/{role_id}": {
       "post": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
@@ -398,16 +398,21 @@
     },
     "/api/v1/permissions": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cargos e Permissões"
+        ],
+        "description": "Endpoint para criar uma nova Permissão.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
+            "description": "Para crair uma nova permissão envie os dados como no exemplo.",
             "schema": {
-              "type": "object",
               "properties": {
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "READ"
                 }
               }
             }

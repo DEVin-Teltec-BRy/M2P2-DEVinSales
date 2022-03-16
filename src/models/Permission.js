@@ -10,6 +10,12 @@ class Permission extends Model {
           unique: {
             msg: "A descrição deve ser única",
           },
+          validate: {
+            len: {
+              msg: "A descrição da permissão deve ter entre 4 e 10 caracteres.",
+              args: [4,10]
+            }
+          }
         },
       },
       {
