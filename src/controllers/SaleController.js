@@ -1,43 +1,100 @@
+const { literal } = require('sequelize');
+const { decode } = require("jsonwebtoken");
+const { validateErrors, daysToDelivery } = require('../utils/functions');
+
+const salesRoutes = require('../routes/v1/sales.routes');
+
 const Sale = require('../models/Sale')
 const User = require("../models/User");
 const ProductsSales = require("../models/ProductsSales");
 const Product = require("../models/Product");
-const { decode } = require("jsonwebtoken");
-const salesRoutes = require('../routes/v1/sales.routes');
-const { validateErrors } = require('../utils/functions');
-const { literal } = require('sequelize');
+const Address = require('../models/Address');
+const Delivery = require('../models/Deliveries');
+const State = require('../models/State');
 
 
 
 module.exports = {
-
-  async create(req, res) {
-
+  async createBuy(req, res) {
     const { user_id } = req.params
-    const { buyer_id, dt_sale, } = req.body
-    const receivedDate = new Date(dt_sale)
-    const dateNow = new Date()
+    const { seller_id, dt_sale } = req.body
+
     try {
+      if (!Number(seller_id)) throw new Error('Seller_id deve ser um número')
+      if (!user_id) throw new Error('Precisa enviar o user_id')
+      if (dt_sale.length < 10) throw new Error('Formato de data inválido')
+      if (new Date(dt_sale) == 'Invalid Date') throw new Error('Formato de data inválido')
+
       const result = await Sale.create({
-        seller_id: user_id,
-        buyer_id: buyer_id,
-        dt_sale: (receivedDate.length > 0) ? receivedDate : dateNow.getTime()
+        seller_id: (seller_id) ? seller_id : null,
+        buyer_id: user_id,
+        dt_sale: dt_sale
       })
-      res.status(201).send({ 'created': "id-" + result.id })
+      return res.status(201).send({ 'created': "id-" + result.id })
+
     } catch (error) {
-      if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_seller_id_fkey"`) return res.status(404).send("user_id inexistente")
-      if (error.message == `insert or update on table "sales" violates foreign key constraint "Sales_buyer_id_fkey"`) return res.status(404).send("buyer_id inexistente")
-      res.status(404).send(error.message)
+      if (error.message.includes('sales_seller_id_fkey')) return res.status(404).send({ message: "seller_id inexistente" })
+      if (error.message.includes('sales_buyer_id_fkey')) return res.status(404).send({ message: "buyer_id inexistente" })
+      if (error.message.includes('invalid input syntax')) return res.status(400).send({ message: "User_id em formato inválido" })
+
+      res.status(400).send({ message: error.message })
     }
 
   },
+  async createSale(req, res) {
+    const { user_id } = req.params
+    const { buyer_id, dt_sale } = req.body
+
+    try {
+      if (dt_sale.length < 10) throw new Error('Formato de data inválido')
+      if (!buyer_id) throw new Error("Precisa existir um comprador")
+      if (new Date(dt_sale) == 'Invalid Date') throw new Error('Formato de data inválido')
+
+      const result = await Sale.create({
+        seller_id: user_id,
+        buyer_id: buyer_id,
+        dt_sale: dt_sale
+      })
+      return res.status(201).send({ 'created': "id-" + result.id })
+
+    } catch (error) {
+
+      if (error.message.includes('sales_seller_id_fkey')) return res.status(404).send({ message: "seller_id inexistente" })
+      if (error.message.includes('sales_buyer_id_fkey')) return res.status(404).send({ message: "buyer_id inexistente" })
+      if (error.message.includes('invalid input syntax')) return res.status(400).send({ message: "User_id em formato inválido" })
+
+      res.status(400).send({ message: error.message })
+    }
+  },
+
 
   async showSaler(req, res) {
 
-    const FindUser = await Sale.findAll()
-    console.log(FindUser)
-    return res.status(201).json(FindUser)
+    const { id } = req.params;
+    try {
+      const findUser = await User.findByPk(id);
 
+      const findSaler = await User.findAll({
+        attributes: ['name', 'email'],
+        include:
+        {
+          association: 'sales_user',
+          attributes: ['seller_id', 'dt_sale'],
+          where: { seller_id: id },
+        }
+      });
+
+      if (!findUser) {
+        return res.status(400).send({ message: "Este usuario não existe!" });
+      }
+      if (findSaler.length === 0) {
+        return res.status(400).send({ message: "Este usuario não possui vendas!" });
+      }
+      return res.status(200).json(findSaler)
+    } catch (error) {
+
+      return res.status(400).send({ message: "Erro deconhecido!" })
+    }
   },
 
   async showSaleById(req, res) {
@@ -116,37 +173,97 @@ module.exports = {
       return res.status(500).json(error.message)
     }
   },
-  async showSaler(req, res) {
 
-    const { id } = req.params;
+  async showSalesByBuyer(req, res) {
 
+
+    const { user_id } = req.params;
 
     try {
-      const findUser = await User.findByPk(id);
+      const salesData = await User.findAll({
+        attributes: ['id', 'name', 'email'],
+        include: [
+          {
+            association: "buyer_sales",
+            attributes: ['seller_id', 'buyer_id', 'dt_sale'],
+            where: {
+              buyer_id: user_id,
+            }
+          }
+        ]
+      });
 
-      const findSaler = await User.findAll({
-        attributes: ['name', 'email'],
-        include:
-        {
-          association: 'sales_user',
-          attributes: ['seller_id', 'dt_sale'],
-          where: { seller_id: id },
+      if (salesData.length == 0) {
+        return res.status(204).json({ message: "no content" });
+      }
+
+      return res.status(200).json(salesData);
+
+    } catch (error) {
+
+      return res.status(201).json({ message: "erro ao listar dados de vendas" });
+    }
+  },
+
+  async deliveries(req, res) {
+
+    try {
+      const { sale_id } = req.params;
+      const { address_id, delivery_forecast } = req.body;
+
+      if (address_id.length == 0) {
+        return res.status(400).json({ message: "Bad Request" });
+      }
+
+      const sale = await Sale.findAll({
+        where: {
+          id: sale_id,
         }
       });
 
-      if (!findUser) {
-        return res.status(400).send({ message: "Este usuario não existe!" });
+      if (sale.length == 0) {
+        return res.status(404).json({ message: "id_sale not found" });
       }
 
-      if (findSaler.length === 0) {
-        return res.status(400).send({ message: "Este usuario não possui vendas!" });
+      const address = await Address.findAll({
+        where: {
+          id: address_id,
+        }
+      });
+
+      if (address.length == 0) {
+        return res.status(404).json({ message: "address_id not found" });
       }
 
+      const dateNow = new Date();
+      const dataParsed = Date.parse(dateNow);
+      const dataForecastParsed = Date.parse(delivery_forecast);
 
-      return res.status(200).json(findSaler)
+      if (dataForecastParsed < dataParsed) {
+        return res.status(400).json({ message: "Bad request" });
+      }
+
+      const deliverydate = daysToDelivery(7);
+
+      const deliveryBooked = await Delivery.findAll({
+        where: {
+          sale_id: sale_id,
+        }
+      });
+
+      if (deliveryBooked.length >= 1) {
+        return res.status(400).json({ message: "Já existe um agendamento de entrega para esta venda" });
+      }
+
+      const deliveryDateResult = await Delivery.create({
+        address_id: address_id,
+        sale_id: sale_id,
+        delivery_forecast: deliverydate
+      })
+
+      return res.status(200).json({ message: "Entrega agendada com sucesso" });
     } catch (error) {
-
-      return res.status(400).send({ message: "Erro deconhecido!" })
+      return res.status(400).json({ message: "Bad request" });
     }
 
   },
@@ -160,35 +277,31 @@ module.exports = {
       const dt_sale = new Date();
       const buyer = await decode(req.headers.authorization);
       const buyer_id = buyer.userId;
-      if (!amount || amount.replace(/\s/g, "") == "") {
+      console.log(req.body);
+      if (!amount) {
         amount = 1;
       }
-      if (
-        !product_id ||
-        product_id.replace(/\s/g, "") == "" ||
-        product_id === "any"
-      ) {
-        return res.status(400).send({ message: "Invalid Product_id" });
+
+      if (!product_id) {
+        return res.status(400).send({ message: "Tem que enviar product_id" });
       }
+
       if (unit_price <= 0 || amount <= 0) {
         return res
           .status(400)
-          .send({ message: "unit_price or amount aren't valid" });
+          .send({ message: "unit_price e amount tem que ser maior que 0" });
       }
       const validProductId = await Product.findByPk(product_id);
       if (!validProductId) {
-        return res.status(404).send({ message: "product_id does not exist" });
+        return res.status(404).send({ message: "product_id não existe" });
       }
 
       const validSellerId = await User.findByPk(seller_id);
       if (!validSellerId) {
-        return res.status(404).send({ message: "seller_id does not exist" });
+        return res.status(404).send({ message: "seller_id não existe" });
       }
-      if (
-        !unit_price ||
-        unit_price.replace(/\s/g, "") == "" ||
-        unit_price === "any"
-      ) {
+
+      if (!unit_price) {
         unit_price = validProductId.suggested_price;
       }
       const sale = await Sale.create({
@@ -198,7 +311,7 @@ module.exports = {
       });
       let sale_id = await sale.id;
       await sale.addProduct(product_id, { through: { unit_price, amount } });
-      productSale = await ProductsSales.findOne({
+      const productSale = await ProductsSales.findOne({
         attributes: ["id"],
         where: {
           sale_id: sale_id,
@@ -207,7 +320,7 @@ module.exports = {
           amount: amount,
         },
       });
-      return res.status(201).send({ 'created': "id-" + productSale.id });
+      return res.status(201).json({ 'created': "id-" + productSale.id});
     } catch (error) {
       return res.status(400).send(error.message);
     }
