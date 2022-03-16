@@ -38,7 +38,13 @@ module.exports = {
             .concat(
               names.flat().map(async (name) => {
                 return await State.findAll({
-                  where: { name: { [Op.iLike]: `%${name}%` } },
+                  where: where(
+                    fn("translate", fn("lower", col("State.name")), ACCENT, UNNACENT),
+                    {
+                      [Op.iLike]: `%${name
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")}%`,
+                    })
                 });
               })
             )
@@ -169,4 +175,80 @@ module.exports = {
       return res.status(400).send(message);
     }
   },
+  async postStateIdCity(req, res) {
+    // #swagger.tags = ['Estado']
+    // #swagger.description = 'O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.'
+    /*#swagger.parameters['state_id'] = {
+      in: 'path',
+      description: 'Id do Estado' ,
+      type: 'number'
+    }
+    #swagger.parameters['obj'] = {
+      in: 'body',
+      required: true,
+      schema: {
+        $ref: '#/definitions/AddCity'
+      }
+    }
+     #swagger.responses[201] = { 
+               schema: { $ref: "#/definitions/ResState" },
+        } 
+      
+     #swagger.responses[403] = {
+        description: 'O usuário não tem permissão(Forbidden)'
+      } 
+     #swagger.responses[404] = {
+        description: 'O Estado não existe no Banco de Dados(No found)'
+      } 
+     #swagger.responses[400] = {
+        description: 'Já existe uma cidade com este nome para o Estado(Bad Request)'
+      } 
+     */
+
+    try {
+      const { state_id } = req.params;
+      const { name } = req.body;
+
+      const state = await State.findByPk(state_id);
+
+      if (!state) {
+        return res
+          .status(404)
+          .send({ message: "O Estado não existe no Banco de Dados" });
+      }
+
+      const city = await City.findOne({
+        where: {
+          name: where(
+            fn("translate", fn("lower", col("City.name")), ACCENT, UNNACENT),
+            {
+              [Op.iLike]: `%${name
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")}%`,
+            }
+          ),
+          state_id: state.id,
+        },
+      });
+
+      if (city) {
+        return res
+          .status(400)
+          .send({
+            message: `Já existe uma cidade com nome de ${name} no Estado de ${state.name}`,
+          });
+      }
+
+      const newCity = await City.create({
+        name,
+        state_id,
+      });
+      return res.status(201).send({ city: newCity.id });
+    } catch (error) {
+      const message = validateErrors(error);
+      return res.status(403).send(message);
+    }
+  }
 };
+
+

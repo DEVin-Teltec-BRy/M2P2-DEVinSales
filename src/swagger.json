@@ -275,7 +275,7 @@
     "/api/v1/roles": {
       "post": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
@@ -314,7 +314,7 @@
       },
       "get": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [],
@@ -346,7 +346,7 @@
     "/api/v1/roles/{role_id}": {
       "post": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
@@ -398,16 +398,21 @@
     },
     "/api/v1/permissions": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cargos e Permissões"
+        ],
+        "description": "Endpoint para criar uma nova Permissão.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
+            "description": "Para criar uma nova permissão envie os dados como no exemplo.",
             "schema": {
-              "type": "object",
               "properties": {
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "READ"
                 }
               }
             }
@@ -415,7 +420,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissão criado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -991,257 +1008,6 @@
         }
       }
     },
-    "/api/v1/sales/{sale_id}/product/{product_id}/amount/{amount}": {
-      "patch": {
-        "tags": [
-          "Produtos_Vendas"
-        ],
-        "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
-        "parameters": [
-          {
-            "name": "sale_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "product_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "amount",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Sucesso na atualização do endpoint"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/v1/sales/{sale_id}/product/{product_id}/price/{price}": {
-      "patch": {
-        "tags": [
-          "Produtos_Vendas"
-        ],
-        "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
-        "parameters": [
-          {
-            "name": "sale_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "product_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "price",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Sucesso na atualização do endpoint"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/v1/state": {
-      "get": {
-        "tags": [
-          "Estado"
-        ],
-        "description": "Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Filtro que identifica o nome integral ou parcial dos estados que serão retornados",
-            "type": "array",
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "initials",
-            "in": "query",
-            "description": "Filtro que identifica as iniciais integral ou parcial dos estados que serão retornados",
-            "type": "array",
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/state/{state_id}": {
-      "get": {
-        "tags": [
-          "Estado"
-        ],
-        "description": "Endpoint que retorna um estado de acordo com o state_id fornecido",
-        "parameters": [
-          {
-            "name": "state_id",
-            "in": "path",
-            "required": true,
-            "type": "number",
-            "description": "ID do estado que será buscado"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/v1/state/{state_id}/city/": {
-      "get": {
-        "tags": [
-          "Estado"
-        ],
-        "description": "Endpoint para buscar cidade(s) por estado",
-        "parameters": [
-          {
-            "name": "state_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/v1/address": {
       "get": {
         "tags": [
@@ -1476,6 +1242,329 @@
           }
         }
       }
+    },
+    "/api/v1/state": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint que retorna os estados com base no nome fornecido via query, ou então todos os estados caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Filtro que identifica o nome integral ou parcial dos estados que serão retornados",
+            "type": "array",
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "initials",
+            "in": "query",
+            "description": "Filtro que identifica as iniciais integral ou parcial dos estados que serão retornados",
+            "type": "array",
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint que retorna um estado de acordo com o state_id fornecido",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "ID do estado que será buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city/": {
+      "get": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "Endpoint para buscar cidade(s) por estado",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city": {
+      "post": {
+        "tags": [
+          "Estado"
+        ],
+        "description": "O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.",
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do Estado"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddCity"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ResState"
+            }
+          },
+          "400": {
+            "description": "Já existe uma cidade com este nome para o Estado(Bad Request)"
+          },
+          "403": {
+            "description": "O usuário não tem permissão(Forbidden)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "O Estado não existe no Banco de Dados(No found)"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{sale_id}/product/{product_id}/amount/{amount}": {
+      "patch": {
+        "tags": [
+          "Produtos_Vendas"
+        ],
+        "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Id da venda",
+            "example": 1
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Id do produto",
+            "example": 2
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Quantidade atualizada do produto",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sucesso na atualização do endpoint"
+          },
+          "400": {
+            "description": "Id do produto enviado não é compatível ao cadastrado na venda, ou quantidade atualizada é igual à zero"
+          },
+          "401": {
+            "description": "Sem permissão para acessar o endpoint"
+          },
+          "403": {
+            "description": "Sem permissão para acessar o endpoint",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Id de produto ou venda não existem"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{sale_id}/product/{product_id}/price/{price}": {
+      "patch": {
+        "tags": [
+          "Produtos_Vendas"
+        ],
+        "description": "Endpoint que atualiza a quantidade de produtos de uma venda.",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Id da venda",
+            "example": 1
+          },
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Id do produto",
+            "example": 2
+          },
+          {
+            "name": "price",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Preço atualizado do produto",
+            "example": 999.99
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Sucesso na atualização do endpoint"
+          },
+          "400": {
+            "description": "Id do produto enviado não é compatível ao cadastrado na venda, ou preço do produto é igual à zero"
+          },
+          "401": {
+            "description": "Sem permissão para acessar o endpoint"
+          },
+          "403": {
+            "description": "Sem permissão para acessar o endpoint",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Id de produto ou venda não existem"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1704,6 +1793,24 @@
         "suggested_price": {
           "type": "number",
           "example": 3999.99
+        }
+      }
+    },
+    "AddCity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Curitiba"
+        }
+      }
+    },
+    "ResState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
         }
       }
     }
