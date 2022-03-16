@@ -11,6 +11,7 @@ module.exports = {
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
+    port: connectionOptions.port,
     dialectoptions: {
       useUTC: false
     },
@@ -27,6 +28,7 @@ module.exports = {
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
+    port: connectionOptions.port,
     dialectoptions: {
       useUTC: false
     },
@@ -43,6 +45,7 @@ module.exports = {
     username: connectionOptions.user,
     password: connectionOptions.password,
     database: connectionOptions.database,
+    port: connectionOptions.port,
     dialectoptions: {
       useUTC: false
     },
