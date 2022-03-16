@@ -33,8 +33,6 @@ module.exports = {
         birth_date,
         roles
       );
-
-      await user.setRoles(responseRoles);
       /*
         #swagger.responses[201] = {
           schema: {
