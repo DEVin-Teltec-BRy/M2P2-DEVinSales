@@ -38,7 +38,13 @@ module.exports = {
             .concat(
               names.flat().map(async (name) => {
                 return await State.findAll({
-                  where: { name: { [Op.iLike]: `%${name}%` } },
+                  where: where(
+                    fn("translate", fn("lower", col("State.name")), ACCENT, UNNACENT),
+                    {
+                      [Op.iLike]: `%${name
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")}%`,
+                    })
                 });
               })
             )
