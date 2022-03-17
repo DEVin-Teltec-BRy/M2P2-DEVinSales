@@ -1008,6 +1008,220 @@
         }
       }
     },
+    "/api/v1/address": {
+      "get": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
+        "parameters": [
+          {
+            "name": "city_id",
+            "in": "query",
+            "description": "Filtro que identifica o id da cidade desejada",
+            "type": "number",
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "description": "Filtro que identifica o nome da rua que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "cep",
+            "in": "query",
+            "description": "Filtro que identifica o cep que será retornada",
+            "type": "string",
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço encontrado com sucesso!",
+            "schema": {
+              "$ref": "#/definitions/GetAddress"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Você não tem autorização para este recurso!"
+          }
+        }
+      }
+    },
+    "/api/v1/address/{address_id}": {
+      "delete": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint que faz a alteração de um endereço com base nos dados passados pelo body",
+        "parameters": [
+          {
+            "name": "address_id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "ID do endereço a ser alterado"
+          },
+          {
+            "name": "address",
+            "in": "body",
+            "description": "Dados para alteração do endereço",
+            "schema": {
+              "$ref": "#/definitions/PatchAddress"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Endereço alterado com sucesso!"
+          },
+          "400": {
+            "description": "É necessário passar pelo menos um dado para alteração!"
+          },
+          "403": {
+            "description": "Você não tem autorização para este recurso!"
+          },
+          "404": {
+            "description": "Endereço não localizado!"
+          }
+        }
+      }
+    },
+    "/api/v1/state/{state_id}/city/{city_id}/address": {
+      "post": {
+        "tags": [
+          "Endereços"
+        ],
+        "description": "Endpoint para adicionar um novo endereço ao banco de dados",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "state_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Filtro que identifica o id do estado no qual o endereço está localizado"
+          },
+          {
+            "name": "city_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Filtro que identifica o id da cidade na qual o endereço está localizado"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "required": [
+                "street",
+                "number",
+                "cep"
+              ],
+              "properties": {
+                "street": {
+                  "required": true,
+                  "type": "string",
+                  "example": "Rua Florianopolis"
+                },
+                "number": {
+                  "required": true,
+                  "type": "number",
+                  "example": 123
+                },
+                "cep": {
+                  "required": true,
+                  "type": "string",
+                  "example": "89229780"
+                },
+                "complement": {
+                  "required": false,
+                  "type": "string",
+                  "example": "Apto. 302"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/v1/state": {
       "get": {
         "tags": [
@@ -1151,222 +1365,41 @@
         }
       }
     },
-    "/api/v1/address": {
-      "get": {
-        "tags": [
-          "Endereços"
-        ],
-        "description": "Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada",
-        "parameters": [
-          {
-            "name": "city_id",
-            "in": "query",
-            "description": "Filtro que identifica o id da cidade desejada",
-            "type": "number",
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "street",
-            "in": "query",
-            "description": "Filtro que identifica o nome da rua que será retornada",
-            "type": "string",
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "cep",
-            "in": "query",
-            "description": "Filtro que identifica o cep que será retornada",
-            "type": "string",
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!"
-          },
-          "204": {
-            "description": "No Content"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/address/{address_id}": {
-      "delete": {
-        "tags": [
-          "Endereços"
-        ],
-        "description": "Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.",
-        "parameters": [
-          {
-            "name": "address_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "Endereços"
-        ],
-        "description": "Endpoint que faz a alteração de um endereço com base nos dados passados pelo body",
-        "parameters": [
-          {
-            "name": "address_id",
-            "in": "path",
-            "required": true,
-            "type": "number",
-            "description": "ID do endereço a ser alterado"
-          },
-          {
-            "name": "address",
-            "in": "body",
-            "description": "Dados para alteração do endereço",
-            "schema": {
-              "$ref": "#/definitions/address"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Endereço alterado com sucesso!"
-          },
-          "400": {
-            "description": "É necessário passar pelo menos um dado para alteração!"
-          },
-          "403": {
-            "description": "Você não tem autorização para este recurso!",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Você não tem autorização para este recurso."
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Endereço não localizado!"
-          }
-        }
-      }
-    },
-    "/api/v1/state/{state_id}/city/{city_id}/address": {
+    "/api/v1/state/{state_id}/city": {
       "post": {
         "tags": [
-          "Endereços"
+          "Estado"
         ],
-        "description": "Endpoint para adicionar um novo endereço ao banco de dados",
-        "consumes": [
-          "application/json"
-        ],
+        "description": "O Endpoint verifica se o Estado já existe e se existe alguma outra cidade criada no Estado com o mesmo nome. Caso não exista, cria-se uma nova Cidade. Nesse endpoint o usuário deve ter permissão WRITE.",
         "parameters": [
           {
             "name": "state_id",
             "in": "path",
             "required": true,
-            "type": "integer",
-            "description": "Filtro que identifica o id do estado no qual o endereço está localizado"
-          },
-          {
-            "name": "city_id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "description": "Filtro que identifica o id da cidade na qual o endereço está localizado"
+            "type": "number",
+            "description": "Id do Estado"
           },
           {
             "name": "obj",
             "in": "body",
             "required": true,
             "schema": {
-              "required": [
-                "street",
-                "number",
-                "cep"
-              ],
-              "properties": {
-                "street": {
-                  "required": true,
-                  "type": "string",
-                  "example": "Rua Florianopolis"
-                },
-                "number": {
-                  "required": true,
-                  "type": "number",
-                  "example": 123
-                },
-                "cep": {
-                  "required": true,
-                  "type": "string",
-                  "example": "89229780"
-                },
-                "complement": {
-                  "required": false,
-                  "type": "string",
-                  "example": "Apto. 302"
-                }
-              }
+              "$ref": "#/definitions/AddCity"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "201": {
-            "description": "Created"
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/ResState"
+            }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Já existe uma cidade com este nome para o Estado(Bad Request)"
           },
           "403": {
-            "description": "Forbidden",
+            "description": "O usuário não tem permissão(Forbidden)",
             "schema": {
               "type": "object",
               "properties": {
@@ -1381,7 +1414,7 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": "O Estado não existe no Banco de Dados(No found)"
           }
         }
       }
@@ -1451,6 +1484,74 @@
     }
   },
   "definitions": {
+    "GetAddress": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 3
+        },
+        "street": {
+          "type": "string",
+          "example": "Rua das Palmeiras"
+        },
+        "cep": {
+          "type": "string",
+          "example": "87654321"
+        },
+        "city": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": 1
+            },
+            "name": {
+              "type": "string",
+              "example": "Afonso Cláudio"
+            },
+            "state": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 8
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Espírito Santo"
+                },
+                "initials": {
+                  "type": "string",
+                  "example": "ES"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PatchAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string",
+          "example": "Rua Paralelepípedo"
+        },
+        "number": {
+          "type": "number",
+          "example": 944
+        },
+        "complement": {
+          "type": "string",
+          "example": "apto 201"
+        },
+        "cep": {
+          "type": "string",
+          "example": "12345678"
+        }
+      }
+    },
     "AddUser": {
       "type": "object",
       "properties": {
@@ -1676,6 +1777,24 @@
         "suggested_price": {
           "type": "number",
           "example": 3999.99
+        }
+      }
+    },
+    "AddCity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Curitiba"
+        }
+      }
+    },
+    "ResState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
         }
       }
     }
