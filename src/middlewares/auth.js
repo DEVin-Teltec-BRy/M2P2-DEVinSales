@@ -19,7 +19,13 @@ function onlyCanAccessWith(permissionsCanAccess) {
   return async (req, res, next) => {
     const user = await auth(req, res);
     if (user.message) {
-
+      /*
+              #swagger.responses[403] = {
+                schema: {
+                  message: 'Você não tem autorização para este recurso.'
+                }
+              }
+            */
       return res.status(403).send({ message: user.message });
     }
     const roles = await Role.findAll({
@@ -48,7 +54,13 @@ function onlyCanAccessWith(permissionsCanAccess) {
       });
     });
     if (!existPermission) {
-
+      /*
+              #swagger.responses[403] = {
+                schema: {
+                  message: 'Você não tem autorização para este recurso.'
+                }
+              }
+            */
       return res
         .status(403)
         .send({ message: "Você não tem autorização para este recurso." });

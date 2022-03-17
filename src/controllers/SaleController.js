@@ -16,6 +16,19 @@ const State = require('../models/State');
 
 module.exports = {
   async createBuy(req, res) {
+    // #swagger.tags = ['Vendas']
+    // #swagger.description = 'Endpoint para criar uma venda.'
+    /* #swagger.parameters['obj'] = {
+            in:'body',
+            schema:{
+            'seller_id':1,
+            'dt_sale':'1980/05/19'
+            }
+        }
+        #swagger.parameters[user_id] = {
+            in:'path'
+        }
+    */
     const { user_id } = req.params
     const { seller_id, dt_sale } = req.body
 
@@ -42,6 +55,19 @@ module.exports = {
 
   },
   async createSale(req, res) {
+    // #swagger.tags = ['Vendas']
+    // #swagger.description = 'Endpoint para criar uma venda.'
+    /* #swagger.parameters['obj'] = {
+            in:'body',
+            schema:{
+            'buyer_id':1,
+            'dt_sale':'1980/05/19'
+            }
+        }
+        #swagger.parameters[user_id] = {
+            in:'path'
+        }
+    */
     const { user_id } = req.params
     const { buyer_id, dt_sale } = req.body
 
@@ -69,6 +95,8 @@ module.exports = {
 
 
   async showSaler(req, res) {
+    // #swagger.tags = [' Vendas ']
+    // #swagger.description = 'Endpoint que buscar as vendas do usuario.'
 
     const { id } = req.params;
     try {
@@ -176,7 +204,8 @@ module.exports = {
 
   async showSalesByBuyer(req, res) {
 
-
+    // #swagger.tags = ['Vendas']
+    // #swagger.description = 'Endpoint pra buscar as vendas do usuario pelo buyer_id.'
     const { user_id } = req.params;
 
     try {
@@ -206,7 +235,15 @@ module.exports = {
   },
 
   async deliveries(req, res) {
-
+    // #swagger.tags = ['Vendas']
+    // #swagger.description = 'Endpoint pra buscar as entregas.'
+    /*  #swagger.parameters['obj'] = {
+            in: 'body',
+            schema: {
+                address_id: 'integer',
+                delivery_forecast: '2022-03-12T11:13:24.848Z'
+            }
+    } */
     try {
       const { sale_id } = req.params;
       const { address_id, delivery_forecast } = req.body;
@@ -269,6 +306,27 @@ module.exports = {
   },
 
   async saleMade(req, res) {
+    // #swagger.auto = false
+    // #swagger.tags = ['Vendas']
+    // #swagger.description = '<h2>Endpoint para registrar vendas de produtos.</h2>'
+    /*  #swagger.parameters[seller_id] = {
+              in: 'path',
+              description: '<ul><li>Tem que ser um seller_id valido</li></ul>',
+            
+      } */
+    /*  #swagger.parameters['obj'] = {
+              in: 'body',
+              description: '<h4>product_id</h4><ul><li>Tem que ser um product_id valido</li></ul><h4>unit_price</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado a suggested_price da tabela de produtos.</li><li>O valor tem que ser maior que 0.</li></ul><h4>amount</h4><ul><li>Se nenhum valor valor for enviado vai ser considerado que é igual a 1.</li><li>O valor tem que ser maior que 0.</li></ul>',
+              schema: {
+                  $product_id: 2 ,
+                  unit_price: 1800.79 ,
+                  amount: 10
+              }
+    } */
+
+    // #swagger.responses[201] = { description: 'Venda submetida com sucesso.' }
+    // #swagger.responses[403] = { description: 'O usuário logado não tem autorização para este recurso.' }
+    // #swagger.responses[404] = { description: 'product_id ou seller_id não existe no banco de dados.' }
     try {
 
       const { seller_id } = req.params;
@@ -320,7 +378,7 @@ module.exports = {
           amount: amount,
         },
       });
-      return res.status(201).json({ 'created': "id-" + productSale.id});
+      return res.status(201).json({ 'created': "id-" + productSale.id });
     } catch (error) {
       return res.status(400).send(error.message);
     }
