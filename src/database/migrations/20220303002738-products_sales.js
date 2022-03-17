@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       unit_price: {
-        type: Sequelize.DECIMAL(15,2),
+        type: Sequelize.DECIMAL,
         allowNull: false,
       },
       amount: {
