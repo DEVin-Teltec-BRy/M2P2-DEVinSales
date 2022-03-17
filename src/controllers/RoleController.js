@@ -35,25 +35,25 @@ module.exports = {
     }
   },
   async create(req, res) {
-      /*
-        #swagger.tags = ['Cargos e Permissões']
-        #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
-        #swagger.parameters['obj'] = { 
-            in: 'body', 
-            "required":"true",
-            'description':'A lista de permissões pode ser omitido na criação de um novo cargo.',
-            '@schema': {
-                "properties": { 
-                    "description": { 
-                        "type": "string",
-                        "example": "financeiro" 
-                    },
-                    "permissions": {
-                        $ref: '#/definitions/Permissions'
-                    },
-                } 
-            } 
-        } */
+    /*
+      #swagger.tags = ['Cargos e Permissões']
+      #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
+      #swagger.parameters['obj'] = { 
+          in: 'body', 
+          "required":"true",
+          'description':'A lista de permissões pode ser omitido na criação de um novo cargo.',
+          '@schema': {
+              "properties": { 
+                  "description": { 
+                      "type": "string",
+                      "example": "financeiro" 
+                  },
+                  "permissions": {
+                      $ref: '#/definitions/Permissions'
+                  },
+              } 
+          } 
+      } */
     try {
       const { description, permissions } = req.body;
       if (!isNaN(parseInt(description))) {
@@ -124,6 +124,9 @@ module.exports = {
 
       await role.addPermissions(permissionsData);
 
+      /* #swagger.responses[200] = { 
+                  schema: {"message": "Permissões vinculadas com sucesso."}
+              } */
 
       return res
         .status(200)

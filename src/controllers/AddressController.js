@@ -9,6 +9,33 @@ module.exports = {
 
   async index(req, res) {
 
+    // #swagger.tags = ['Endereços']
+    // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
+
+    /*
+    #swagger.tags = ['Endereços']
+    #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
+
+    #swagger.parameters['city_id'] = {
+             in: 'query',
+             description: 'Filtro que identifica o id da cidade desejada',
+             type: 'number',
+             collectionFormat: 'multi',
+    }
+    #swagger.parameters['street'] = {
+             in: 'query',
+             description: 'Filtro que identifica o nome da rua que será retornada',
+             type: 'string',
+             collectionFormat: 'multi',
+    }
+    #swagger.parameters['cep'] = {
+             in: 'query',
+             description: 'Filtro que identifica o cep que será retornada',
+             type: 'string',
+             collectionFormat: 'multi',
+    }*/
+
+
     try {
       const { city_id, street, cep } = req.query;
 
@@ -48,18 +75,35 @@ module.exports = {
       });
 
       if (address.length === 0) {
+        // #swagger.responses[204] = { description: 'No Content' }
         return res.status(204).send();
       } else {
+        // #swagger.responses[200] = { description: 'Success!' }
         return res.status(200).json({ address });
       }
     } catch (error) {
       const message = validateErrors(error);
+      // #swagger.responses[403] = { description: 'Forbidden' }
       return res.status(403).send(message);
     }
   },
 
   async update(req, res) {
+    // #swagger.tags = ['Endereços']
+    // #swagger.description = 'Endpoint que faz a alteração de um endereço com base nos dados passados pelo body'
 
+    /* #swagger.parameters['address_id'] = {
+         in: 'path',
+         description: 'ID do endereço a ser alterado',
+         type: 'number',
+         required: true,
+    }*/
+    /* #swagger.parameters['address'] = {
+         in: 'body',
+         description: 'Dados para alteração do endereço',
+         type: 'object',
+         schema: { $ref: "#/definitions/address" }
+       }*/
 
 
     try {
@@ -69,10 +113,13 @@ module.exports = {
       const address = await Address.findByPk(address_id);
 
       if (!address) {
+        // #swagger.responses[404] = { description: 'Endereço não localizado!' }
         return res.status(404).json({ message: "Endereço não localizado!" });
       }
 
       if (!street && !number && !complement && !cep) {
+        // #swagger.responses[400] = { description: 'É necessário passar pelo menos um dado para alteração!' }
+
         return res.status(400).json({ message: "É necessário passar pelo menos um dado para alteração!" });
       }
 
@@ -90,16 +137,21 @@ module.exports = {
         }
       )
 
+      // #swagger.responses[200] = { description: 'Endereço alterado com sucesso!' }
+
       return res.status(200).json({ message: "Endereço alterado com sucesso!" });
 
     } catch (error) {
       const message = validateErrors(error);
+      // #swagger.responses[403] = { description: 'Você não tem autorização para este recurso!' }
       return res.status(403).send(message);
     }
 
   },
 
   async delete(req, res) {
+    // #swagger.tags = ['Endereços']
+    // #swagger.description = 'Endpoint para deletar endereço cadastrado. O id do endereço deve ser enviado por params.'
 
     try {
       const { address_id } = req.params;
@@ -107,6 +159,8 @@ module.exports = {
       const address = await Address.findByPk(address_id);
 
       if (!address) {
+        //#swagger.responses[404] = {description: 'Not Found'}
+
         return res.status(404).send({ message: 'Endreço não encontrado.' });
       }
 
@@ -117,6 +171,8 @@ module.exports = {
       });
 
       if (deliveryUsing.length > 0) {
+        //#swagger.response[400] = {description: 'Bad Request'}
+
         return res
           .status(400)
           .send({ message: 'Endereço em uso. Não pode ser deletado.' });
@@ -124,6 +180,7 @@ module.exports = {
 
       await address.destroy();
       console.log('DESTROYED');
+      //#swagger.response[204] = {description: 'No Content' }
       return res.status(204).send();
     } catch (error) {
       console.log(error);
@@ -133,6 +190,50 @@ module.exports = {
   },
 
   async insertNewAddress(req, res) {
+    /*
+     #swagger.tags = ['Endereços']
+     #swagger.description = 'Endpoint para adicionar um novo endereço ao banco de dados'
+     #swagger.consumes = ['application/json']
+     #swagger.parameters['state_id'] = {
+       in: 'path',
+       description: 'Filtro que identifica o id do estado no qual o endereço está localizado',
+       type: 'integer',
+     }
+     #swagger.parameters['city_id'] = {
+       in: 'path',
+       description: 'Filtro que identifica o id da cidade na qual o endereço está localizado',
+       type: 'integer',
+     }
+     #swagger.parameters['obj'] = { 
+       in: 'body', 
+       required: 'true',
+       '@schema': { 
+         "required": ["street", "number", "cep"], 
+         "properties": { 
+           "street": { 
+               "required": true,
+               "type": "string",
+               "example": "Rua Florianopolis", 
+           },
+           "number": {
+               "required": true,
+               "type": "number",
+               "example": 123,
+           },
+           "cep": {
+               "required": true,
+               "type": "string",
+               "example": "89229780", 
+           },
+           "complement": {
+               "required": false,
+               "type": "string",
+               "example": "Apto. 302", 
+           },
+         } 
+       } 
+     } 
+   */
 
     try {
       const { state_id, city_id } = req.params;
@@ -164,11 +265,9 @@ module.exports = {
       if (city.length === 0) {
         return res.status(404).send({ message: "Couldn't find any city with the given 'city_id'" })
       }
-
       if (city[0].state_id !== state[0].id) {
         return res.status(400).send({ message: "The 'city_id' returned a city that doesn't match with the given 'state_id'" })
       }
-
       const addressObjKeys = ['street', 'number', 'cep']
       if (addressObjKeys.every(key => key in addressData)) {
         if (typeof addressData.street !== 'string') {
@@ -186,11 +285,11 @@ module.exports = {
           return res.status(400).send({ message: "The 'cep' param is invalid" })
         }
         else if (addressData.cep.length === 8 && isNaN(addressData.cep)) {
-          return res.status(400).send({message: "The 'cep' param format is invalid"})
+          return res.status(400).send({ message: "The 'cep' param format is invalid" })
         }
         else if (addressData.cep.length === 9) {
-          if(addressData.cep[5] !== '-') {
-            return res.status(400).send({message: "The 'cep' param format is invalid"})
+          if (addressData.cep[5] !== '-') {
+            return res.status(400).send({ message: "The 'cep' param format is invalid" })
           } else {
             addressData.cep = addressData.cep.replace('-', '');
           }

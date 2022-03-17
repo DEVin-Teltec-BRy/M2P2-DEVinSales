@@ -11,6 +11,26 @@ const {
 
 module.exports = {
   async index(req, res) {
+    /* #swagger.tags = ['Produto']
+    #swagger.description = 'Endpoint para buscar produtos conforme critério query params. Caso a busca seja feita sem os parâmetros, o endpoint irá retornar todos os produtos cadastrados. Nesse endpoint o usuário deve ter permissão READ.'
+    #swagger.parameters['name'] = {
+      in: 'query',
+      description: 'query para buscar produtos pelo nome',
+      required: false,
+    },
+    #swagger.parameters['price_min'] = {
+    in: 'query',
+    description: 'query para buscar produtos pelo preço mínimo',
+    required: false,
+    type: 'number',
+  },
+   #swagger.parameters['price_max'] = {
+    in: 'query',
+    description: 'query para buscar produtos pelo preço máximo',
+    required: false,
+    type: 'number',
+
+  } */
 
     try {
       const { name, price_min, price_max } = req.query;
@@ -21,6 +41,11 @@ module.exports = {
 
       return res.status(200).send({ products });
 
+      /* #swagger.responses[200] = { 
+               schema: { $ref: "#/definitions/GetProduct" },
+               description: "Produtos:" 
+        } */
+
     } catch (error) {
       const message = validateErrors(error);
       return res.status(400).send(message);
@@ -28,11 +53,25 @@ module.exports = {
   },
   async store(req, res) {
 
+    /*#swagger.tags = ['Produto']
+   #swagger.description = 'Endpoint para criar um novo produto. Nesse endpoint o usuário deve ter permissão WRITE.'
+   #swagger.parameters['obj'] = {
+       in: 'body',
+       required: true,
+       schema: {
+         $ref: '#/definitions/AddProduct'
+       }
+     }*/
+
 
     try {
       const newProduct = req.body;
 
       const product = await storeProductService(newProduct);
+      /* #swagger.responses[200] = { 
+              schema: { $ref: "#/definitions/ResProduct" },
+              description: "Produto criado com sucesso!" 
+       } */
 
       return res.status(200).send({
         message: "Produto criado com sucesso!",
@@ -47,6 +86,21 @@ module.exports = {
     }
   },
   async putUpdate(req, res) {
+    /*#swagger.tags = ['Produto']
+    #swagger.description = 'Endpoint para atualizar todos as propriedades de um produto. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+    #swagger.parameters['product_id'] = {
+      in: 'path',
+      description: 'parâmetro id para buscar um produto para atualização',
+      required: true,
+      type: 'number',
+    }
+    #swagger.parameters['obj'] = {
+        in: 'body',
+        required: true,
+        schema: {
+          $ref: '#/definitions/PutProduct'
+        }
+      }*/
 
 
     try {
@@ -80,6 +134,21 @@ module.exports = {
     }
   },
   async update(req, res) {
+    /* #swagger.tags = ['Produto']
+   #swagger.description = 'Endpoint para alterar apenas uma propriedade de um produto, name ou suggested_price. Neste endpoint o usuário logado deve ter permissão de UPDATE.'
+   #swagger.parameters['id'] = {
+     in: 'path',
+     description: 'parâmetro id para buscar um produto para atualização',
+     required: true,
+     type: 'number',
+   } 
+   #swagger.parameters['obj'] = {
+     in: 'body',
+     required: true,
+     schema: {
+       $ref: '#/definitions/PatchProduct'
+     }
+   }*/
 
     try {
       const { id } = req.params;
@@ -104,6 +173,14 @@ module.exports = {
     }
   },
   async delete(req, res) {
+    /*#swagger.tags = ['Produto']
+   #swagger.description = 'Endpoint para deletar um produto, neste endpoint o usuário logado deve ter permissão de DELETE e não pode ser um produto vendido.'
+     #swagger.parameters['id'] = {
+     in: 'path',
+     description: 'parâmetro id para buscar um produto para deleção',
+     required: true,
+     type: 'number',
+   } */
 
 
     try {
