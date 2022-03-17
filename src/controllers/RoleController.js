@@ -4,7 +4,10 @@ const { validateErrors } = require("../utils/functions");
 
 module.exports = {
   async index(req, res) {
-
+    /*
+        #swagger.tags = ['Cargos e Permissões']
+        #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
+    */
     try {
       const roles = await Role.findAll({
         attributes: ["id", "description"],
@@ -32,7 +35,25 @@ module.exports = {
     }
   },
   async create(req, res) {
-
+      /*
+        #swagger.tags = ['Cargos e Permissões']
+        #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
+        #swagger.parameters['obj'] = { 
+            in: 'body', 
+            "required":"true",
+            'description':'A lista de permissões pode ser omitido na criação de um novo cargo.',
+            '@schema': {
+                "properties": { 
+                    "description": { 
+                        "type": "string",
+                        "example": "financeiro" 
+                    },
+                    "permissions": {
+                        $ref: '#/definitions/Permissions'
+                    },
+                } 
+            } 
+        } */
     try {
       const { description, permissions } = req.body;
       if (!isNaN(parseInt(description))) {
@@ -59,7 +80,20 @@ module.exports = {
     }
   },
   async addPermission(req, res) {
-
+    /*
+        #swagger.tags = ['Cargos e Permissões']
+        #swagger.description = 'Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
+        #swagger.parameters['obj'] = { 
+            in: 'body', 
+            "required":"true",
+            'description':'A lista de permissões é obrigatória e deve conter ids de permissões cadastradas previamente no sistema.<br>Caso seja enviado um uma permissão que o cargo já tenha, ela será desconsiderada, evitando duplicidade.',
+            schema: {
+                "permissions": {
+                    $ref: '#/definitions/Permissions'
+                },
+            }
+        } 
+     */
     try {
       const { role_id } = req.params;
       const { permissions } = req.body;

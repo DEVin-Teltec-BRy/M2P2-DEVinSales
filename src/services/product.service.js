@@ -43,8 +43,7 @@ module.exports = {
       throw new Error("O preço deve ser maior que zero.");
     }
 
-    const product = await Product.create(newProduct);
-    return product;
+    return await Product.create(newProduct);
   },
 
   async updateProductService(id, name, suggested_price) {

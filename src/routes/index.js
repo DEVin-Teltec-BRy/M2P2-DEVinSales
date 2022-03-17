@@ -22,10 +22,9 @@ routes.use("/api/v1", [
   permissionRoutes,
   salesRoutes,
   productsRoutes,
-  statesRoutes,
   addressesRoutes,
+  statesRoutes,
   productsalesRoutes
 ]);
-
 
 module.exports = routes;

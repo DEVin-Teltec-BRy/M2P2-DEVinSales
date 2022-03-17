@@ -275,7 +275,7 @@
     "/api/v1/roles": {
       "post": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
@@ -314,7 +314,7 @@
       },
       "get": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [],
@@ -346,7 +346,7 @@
     "/api/v1/roles/{role_id}": {
       "post": {
         "tags": [
-          "Cargo"
+          "Cargos e Permissões"
         ],
         "description": "Endpoint para adicionar permissões um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.",
         "parameters": [
@@ -398,16 +398,21 @@
     },
     "/api/v1/permissions": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cargos e Permissões"
+        ],
+        "description": "Endpoint para criar uma nova Permissão.",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "required": true,
+            "description": "Para criar uma nova permissão envie os dados como no exemplo.",
             "schema": {
-              "type": "object",
               "properties": {
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "READ"
                 }
               }
             }
@@ -415,7 +420,19 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Permissão criado com sucesso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -604,45 +621,6 @@
         }
       }
     },
-    "/api/v1/user/{user_id}/sales": {
-      "post": {
-        "tags": [
-          "Vendas"
-        ],
-        "description": "Endpoint criar uma venda.",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "buyer_id": {
-                  "example": "any"
-                },
-                "dt_sale": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
     "/api/v1/sales/{sale_id}/deliver": {
       "post": {
         "tags": [
@@ -677,6 +655,124 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{user_id}/buy": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint para criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "seller_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "dt_sale": {
+                  "type": "string",
+                  "example": "1980/05/19"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Você não tem autorização para este recurso."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/sales/{user_id}/sale": {
+      "post": {
+        "tags": [
+          "Vendas"
+        ],
+        "description": "Endpoint para criar uma venda.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buyer_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "dt_sale": {
+                  "type": "string",
+                  "example": "1980/05/19"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"

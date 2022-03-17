@@ -185,9 +185,14 @@ module.exports = {
         else if (addressData.cep.length < 8 || addressData.cep.length > 9) {
           return res.status(400).send({ message: "The 'cep' param is invalid" })
         }
+        else if (addressData.cep.length === 8 && isNaN(addressData.cep)) {
+          return res.status(400).send({message: "The 'cep' param format is invalid"})
+        }
         else if (addressData.cep.length === 9) {
-          if (addressData.cep[5] !== '-') {
-            return res.status(400).send({ message: "The 'cep' param format is invalid" })
+          if(addressData.cep[5] !== '-') {
+            return res.status(400).send({message: "The 'cep' param format is invalid"})
+          } else {
+            addressData.cep = addressData.cep.replace('-', '');
           }
         }
       }

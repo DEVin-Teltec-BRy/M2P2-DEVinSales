@@ -84,6 +84,12 @@ const doc = {
     PatchProduct: {
       suggested_price: 3999.99,
     },
+    AddCity: {
+      name: "Curitiba"
+    },
+    ResState: {
+      id: 1
+    }
   },
 };
 

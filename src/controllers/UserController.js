@@ -14,9 +14,13 @@ module.exports = {
         birth_date,
         roles
       );
-
-      await user.setRoles(responseRoles);
-
+      /*
+        #swagger.responses[201] = {
+          schema: {
+            response: 42
+          }
+        }
+      */
       return res.status(201).send({ response: user.id });
     } catch (error) {
       const message = validateErrors(error);
