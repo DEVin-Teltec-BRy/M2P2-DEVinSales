@@ -479,6 +479,41 @@
         }
       }
     },
+    "/api/v1/sales/{sale_id}/": {
+      "get": {
+        "tags": [
+          "Vendas"
+        ],
+        "summary": "Pega uma venda por seu ID",
+        "description": "Endpoint pra buscar uma venda específica retornando id do vendedor, id do comprador como também o produto junto com sua quantidade, preço do item e o total .",
+        "parameters": [
+          {
+            "name": "sale_id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "minimum": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não existe venda para este ID"
+          },
+          "500": {
+            "description": "Error"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "É necessário passar o ID de vendas"
+          }
+        }
+      }
+    },
     "/api/v1/user/{user_id}/buy": {
       "get": {
         "tags": [

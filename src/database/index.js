@@ -15,10 +15,7 @@ const City = require("../models/City");
 const Address = require("../models/Address");
 
 const connection = new Sequelize(dbConfig[nodeEnv]);
-/**
- * inicialização dos models
- * todos os models devem ser iniciados passando a connection
- */
+
 User.init(connection);
 Role.init(connection);
 Permission.init(connection);
@@ -31,10 +28,6 @@ City.init(connection);
 Address.init(connection);
 
 
-/**
- * Associação dos models
- * Somente os models com associações devem ser chamados abaixo
- */
 User.associate(connection.models);
 Role.associate(connection.models);
 Permission.associate(connection.models);

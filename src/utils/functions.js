@@ -15,14 +15,14 @@ function stringToDate(string) {
   return new Date(Number(year), Number(month) - 1, Number(day));
 }
 
-function daysToDelivery(addDays){
-    Date.prototype.addDays = function(days) {
-      const date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
-      return date;
-    }    
-    const date = new Date();    
-    return date.addDays(addDays);
+function daysToDelivery(addDays) {
+  Date.prototype.addDays = function (days) {
+    const date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+  const date = new Date();
+  return date.addDays(addDays);
 }
 
 function PostUserPasswordValidation(password) {

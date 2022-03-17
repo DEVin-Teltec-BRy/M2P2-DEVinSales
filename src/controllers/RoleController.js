@@ -35,29 +35,29 @@ module.exports = {
     }
   },
   async create(req, res) {
-      /*
-        #swagger.tags = ['Cargos e Permissões']
-        #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
-        #swagger.parameters['obj'] = { 
-            in: 'body', 
-            "required":"true",
-            'description':'A lista de permissões pode ser omitido na criação de um novo cargo.',
-            '@schema': {
-                "properties": { 
-                    "description": { 
-                        "type": "string",
-                        "example": "financeiro" 
-                    },
-                    "permissions": {
-                        $ref: '#/definitions/Permissions'
-                    },
-                } 
-            } 
-        } */
+    /*
+      #swagger.tags = ['Cargos e Permissões']
+      #swagger.description = 'Endpoint para criar um novo Cargo. Nesse endpoint o usuário deve ter cargo de OWNER.'
+      #swagger.parameters['obj'] = { 
+          in: 'body', 
+          "required":"true",
+          'description':'A lista de permissões pode ser omitido na criação de um novo cargo.',
+          '@schema': {
+              "properties": { 
+                  "description": { 
+                      "type": "string",
+                      "example": "financeiro" 
+                  },
+                  "permissions": {
+                      $ref: '#/definitions/Permissions'
+                  },
+              } 
+          } 
+      } */
     try {
       const { description, permissions } = req.body;
-      if (!isNaN(parseInt(description)) ) {
-          throw new Error("A descrição não pode ser somente numeros.")
+      if (!isNaN(parseInt(description))) {
+        throw new Error("A descrição não pode ser somente numeros.")
       }
       const role = await Role.create({ description });
 
@@ -72,7 +72,7 @@ module.exports = {
           await role.addPermissions(permissionsEntity);
         }
       }
-       /* #swagger.responses[200] = { 
+         /* #swagger.responses[200] = { 
             schema: { $ref: "#/definitions/ResRole" }
         } */
       return res.status(200).send({ message: "Cargo criado com sucesso." });
@@ -127,8 +127,9 @@ module.exports = {
       await role.addPermissions(permissionsData);
 
       /* #swagger.responses[200] = { 
-            schema: {"message": "Permissões vinculadas com sucesso."}
-        } */
+                  schema: {"message": "Permissões vinculadas com sucesso."}
+              } */
+
       return res
         .status(200)
         .send({ message: "Permissões vinculadas com sucesso." });

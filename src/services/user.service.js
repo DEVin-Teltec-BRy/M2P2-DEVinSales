@@ -175,7 +175,7 @@ module.exports = {
 
       const findSale = await Sale.findAll({
         where: {
-          [Op.or]: [{ buyer_id: userId }, {seller_id: userId}],
+          [Op.or]: [{ buyer_id: userId }, { seller_id: userId }],
         },
       });
 

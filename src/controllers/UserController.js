@@ -5,25 +5,25 @@ const UserServices = require("../services/user.service");
 module.exports = {
   async create(req, res) {
     /*
-      #swagger.tags = ['Usuário']
-      #swagger.description = 'Endpoint que criar um novo usuário.'
-      #swagger.parameters['obj'] = {
-        in: 'body',
-        required: true,
-        schema: {
-          $ref: '#/definitions/AddUser'
-        }
-      }
-      #swagger.responses[201] = {
-        description: 'Created',
-        schema: {
-          message: 'Usuário salvo com sucesso.'
-        }
-      }
-      #swagger.responses[403] = {
-        description: 'Forbidden'
-      }
-    */
+          #swagger.tags = ['Usuário']
+          #swagger.description = 'Endpoint que criar um novo usuário.'
+          #swagger.parameters['obj'] = {
+            in: 'body',
+            required: true,
+            schema: {
+              $ref: '#/definitions/AddUser'
+            }
+          }
+          #swagger.responses[201] = {
+            description: 'Created',
+            schema: {
+              message: 'Usuário salvo com sucesso.'
+            }
+          }
+          #swagger.responses[403] = {
+            description: 'Forbidden'
+          }
+        */
     try {
       const { name, password, email, birth_date, roles } = req.body;
       const user = await UserServices.createUser(
@@ -44,39 +44,39 @@ module.exports = {
     } catch (error) {
       const message = validateErrors(error);
       /*
-        #swagger.responses[400] = {
-          schema: {
-            $ref: '#/definitions/CreateUserResponses'
-          }
-        }
-      */
+              #swagger.responses[400] = {
+                schema: {
+                  $ref: '#/definitions/CreateUserResponses'
+                }
+              }
+            */
       return res.status(400).send(message);
     }
   },
   async session(req, res) {
     /*
-      #swagger.tags = ['Usuário']
-      #swagger.description = 'Endpoint para login do usuário, quando email e senha são validos retorna um token.'
-      #swagger.parameters['obj'] = {
-        in: 'body',
-        required: true,
-        schema: {
-          $ref: '#/definitions/UserLogin'
-        }
-      }
-      #swagger.responses[201] = {
-        description: 'Token de acesso',
-        schema: {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGVzIjpbeyJpZCI6Miwi___RANDOM_TOKEN___JPV05FUiJ9XSwiaWF0IjoxNjQ2ODA0MDkxLCJleHAiOjE2NDY4OTA0OTF9.OwvUy0p3BVfbicuCg9YYAk5tlPQ6UKB_bZrHt8-H_CU"
-        }
-      }
-      #swagger.responses[400] = {
-        description: 'Login não efetuado',
-        schema: {
-          "message": "Email ou senha inválidos"
-        }
-      }
-    */
+         #swagger.tags = ['Usuário']
+         #swagger.description = 'Endpoint para login do usuário, quando email e senha são validos retorna um token.'
+         #swagger.parameters['obj'] = {
+           in: 'body',
+           required: true,
+           schema: {
+             $ref: '#/definitions/UserLogin'
+           }
+         }
+         #swagger.responses[201] = {
+           description: 'Token de acesso',
+           schema: {
+             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGVzIjpbeyJpZCI6Miwi___RANDOM_TOKEN___JPV05FUiJ9XSwiaWF0IjoxNjQ2ODA0MDkxLCJleHAiOjE2NDY4OTA0OTF9.OwvUy0p3BVfbicuCg9YYAk5tlPQ6UKB_bZrHt8-H_CU"
+           }
+         }
+         #swagger.responses[400] = {
+           description: 'Login não efetuado',
+           schema: {
+             "message": "Email ou senha inválidos"
+           }
+         }
+       */
     try {
       const { email, password } = req.body;
       const token = await UserServices.beginSession(email, password);
@@ -91,27 +91,27 @@ module.exports = {
   },
   async index(req, res) {
     /*
-      #swagger.tags = ['Usuário']
-      #swagger.description = 'Endpoint para buscar todos os usuários do banco de dados.'
-      #swagger.parameters['name'] = {
-        in: 'query',
-        type: 'string',
-        description: 'Nome de um usuário.',
-        default: 'John Doe'
-      }
-      #swagger.parameters['birth_date_min'] = {
-        in: 'query',
-        type: 'string',
-        description: 'Data limite inferior da consulta.',
-        default: 'DD/MM/AAAA'
-      }
-      #swagger.parameters['birth_date_max'] = {
-        in: 'query',
-        type: 'string',
-        description: 'Data limite superior da consulta.',
-        default: 'DD/MM/AAAA'
-      }
-    */
+          #swagger.tags = ['Usuário']
+          #swagger.description = 'Endpoint para buscar todos os usuários do banco de dados.'
+          #swagger.parameters['name'] = {
+            in: 'query',
+            type: 'string',
+            description: 'Nome de um usuário.',
+            default: 'John Doe'
+          }
+          #swagger.parameters['birth_date_min'] = {
+            in: 'query',
+            type: 'string',
+            description: 'Data limite inferior da consulta.',
+            default: 'DD/MM/AAAA'
+          }
+          #swagger.parameters['birth_date_max'] = {
+            in: 'query',
+            type: 'string',
+            description: 'Data limite superior da consulta.',
+            default: 'DD/MM/AAAA'
+          }
+        */
     try {
       const { name, birth_date_min, birth_date_max } = req.query;
 
@@ -134,16 +134,18 @@ module.exports = {
         }
       }
       */
+
       return res.status(200).send({ users });
     } catch (error) {
       const message = validateErrors(error);
       /*
-        #swagger.responses[400] = {
-        schema: {
-          message: 'Informe uma data em um formato válido dd/mm/yyyy'
-        }
-      }
-      */
+       #swagger.responses[400] = {
+       schema: {
+         message: 'Informe uma data em um formato válido dd/mm/yyyy'
+       }
+     }
+     */
+
       return res.status(400).send(message);
     }
   },
@@ -186,7 +188,7 @@ module.exports = {
         throw new Error(message.error);
       }
 
-      return res.status(200).json({message});
+      return res.status(200).json({ message });
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }

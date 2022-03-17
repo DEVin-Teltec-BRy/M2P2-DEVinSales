@@ -32,20 +32,20 @@ class ProductsSales extends Model {
       { sequelize }
     );
   }
-  static associate(models){
+  static associate(models) {
     this.belongsTo(
-        models.Sale, {
-            foreignKey: 'sales_id',
-            as: 'sale'
-        }
+      models.Sale, {
+      foreignKey: 'sale_id',
+      as: 'sale'
+    }
     )
     this.belongsTo(
-        models.Product, {
-            foreignKey: 'product_id',
-            as: 'product'
-        }
+      models.Product, {
+      foreignKey: 'product_id',
+      as: 'product'
+    }
     )
-}
+  }
 }
 
 module.exports = ProductsSales;
