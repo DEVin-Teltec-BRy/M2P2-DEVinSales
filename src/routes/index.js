@@ -7,7 +7,7 @@ const salesRoutes = require('./v1/sales.routes');
 const productsRoutes = require('./v1/products.routes');
 const statesRoutes = require('./v1/states.routes');
 const addressesRoutes = require("./v1/addresses.routes");
-const productsalesRoutes = require('./v1/productsales.routes');
+const productsalesRoutes = require ('./v1/productsales.routes');
 
 
 routes.get("/", (req, res) => {
