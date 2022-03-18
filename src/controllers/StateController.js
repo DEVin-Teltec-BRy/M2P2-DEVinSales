@@ -62,14 +62,11 @@ module.exports = {
         }
       }
 
-      // No query params
       else {
         const states = await State.findAll();
-        // Blank DB
         if (states.length === 0) {
           return res.status(204).send();
         }
-        // DB with content
         else {
           return res.status(200).send({ states });
         }
@@ -82,14 +79,14 @@ module.exports = {
 
   async getStateById(req, res) {
     /*
-      #swagger.tags = ['Estado']
-      #swagger.description = 'Endpoint que retorna um estado de acordo com o state_id fornecido'
-      #swagger.parameters['state_id'] = {
-        description: 'ID do estado que será buscado',
-        type: 'number',
-        required: 'true',
-      }
-    */
+    #swagger.tags = ['Estado']
+    #swagger.description = 'Endpoint que retorna um estado de acordo com o state_id fornecido'
+    #swagger.parameters['state_id'] = {
+      description: 'ID do estado que será buscado',
+      type: 'number',
+      required: 'true',
+    }
+  */
 
     try {
       const { state_id } = req.params;
@@ -121,9 +118,9 @@ module.exports = {
 
   async getCitiesByStateID(req, res) {
     /* 
-    #swagger.tags = ['Estado']
-    #swagger.description = 'Endpoint para buscar cidade(s) por estado'
-    */
+   #swagger.tags = ['Estado']
+   #swagger.description = 'Endpoint para buscar cidade(s) por estado'
+   */
     try {
       const { state_id } = req.params;
       const { name } = req.query;

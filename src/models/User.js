@@ -40,8 +40,8 @@ class User extends Model {
         password: {
           type: DataTypes.STRING,
           allowNull: false,
-          validate:{
-            is:{
+          validate: {
+            is: {
               args: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z]).{4,}$/,
               msg: "A senha deve conter pelo menos 4 caractéres, sendo um minúsculo ou um maiúsculo, desde que diferente dos demais."
             },

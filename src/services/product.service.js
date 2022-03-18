@@ -99,7 +99,7 @@ module.exports = {
     return await Product.findByPk(id);
   },
 
-  async countSalesByProductId(id){
+  async countSalesByProductId(id) {
     if (!Number(id)) {
       throw new Error("O id deve ser um número.");
     }
