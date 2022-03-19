@@ -21,6 +21,26 @@ const doc = {
     },
   ],
   definitions: {
+    GetAddress: {
+      id: 3,
+      street: "Rua das Palmeiras",
+      cep: "87654321",
+      city: {
+        id: 1,
+        name: "Afonso Cláudio",
+        state: {
+          id: 8,
+          name: "Espírito Santo",
+          initials: "ES"
+        }
+      }
+    },
+    PatchAddress: {
+      street: "Rua Paralelepípedo",
+      number: 944,
+      complement: "apto 201",
+      cep: "12345678"
+    },
     AddUser: {
       name: 'John Doe',
       password: 'aB12345',

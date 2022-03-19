@@ -8,10 +8,7 @@ const { Op } = require("sequelize");
 module.exports = {
 
   async index(req, res) {
-
-    // #swagger.tags = ['Endereços']
-    // #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
-
+    
     /*
     #swagger.tags = ['Endereços']
     #swagger.description = 'Endpoint que retorna os endereços com base nos dados fornecidos via query, ou então todos os endereços caso nenhuma query seja passada'
@@ -33,7 +30,8 @@ module.exports = {
              description: 'Filtro que identifica o cep que será retornada',
              type: 'string',
              collectionFormat: 'multi',
-    }*/
+    }
+    */
 
 
     try {
@@ -78,32 +76,38 @@ module.exports = {
         // #swagger.responses[204] = { description: 'No Content' }
         return res.status(204).send();
       } else {
-        // #swagger.responses[200] = { description: 'Success!' }
-        return res.status(200).json({ address });
+        /* #swagger.responses[200] = { 
+          description: 'Endereço encontrado com sucesso!',
+          schema: { $ref: "#/definitions/GetAddress" }
+        } */
+        return res.status(200).json({ message: "Endereço encontrado com sucesso!", address });
       }
     } catch (error) {
       const message = validateErrors(error);
-      // #swagger.responses[403] = { description: 'Forbidden' }
+      // #swagger.responses[403] = { description: 'Você não tem autorização para este recurso!' }
       return res.status(403).send(message);
     }
   },
 
-  async update(req, res) {
-    // #swagger.tags = ['Endereços']
-    // #swagger.description = 'Endpoint que faz a alteração de um endereço com base nos dados passados pelo body'
+  async update(req,res){
 
-    /* #swagger.parameters['address_id'] = {
+    /*
+    #swagger.tags = ['Endereços']
+    #swagger.description = 'Endpoint que faz a alteração de um endereço com base nos dados passados pelo body'
+
+    #swagger.parameters['address_id'] = {
          in: 'path',
          description: 'ID do endereço a ser alterado',
          type: 'number',
          required: true,
-    }*/
-    /* #swagger.parameters['address'] = {
+    }
+    #swagger.parameters['address'] = {
          in: 'body',
          description: 'Dados para alteração do endereço',
          type: 'object',
-         schema: { $ref: "#/definitions/address" }
-       }*/
+         schema: { $ref: "#/definitions/PatchAddress" }
+    }
+    */
 
 
     try {
